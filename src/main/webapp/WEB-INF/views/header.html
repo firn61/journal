@@ -1,0 +1,19 @@
+<div th:fragment="header">
+<form th:action="@{index}" method="post">
+    <select class="form-control" id="period" name="period">
+        <option th:each="period : ${periodList}"
+                th:selected="${period.getRn()}==${currentDate}"
+                th:value="${period}"
+                th:text="${period}">
+        </option>
+    </select>
+    <select class="form-control" id="podstation" name="podstation">
+        <option value="">Подстанция..</option>
+        <option th:each="podstation : ${podstations}"
+                th:value="${podstation}"
+                th:text="${podstation}">
+        </option>
+    </select>
+    <button type="submit">Выбор</button>
+</form>
+</div>
