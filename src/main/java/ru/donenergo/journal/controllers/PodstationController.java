@@ -26,4 +26,9 @@ public class PodstationController {
         model.addAttribute("transformators", transformatorDAO.getTransformators(1));
         return "index";
     }
+    @PostMapping("/index")
+    public String selectedDateAndPodstation(Model model){
+        System.out.println("hello");
+        return "redirect:/";
+    }
 }

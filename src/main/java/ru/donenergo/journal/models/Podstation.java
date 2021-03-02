@@ -15,7 +15,7 @@ public class Podstation {
 
     @Override
     public String toString() {
-        return podstType + "-" + num +"(" + resNum + ")";
+        return podstType + "-" + num + "(" + resNum + ")";
     }
 
     public Podstation(int rn, String podstType, int num, String numStr, int resNum, int dateRn, int isActive, String address) {

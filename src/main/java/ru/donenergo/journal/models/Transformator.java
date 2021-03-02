@@ -11,6 +11,10 @@ public class Transformator {
     private int uC;
     private int iA;
     private int iB;
+    private int iC;
+    private int iN;
+    private String dateTime;
+    private String monter;
 
     public Transformator() {
     }
@@ -144,8 +148,4 @@ public class Transformator {
         this.monter = monter;
     }
 
-    private int iC;
-    private int iN;
-    private String dateTime;
-    private String monter;
 }
