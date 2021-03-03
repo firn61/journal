@@ -14,10 +14,14 @@ import java.util.List;
 public class PodstationDAO {
 
     private final JdbcTemplate jdbcTemplate;
-
     private String currentDate;
     private List<Period> periodList = new ArrayList<>();
 
+    public List<Podstation> getPodstations() {
+        return podstations;
+    }
+
+    private List<Podstation> podstations;
     public String getCurrentDate() {
         return currentDate;
     }
@@ -32,16 +36,9 @@ public class PodstationDAO {
     }
 
     @PostConstruct
-    private void getCurrentDateFromDb(){
-        currentDate=(String)jdbcTemplate.queryForObject("SELECT SVALUE FROM SYSTEM WHERE SPARAM = 'currentDate'", String.class);
-    }
-
-    @PostConstruct
-    private void setPeriodListFill(){
+    private void getCurrentDateFromDb() {
+        currentDate = (String) jdbcTemplate.queryForObject("SELECT SVALUE FROM SYSTEM WHERE SPARAM = 'currentDate'", String.class);
         periodList = jdbcTemplate.query("SELECT * FROM DATES", new PeriodMapper());
-    }
-
-    public List<Podstation> index(){
-        return jdbcTemplate.query("SELECT * FROM PODSTATION WHERE DATE_RN=?", new Object[]{currentDate}, new PodstationMapper());
+        podstations = jdbcTemplate.query("SELECT * FROM PODSTATION WHERE DATE_RN=?", new Object[]{currentDate}, new PodstationMapper());
     }
 }

@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Журнал нагрузок</title>
-</head>
-<body>
-<header th:insert="header :: header"></header>
+<div th:fragment="header">
     <fieldset>
         <table>
             <thead>
@@ -38,10 +31,8 @@
                 <td><p th:text="${transformator.getiN()}" /></td>
                 <td><p th:text="${transformator.getDateTime()}" /></td>
                 <td><p th:text="${transformator.getMonter()}" /></td>
-                <td><button type="submit">Выбор</button></td>
             </tr>
             </tbody>
         </table>
     </fieldset>
-</body>
-</html>
+</div>

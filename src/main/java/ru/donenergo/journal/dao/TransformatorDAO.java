@@ -15,7 +15,7 @@ public class TransformatorDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Transformator> getTransformators(int tpRn){
+    public List<Transformator> getTransformators(String tpRn){
         List<Transformator> lt = jdbcTemplate.query("SELECT * FROM TRANSFORMATOR WHERE TP_RN=?", new Object[]{tpRn}, new TransformatorMapper());
         System.out.println("lt size is: " + lt.size());
         return lt;
