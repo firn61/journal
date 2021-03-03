@@ -25,7 +25,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="transformator : ${transformators}">
+                <tr th:each="transformator : ${transformators}">
                 <td><p th:text="${transformator.getNum()}" /></td>
                 <td><p th:text="${transformator.getFider()}" /></td>
                 <td><p th:text="${transformator.getPower()}" /></td>
@@ -38,7 +38,6 @@
                 <td><p th:text="${transformator.getiN()}" /></td>
                 <td><p th:text="${transformator.getDateTime()}" /></td>
                 <td><p th:text="${transformator.getMonter()}" /></td>
-                <td><button type="submit">Выбор</button></td>
             </tr>
             </tbody>
         </table>

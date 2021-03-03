@@ -3,6 +3,8 @@ package ru.donenergo.journal.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import ru.donenergo.journal.mappers.PeriodMapper;
+import ru.donenergo.journal.mappers.PodstationMapper;
 import ru.donenergo.journal.models.Period;
 import ru.donenergo.journal.models.Podstation;
 

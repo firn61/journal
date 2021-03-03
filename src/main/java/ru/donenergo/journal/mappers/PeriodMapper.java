@@ -1,4 +1,4 @@
-package ru.donenergo.journal.dao;
+package ru.donenergo.journal.mappers;
 
 import org.springframework.jdbc.core.RowMapper;
 import ru.donenergo.journal.models.Period;
