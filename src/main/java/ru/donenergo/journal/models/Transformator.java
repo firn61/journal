@@ -1,5 +1,7 @@
 package ru.donenergo.journal.models;
 
+import java.util.List;
+
 public class Transformator {
     private int rn;
     private int tpRn;
@@ -15,6 +17,8 @@ public class Transformator {
     private int iN;
     private String dateTime;
     private String monter;
+    private int linesCount;
+    private List<Line> listLines;
 
     public Transformator() {
     }
@@ -34,6 +38,22 @@ public class Transformator {
         this.iN = iN;
         this.dateTime = dateTime;
         this.monter = monter;
+    }
+
+    public int getLinesCount() {
+        return linesCount;
+    }
+
+    public void setLinesCount(int linesCount) {
+        this.linesCount = linesCount;
+    }
+
+    public List<Line> getListLines() {
+        return listLines;
+    }
+
+    public void setListLines(List<Line> listLines) {
+        this.listLines = listLines;
     }
 
     public int getRn() {

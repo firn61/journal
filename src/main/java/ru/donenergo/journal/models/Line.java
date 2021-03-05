@@ -1,14 +1,6 @@
 package ru.donenergo.journal.models;
 
 public class Line {
-    public int getSectionNum() {
-        return sectionNum;
-    }
-
-    public void setSectionNum(int sectionNum) {
-        this.sectionNum = sectionNum;
-    }
-
     private int sectionNum;
     private int rn;
     private int trRn;
@@ -33,6 +25,14 @@ public class Line {
         this.iC = iC;
         this.iO = iO;
         this.kA = kA;
+    }
+
+    public int getSectionNum() {
+        return sectionNum;
+    }
+
+    public void setSectionNum(int sectionNum) {
+        this.sectionNum = sectionNum;
     }
 
     public int getRn() {

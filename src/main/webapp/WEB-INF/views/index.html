@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
     <meta charset="UTF-8">
     <title>Журнал нагрузок</title>
 </head>
@@ -24,21 +30,40 @@
                 <th>Монтер</th>
             </tr>
             </thead>
+        </table><table>
             <tbody>
-                <tr th:each="transformator : ${transformators}">
-                <td><p th:text="${transformator.getNum()}" /></td>
-                <td><p th:text="${transformator.getFider()}" /></td>
-                <td><p th:text="${transformator.getPower()}" /></td>
-                <td><p th:text="${transformator.getuA()}" /></td>
-                <td><p th:text="${transformator.getuB()}" /></td>
-                <td><p th:text="${transformator.getuA()}" /></td>
-                <td><p th:text="${transformator.getiA()}" /></td>
-                <td><p th:text="${transformator.getiB()}" /></td>
-                <td><p th:text="${transformator.getiC()}" /></td>
-                <td><p th:text="${transformator.getiN()}" /></td>
-                <td><p th:text="${transformator.getDateTime()}" /></td>
-                <td><p th:text="${transformator.getMonter()}" /></td>
+                <th:block th:each= "transformator : ${sPodstation.getTrList()}">
+                    <td><p th:text="${transformator.getNum()}"/></td>
+                    <td><p th:text="${transformator.getFider()}"/></td>
+                    <td><p th:text="${transformator.getPower()}"/></td>
+                    <td><p th:text="${transformator.getuA()}"/></td>
+                    <td><p th:text="${transformator.getuB()}"/></td>
+                    <td><p th:text="${transformator.getuA()}"/></td>
+                    <td><p th:text="${transformator.getiA()}"/></td>
+                    <td><p th:text="${transformator.getiB()}"/></td>
+                    <td><p th:text="${transformator.getiC()}"/></td>
+                    <td><p th:text="${transformator.getiN()}"/></td>
+                    <td><p th:text="${transformator.getDateTime()}"/></td>
+                    <td><p th:text="${transformator.getMonter()}"/></td>
             </tr>
+                    <tr th:each="line : ${transformator.getListLines()}">
+                        <td><p th:text="${line.getName()}"></p></td>
+                    </tr>
+                </th:block>
+<!--                <tr th:each="transformator : ${sPodstation.getTrList()}">-->
+<!--                    <td><p th:text="${transformator.getNum()}"/></td>-->
+<!--                    <td><p th:text="${transformator.getFider()}"/></td>-->
+<!--                    <td><p th:text="${transformator.getPower()}"/></td>-->
+<!--                    <td><p th:text="${transformator.getuA()}"/></td>-->
+<!--                    <td><p th:text="${transformator.getuB()}"/></td>-->
+<!--                    <td><p th:text="${transformator.getuA()}"/></td>-->
+<!--                    <td><p th:text="${transformator.getiA()}"/></td>-->
+<!--                    <td><p th:text="${transformator.getiB()}"/></td>-->
+<!--                    <td><p th:text="${transformator.getiC()}"/></td>-->
+<!--                    <td><p th:text="${transformator.getiN()}"/></td>-->
+<!--                    <td><p th:text="${transformator.getDateTime()}"/></td>-->
+<!--                    <td><p th:text="${transformator.getMonter()}"/></td>-->
+<!--                </tr>-->
             </tbody>
         </table>
     </fieldset>

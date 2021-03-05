@@ -1,5 +1,7 @@
 package ru.donenergo.journal.models;
 
+import java.util.List;
+
 public class Podstation {
     private int rn;
     private String podstType;
@@ -9,6 +11,8 @@ public class Podstation {
     private int dateRn;
     private int isActive;
     private String address;
+    private int trCount;
+    private List<Transformator> trList;
 
     public Podstation() {
     }
@@ -27,6 +31,22 @@ public class Podstation {
         this.dateRn = dateRn;
         this.isActive = isActive;
         this.address = address;
+    }
+
+    public int getTrCount() {
+        return trCount;
+    }
+
+    public void setTrCount(int trCount) {
+        this.trCount = trCount;
+    }
+
+    public List<Transformator> getTrList() {
+        return trList;
+    }
+
+    public void setTrList(List<Transformator> trList) {
+        this.trList = trList;
     }
 
     public int getRn() {
