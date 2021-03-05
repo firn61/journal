@@ -9,11 +9,13 @@
     </style>
     <meta charset="UTF-8">
     <title>Журнал нагрузок</title>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 </head>
 <body>
 <header th:insert="header :: header"></header>
 <th:block th:each="transformator : ${sPodstation.getTrList()}">
-    <table>
+    <div>
+        <table th:onclick="'showHideLines(\'' + ${transformator.getRn()} + '\');'">
         <tr>
             <th>Номер</th>
             <th>Фидер</th>
@@ -42,7 +44,8 @@
         <td><p th:text="${transformator.getMonter()}"/></td>
         </tr>
     </table>
-    <table>
+    </div>
+    <table th:id="${transformator.getRn()}">
         <tr>
             <th>Номер</th>
             <th>Наименование</th>
@@ -63,5 +66,15 @@
         </tr>
     </table>
 </th:block>
+<script>
+    function showHideLines(varId) {
+        var x = document.getElementById(varId);
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+</script>
 </body>
 </html>

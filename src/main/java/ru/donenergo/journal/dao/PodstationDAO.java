@@ -39,10 +39,8 @@ public class PodstationDAO {
     public Podstation getPodstation(int rn) {
         String sqlTemplate = "SELECT RN, PODST_TYPE, NUM, NUM_STR, RES_NUM, DATE_RN, IS_ACTIVE, ADDRESS FROM PODSTATION WHERE RN =?";
         Podstation podstation = (Podstation) jdbcTemplate.queryForObject(sqlTemplate, new Object[]{rn}, new PodstationMapper());
-        System.out.println("Current podstation is: " + podstation.getNum());
         podstation.setTrList(getTransformators(podstation.getRn()));
         podstation.setTrCount(podstation.getTrList().size());
-        System.out.println("It has " + podstation.getTrCount() + " transformators");
         for (int i = 0; i < podstation.getTrList().size(); i++) {
             podstation.getTrList().get(i).setListLines(getTransformatorLines(podstation.getTrList().get(i).getNum(), podstation.getTrList().get(i).getRn()));
         }
@@ -60,7 +58,6 @@ public class PodstationDAO {
         for (int tNum = 0; tNum < tList.size(); tNum++) {
             allLines.addAll(getTransformatorLines(tList.get(tNum).getNum(),
                     tList.get(tNum).getRn()));
-            //  System.out.println("Total lines Count for section " + tNum + ": " + allLines.size());
         }
         return allLines;
     }
@@ -75,8 +72,9 @@ public class PodstationDAO {
         return tLines;
     }
 
-    public List<Podstation> getPodstations() {
-        return podstations;
+    public List<Podstation> getPodstations(String currentDate) {
+        return jdbcTemplate.query("SELECT * FROM PODSTATION WHERE DATE_RN=?", new Object[]{currentDate}, new PodstationMapper());
+        //return podstations;
     }
 
     public String getCurrentDate() {

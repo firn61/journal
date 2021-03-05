@@ -28,7 +28,7 @@ public class MainController {
         model.addAttribute("currentPodstation", currentPodstation);
         model.addAttribute("currentDate", currentDate);
         model.addAttribute("periodList", podstationDAO.getPeriodList());
-        model.addAttribute("podstations", podstationDAO.getPodstations());
+        model.addAttribute("podstations", podstationDAO.getPodstations(currentDate));
         model.addAttribute("sPodstation", podstationDAO.getPodstation(currentIntPodstation));
         return "index";
     }
@@ -38,7 +38,6 @@ public class MainController {
                                             @RequestParam(value = "podstation", required = false) String podstationRn,
                                             Model model) {
         currentIntPodstation = Integer.valueOf(currentPodstation);
-        model.addAttribute("sPodstation", podstationDAO.getPodstation(currentIntPodstation));
         currentPodstation = podstationRn;
         currentDate = periodRn;
         return "redirect:/";
