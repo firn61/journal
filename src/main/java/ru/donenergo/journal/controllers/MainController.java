@@ -3,9 +3,7 @@ package ru.donenergo.journal.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.donenergo.journal.dao.PodstationDAO;
 
 @Controller
@@ -41,5 +39,11 @@ public class MainController {
         currentPodstation = podstationRn;
         currentDate = periodRn;
         return "redirect:/";
+    }
+
+    @RequestMapping("/{podstationRn}")
+    public String showPodstation(@PathVariable("podstationRn") int podstationRn, Model model){
+        model.addAttribute("rn", podstationRn);
+        return "/showPodstation";
     }
 }
