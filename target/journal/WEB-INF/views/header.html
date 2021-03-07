@@ -1,7 +1,7 @@
 <div th:fragment="header">
 <form th:action="@{/index}" th:method="POST" th:object="${period}">
     <div th:object="${period}">
-            <select class="form-control" id="period1" name="period" th:onchange="this.form.submit()">
+            <select th:onchange="this.form.submit()" class="form-control" id="period1" name="period" >
         <option th:each="period : ${periodList}"
                 th:selected="${period.getRn()}==${currentDate}"
                 th:value="${period.getRn()}"
@@ -16,8 +16,8 @@
                 th:value="${podstation.getRn()}"
                 th:text="${podstation}">
         </option>
+        <a th:href="@{/{rn}(rn=${podstations})}" th:text="hello">dfgf</a>
     </select>
     </div>
-<!--    <button type="submit">Выбор</button>-->
 </form>
 </div>

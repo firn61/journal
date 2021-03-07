@@ -19,6 +19,11 @@ import java.util.List;
 @Component
 public class PodstationDAO {
     private final JdbcTemplate jdbcTemplate;
+
+    public void setCurrentDate(String currentDate) {
+        this.currentDate = currentDate;
+    }
+
     private String currentDate;
     private List<Period> periodList = new ArrayList<>();
     private List<Podstation> podstations;
@@ -29,10 +34,24 @@ public class PodstationDAO {
     }
 
     @PostConstruct
-    private void getCurrentDateFromDb() {
-        currentDate = (String) jdbcTemplate.queryForObject("SELECT SVALUE FROM SYSTEM WHERE SPARAM = 'currentDate'", String.class);
-        periodList = jdbcTemplate.query("SELECT * FROM DATES", new PeriodMapper());
+    private void setInitialState() {
+        currentDate = getCurrentDateFromDb();
+        periodList = setPeriodListFromDb();
+        getPodstationsListFromDb(currentDate);
+    }
+    //returns current period DATE_RN from database, used in @PostConstruct
+    private String getCurrentDateFromDb() {
+        return (String) jdbcTemplate.queryForObject("SELECT SVALUE FROM SYSTEM WHERE SPARAM = 'currentDate'", String.class);
+    }
+    //returns all periods from database, used in @PostConstruct
+    private List<Period> setPeriodListFromDb() {
+        return jdbcTemplate.query("SELECT * FROM DATES", new PeriodMapper());
+    }
+    //returns all podstations on current period, used in @PostConstruct
+    private List<Podstation> getPodstationsListFromDb(String currentDate) {
         podstations = jdbcTemplate.query("SELECT * FROM PODSTATION WHERE DATE_RN=?", new Object[]{currentDate}, new PodstationMapper());
+        System.out.println("Podstation refreshed");
+        return podstations;
     }
 
     //Get one podstation with transformators and lines by RN
@@ -52,7 +71,7 @@ public class PodstationDAO {
         return jdbcTemplate.query("SELECT * FROM TRANSFORMATOR WHERE TP_RN=?", new Object[]{tpRn}, new TransformatorMapper());
     }
 
-    //Get podstation lines
+    //Not used
     public List<Line> getAllPodstationLines(List<Transformator> tList) {
         List<Line> allLines = new ArrayList<>();
         for (int tNum = 0; tNum < tList.size(); tNum++) {
@@ -68,13 +87,17 @@ public class PodstationDAO {
         for (Line line : tLines) {
             line.setSectionNum(trNum);
         }
-        //System.out.println("Transformator Lines count: " + tLines.size() + " " + trRn);
         return tLines;
     }
 
-    public List<Podstation> getPodstations(String currentDate) {
-        return jdbcTemplate.query("SELECT * FROM PODSTATION WHERE DATE_RN=?", new Object[]{currentDate}, new PodstationMapper());
-        //return podstations;
+    //get podstations to model
+    public List<Podstation> getPodstations(String requestDate) {
+        if (requestDate.equals(currentDate)) {
+            return podstations;
+        } else {
+            currentDate = requestDate;
+            return getPodstationsListFromDb(requestDate);
+        }
     }
 
     public String getCurrentDate() {
