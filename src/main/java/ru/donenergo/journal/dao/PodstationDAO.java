@@ -61,7 +61,7 @@ public class PodstationDAO {
 
     //Get one podstation with transformators and lines by RN
     public Podstation getPodstation(int rn) {
-        log.info(currentDate);
+        log.info(" rn: " + rn +" Current date is: " + currentDate);
         String sqlTemplate = "SELECT RN, PODST_TYPE, NUM, NUM_STR, RES_NUM, DATE_RN, IS_ACTIVE, ADDRESS FROM PODSTATION WHERE RN =?";
         Podstation podstation = (Podstation) jdbcTemplate.queryForObject(sqlTemplate, new Object[]{rn}, new PodstationMapper());
         podstation.setTrList(getTransformators(podstation.getRn()));
@@ -74,6 +74,7 @@ public class PodstationDAO {
 
     //Get podstation transformators by TP_RN
     public List<Transformator> getTransformators(int tpRn) {
+        log.info(" tpRn: " + tpRn);
         return jdbcTemplate.query("SELECT * FROM TRANSFORMATOR WHERE TP_RN=?", new Object[]{tpRn}, new TransformatorMapper());
     }
 
@@ -88,6 +89,7 @@ public class PodstationDAO {
     }
 
     public List<Line> getTransformatorLines(int trNum, int trRn) {
+        log.info(" trRn: " + trNum + " trRn: " + trRn);
         String sqlTemplate = "SELECT RN, TR_RN, NUM, NAME, I_A, I_B, I_C, I_O, KA FROM LINE WHERE TR_RN = ?";
         List<Line> tLines = jdbcTemplate.query(sqlTemplate, new Object[]{trRn}, new LineMapper());
         for (Line line : tLines) {
@@ -98,6 +100,7 @@ public class PodstationDAO {
 
     //get podstations to model
     public List<Podstation> getPodstations(String requestDate) {
+        log.info(" requestDate: " + requestDate);
         if (requestDate.equals(currentDate)) {
             return podstations;
         } else {
