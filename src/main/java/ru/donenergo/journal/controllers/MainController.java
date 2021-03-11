@@ -42,7 +42,7 @@ public class MainController {
     }
 
     @RequestMapping("/{podstationRn}")
-    public String showPodstation(@PathVariable("podstationRn") int podstationRn, Model model){
+    public String showPodstation(@PathVariable("podstationRn") int podstationRn, Model model) {
         model.addAttribute("currentDate", currentDate);
         model.addAttribute("currentPodstation", podstationRn);
         model.addAttribute("podstations", podstationDAO.getPodstations(currentDate));

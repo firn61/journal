@@ -1,5 +1,6 @@
 package ru.donenergo.journal.dao;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import java.util.List;
 @Component
 public class PodstationDAO {
     private final JdbcTemplate jdbcTemplate;
+    static Logger log = Logger.getLogger(PodstationDAO.class.getName());
 
     public void setCurrentDate(String currentDate) {
         this.currentDate = currentDate;
@@ -39,14 +41,17 @@ public class PodstationDAO {
         periodList = setPeriodListFromDb();
         getPodstationsListFromDb(currentDate);
     }
+
     //returns current period DATE_RN from database, used in @PostConstruct
     private String getCurrentDateFromDb() {
         return (String) jdbcTemplate.queryForObject("SELECT SVALUE FROM SYSTEM WHERE SPARAM = 'currentDate'", String.class);
     }
+
     //returns all periods from database, used in @PostConstruct
     private List<Period> setPeriodListFromDb() {
         return jdbcTemplate.query("SELECT * FROM DATES", new PeriodMapper());
     }
+
     //returns all podstations on current period, used in @PostConstruct
     private List<Podstation> getPodstationsListFromDb(String currentDate) {
         podstations = jdbcTemplate.query("SELECT * FROM PODSTATION WHERE DATE_RN=?", new Object[]{currentDate}, new PodstationMapper());
@@ -56,6 +61,7 @@ public class PodstationDAO {
 
     //Get one podstation with transformators and lines by RN
     public Podstation getPodstation(int rn) {
+        log.info(currentDate);
         String sqlTemplate = "SELECT RN, PODST_TYPE, NUM, NUM_STR, RES_NUM, DATE_RN, IS_ACTIVE, ADDRESS FROM PODSTATION WHERE RN =?";
         Podstation podstation = (Podstation) jdbcTemplate.queryForObject(sqlTemplate, new Object[]{rn}, new PodstationMapper());
         podstation.setTrList(getTransformators(podstation.getRn()));
