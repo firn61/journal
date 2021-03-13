@@ -5,10 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.donenergo.journal.mappers.*;
-import ru.donenergo.journal.models.Line;
-import ru.donenergo.journal.models.Period;
-import ru.donenergo.journal.models.Podstation;
-import ru.donenergo.journal.models.Transformator;
+import ru.donenergo.journal.models.*;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -95,13 +92,18 @@ public class PodstationDAO {
         return tLines;
     }
 
+    public String getPodstationNumByRn(String rn){
+        return (String) jdbcTemplate.queryForObject("SELECT NUM_STR FROM PODSTATION WHERE RN = ?", new Object[]{rn}, String.class);
+    }
+
+    public String getPodstationRn(String type, String num, String currentDate){
+        String sqlTemplate = "SELECT RN FROM PODSTATION WHERE PODST_TYPE = ? AND NUM_STR = ? AND DATE_RN = ?";
+        return (String) jdbcTemplate.queryForObject(sqlTemplate, new Object[]{type, num, currentDate}, String.class);
+    }
 
     public List<String> getPodstationTypes(String currentDate){
         List<String> podstationTypes;
-        podstationTypes = jdbcTemplate.query("SELECT DISTINCT PODST_TYPE FROM PODSTATION WHERE DATE_RN =?", new Object[]{currentDate}, new StringMapper());
-        for (String s : podstationTypes){
-            System.out.println(s);
-        }
+        podstationTypes = jdbcTemplate.query("SELECT DISTINCT PODST_TYPE FROM PODSTATION WHERE DATE_RN = ?", new Object[]{currentDate}, new StringMapper());
         return podstationTypes;
     }
 

@@ -23,9 +23,10 @@ public class MainController {
         if (currentDate == null) {
             currentDate = podstationDAO.getCurrentDate();
         }
-        podstationDAO.getPodstationTypes(currentDate);
         model.addAttribute("currentPodstation", currentPodstation);
+        model.addAttribute("podstationNum", podstationDAO.getPodstationNumByRn(currentPodstation));
         model.addAttribute("currentDate", currentDate);
+        model.addAttribute("podstTypes", podstationDAO.getPodstationTypes(currentDate));
         model.addAttribute("periodList", podstationDAO.getPeriodList());
         model.addAttribute("podstations", podstationDAO.getListPodstations(currentDate));
         model.addAttribute("sPodstation", podstationDAO.getPodstation(currentIntPodstation));
@@ -35,12 +36,12 @@ public class MainController {
     @PostMapping("/index")
     public String selectedDateAndPodstation(@RequestParam(value = "period", required = false) String periodRn,
                                             @RequestParam(value = "podstation", required = false) String podstationRnFromList,
-                                            @RequestParam(value = "currentPodstation", required = false) String podstationRnFromInput,
+                                            @RequestParam(value = "podstationNum", required = false) String podstationRnFromInput,
                                             Model model) {
-        if (podstationRnFromInput.equals(currentPodstation)) {
+        if (podstationRnFromInput.equals(podstationDAO.getPodstationNumByRn(currentPodstation))) {
             currentPodstation = podstationRnFromList;
         } else {
-            currentPodstation = podstationRnFromInput;
+            currentPodstation = podstationDAO.getPodstationRn("ТП", podstationRnFromInput, currentDate);
         }
         currentIntPodstation = Integer.valueOf(currentPodstation);
         currentDate = periodRn;

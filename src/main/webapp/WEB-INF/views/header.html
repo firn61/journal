@@ -18,7 +18,16 @@
     </select>
     </span>
         <span>
-            <input type="number" th:value="${currentPodstation}" th:name="currentPodstation"/>
+            <select class="form-control" id="type1" name="type">
+                <option th:each="podstType : ${podstTypes}"
+                        th:value="${podstType}"
+                        th:selected="${podstType}==${sPodstation.getPodstType()}"
+                        th:text="${podstType}">
+                </option>
+            </select>
+        </span>
+        <span>
+            <input type="number" th:value="${podstationNum}" th:name="podstationNum"/>
         </span>
     </div>
 </form>
