@@ -23,20 +23,26 @@ public class MainController {
         if (currentDate == null) {
             currentDate = podstationDAO.getCurrentDate();
         }
+        podstationDAO.getPodstationTypes(currentDate);
         model.addAttribute("currentPodstation", currentPodstation);
         model.addAttribute("currentDate", currentDate);
         model.addAttribute("periodList", podstationDAO.getPeriodList());
-        model.addAttribute("podstations", podstationDAO.getPodstations(currentDate));
+        model.addAttribute("podstations", podstationDAO.getListPodstations(currentDate));
         model.addAttribute("sPodstation", podstationDAO.getPodstation(currentIntPodstation));
         return "index";
     }
 
     @PostMapping("/index")
     public String selectedDateAndPodstation(@RequestParam(value = "period", required = false) String periodRn,
-                                            @RequestParam(value = "podstation", required = false) String podstationRn,
+                                            @RequestParam(value = "podstation", required = false) String podstationRnFromList,
+                                            @RequestParam(value = "currentPodstation", required = false) String podstationRnFromInput,
                                             Model model) {
+        if (podstationRnFromInput.equals(currentPodstation)) {
+            currentPodstation = podstationRnFromList;
+        } else {
+            currentPodstation = podstationRnFromInput;
+        }
         currentIntPodstation = Integer.valueOf(currentPodstation);
-        currentPodstation = podstationRn;
         currentDate = periodRn;
         return "redirect:/";
     }
@@ -45,7 +51,7 @@ public class MainController {
     public String showPodstation(@PathVariable("podstationRn") int podstationRn, Model model) {
         model.addAttribute("currentDate", currentDate);
         model.addAttribute("currentPodstation", podstationRn);
-        model.addAttribute("podstations", podstationDAO.getPodstations(currentDate));
+        model.addAttribute("podstations", podstationDAO.getListPodstations(currentDate));
         model.addAttribute("sPodstation", podstationDAO.getPodstation(podstationRn));
         model.addAttribute("periodList", podstationDAO.getPeriodList());
         return "/showPodstation";

@@ -4,10 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import ru.donenergo.journal.mappers.LineMapper;
-import ru.donenergo.journal.mappers.PeriodMapper;
-import ru.donenergo.journal.mappers.PodstationMapper;
-import ru.donenergo.journal.mappers.TransformatorMapper;
+import ru.donenergo.journal.mappers.*;
 import ru.donenergo.journal.models.Line;
 import ru.donenergo.journal.models.Period;
 import ru.donenergo.journal.models.Podstation;
@@ -55,7 +52,7 @@ public class PodstationDAO {
     //returns all podstations on current period, used in @PostConstruct
     private List<Podstation> getPodstationsListFromDb(String currentDate) {
         podstations = jdbcTemplate.query("SELECT * FROM PODSTATION WHERE DATE_RN=?", new Object[]{currentDate}, new PodstationMapper());
-        System.out.println("Podstation refreshed");
+        log.info(" Podstation list refreshed");
         return podstations;
     }
 
@@ -98,8 +95,18 @@ public class PodstationDAO {
         return tLines;
     }
 
+
+    public List<String> getPodstationTypes(String currentDate){
+        List<String> podstationTypes;
+        podstationTypes = jdbcTemplate.query("SELECT DISTINCT PODST_TYPE FROM PODSTATION WHERE DATE_RN =?", new Object[]{currentDate}, new StringMapper());
+        for (String s : podstationTypes){
+            System.out.println(s);
+        }
+        return podstationTypes;
+    }
+
     //get podstations to model
-    public List<Podstation> getPodstations(String requestDate) {
+    public List<Podstation> getListPodstations(String requestDate) {
         log.info(" requestDate: " + requestDate);
         if (requestDate.equals(currentDate)) {
             return podstations;
