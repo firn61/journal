@@ -15,11 +15,6 @@ import java.util.List;
 public class PodstationDAO {
     private final JdbcTemplate jdbcTemplate;
     static Logger log = Logger.getLogger(PodstationDAO.class.getName());
-
-    public void setCurrentDate(String currentDate) {
-        this.currentDate = currentDate;
-    }
-
     private String currentDate;
     private List<Period> periodList = new ArrayList<>();
     private List<Podstation> podstations;
@@ -54,7 +49,7 @@ public class PodstationDAO {
     }
 
     //Get one podstation with transformators and lines by RN
-    public Podstation getPodstation(int rn) {
+    public Podstation getPodstation(String rn) {
         log.info(" rn: " + rn +" Current date is: " + currentDate);
         String sqlTemplate = "SELECT RN, PODST_TYPE, NUM, NUM_STR, RES_NUM, DATE_RN, IS_ACTIVE, ADDRESS FROM PODSTATION WHERE RN =?";
         Podstation podstation = (Podstation) jdbcTemplate.queryForObject(sqlTemplate, new Object[]{rn}, new PodstationMapper());
@@ -97,6 +92,7 @@ public class PodstationDAO {
     }
 
     public String getPodstationRn(String type, String num, String currentDate){
+        System.out.println("type form dao is: " + type);
         String sqlTemplate = "SELECT RN FROM PODSTATION WHERE PODST_TYPE = ? AND NUM_STR = ? AND DATE_RN = ?";
         return (String) jdbcTemplate.queryForObject(sqlTemplate, new Object[]{type, num, currentDate}, String.class);
     }
@@ -124,5 +120,8 @@ public class PodstationDAO {
 
     public List<Period> getPeriodList() {
         return periodList;
+    }
+    public void setCurrentDate(String currentDate) {
+        this.currentDate = currentDate;
     }
 }

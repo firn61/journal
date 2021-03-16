@@ -5,13 +5,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.donenergo.journal.dao.PodstationDAO;
+import ru.donenergo.journal.models.Podstation;
+
+import java.util.List;
 
 @Controller
 public class MainController {
     private final PodstationDAO podstationDAO;
     private String currentDate;
-    private String currentPodstation = "10";
-    private int currentIntPodstation = 10;
+    private String currentPodstation;
+    private String podstType;
 
     @Autowired
     public MainController(PodstationDAO podstationDAO) {
@@ -23,13 +26,19 @@ public class MainController {
         if (currentDate == null) {
             currentDate = podstationDAO.getCurrentDate();
         }
+        List<Podstation> podstations = podstationDAO.getListPodstations(currentDate);
+        model.addAttribute("podstations", podstations);
+        if (currentPodstation == null) {
+            currentPodstation = String.valueOf(podstations.get(0).getRn());
+        }
         model.addAttribute("currentPodstation", currentPodstation);
         model.addAttribute("podstationNum", podstationDAO.getPodstationNumByRn(currentPodstation));
         model.addAttribute("currentDate", currentDate);
         model.addAttribute("podstTypes", podstationDAO.getPodstationTypes(currentDate));
         model.addAttribute("periodList", podstationDAO.getPeriodList());
-        model.addAttribute("podstations", podstationDAO.getListPodstations(currentDate));
-        model.addAttribute("sPodstation", podstationDAO.getPodstation(currentIntPodstation));
+        Podstation sPodstation = podstationDAO.getPodstation(currentPodstation);
+        podstType = sPodstation.getPodstType();
+        model.addAttribute("sPodstation", sPodstation);
         return "index";
     }
 
@@ -37,20 +46,23 @@ public class MainController {
     public String selectedDateAndPodstation(@RequestParam(value = "period", required = false) String periodRn,
                                             @RequestParam(value = "podstation", required = false) String podstationRnFromList,
                                             @RequestParam(value = "podstationNum", required = false) String podstationRnFromInput,
-                                            @RequestParam(value = "podstType", required = false) String podstType,
+                                            @RequestParam(value = "podstType", required = false) String podstTypeForm,
                                             Model model) {
-        if (podstationRnFromInput.equals(podstationDAO.getPodstationNumByRn(currentPodstation))) {
+
+        if (podstationRnFromInput.equals(podstationDAO.getPodstationNumByRn(currentPodstation))
+                && podstType.equals(podstTypeForm)) {
+            System.out.println("HERE");
             currentPodstation = podstationRnFromList;
         } else {
-            currentPodstation = podstationDAO.getPodstationRn("ТП", podstationRnFromInput, currentDate);
+            podstType = podstTypeForm;
+            currentPodstation = podstationDAO.getPodstationRn(podstType, podstationRnFromInput, currentDate);
         }
-        currentIntPodstation = Integer.valueOf(currentPodstation);
         currentDate = periodRn;
         return "redirect:/";
     }
 
     @RequestMapping("/{podstationRn}")
-    public String showPodstation(@PathVariable("podstationRn") int podstationRn, Model model) {
+    public String showPodstation(@PathVariable("podstationRn") String podstationRn, Model model) {
         model.addAttribute("currentDate", currentDate);
         model.addAttribute("currentPodstation", podstationRn);
         model.addAttribute("podstations", podstationDAO.getListPodstations(currentDate));
