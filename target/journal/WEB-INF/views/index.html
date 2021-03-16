@@ -13,6 +13,7 @@
 </head>
 <body>
 <header th:insert="header :: header"></header>
+<p th:text="${sPodstation.getAddress()}"></p>
 <th:block th:each="transformator : ${sPodstation.getTrList()}">
     <div>
         <table th:onclick="'showHideLines(\'' + ${transformator.getRn()} + '\');'">

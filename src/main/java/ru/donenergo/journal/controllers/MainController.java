@@ -37,6 +37,7 @@ public class MainController {
     public String selectedDateAndPodstation(@RequestParam(value = "period", required = false) String periodRn,
                                             @RequestParam(value = "podstation", required = false) String podstationRnFromList,
                                             @RequestParam(value = "podstationNum", required = false) String podstationRnFromInput,
+                                            @RequestParam(value = "podstType", required = false) String podstType,
                                             Model model) {
         if (podstationRnFromInput.equals(podstationDAO.getPodstationNumByRn(currentPodstation))) {
             currentPodstation = podstationRnFromList;
