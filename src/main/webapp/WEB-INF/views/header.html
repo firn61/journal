@@ -2,16 +2,16 @@
     <form th:action="@{/index}" th:method="POST" th:object="${period}">
         <div th:object="${period}">
             <select th:onchange="this.form.submit()" class="form-control" id="period1" name="period">
-                <option th:each="period : ${periodList}"
-                        th:selected="${period.getRn()}==${currentDate}"
+                <option th:each="period : ${mds.periodList}"
+                        th:selected="${period.getRn()}==${mds.currentDate}"
                         th:value="${period.getRn()}"
                         th:text="${period}">
                 </option>
             </select>
             <span th:object="${podstation}">
     <select th:onchange="this.form.submit()" class="form-control" id="podstation1" name="podstation">
-        <option th:each="podstation : ${podstations}"
-                th:selected="${podstation.getRn()}==${currentPodstation}"
+        <option th:each="podstation : ${mds.podstations}"
+                th:selected="${podstation.getRn()}==${mds.currentPodstation}"
                 th:value="${podstation.getRn()}"
                 th:text="${podstation}">
         </option>
@@ -19,7 +19,7 @@
     </span>
             <span th:object="${podstType}">
             <select class="form-control" id="type1" name="podstType">
-                <option th:each="podstType : ${podstTypes}"
+                <option th:each="podstType : ${mds.podstTypes}"
                         th:value="${podstType}"
                         th:selected="${podstType}==${sPodstation.getPodstType()}"
                         th:text="${podstType}">
@@ -27,7 +27,7 @@
             </select>
         </span>
             <span>
-            <input type="number" th:value="${podstationNum}" th:name="podstationNum"/>
+            <input type="number" th:value="${mds.podstationNum}" th:name="podstationNum"/>
         </span>
         </div>
     </form>

@@ -27,7 +27,7 @@ public class PodstationDAO {
     @PostConstruct
     private void setInitialState() {
         currentDate = getCurrentDateFromDb();
-        periodList = setPeriodListFromDb();
+        periodList = setPeriodListFromDb(currentDate);
         getPodstationsListFromDb(currentDate);
     }
 
@@ -37,8 +37,8 @@ public class PodstationDAO {
     }
 
     //returns all periods from database, used in @PostConstruct
-    private List<Period> setPeriodListFromDb() {
-        return jdbcTemplate.query("SELECT * FROM DATES", new PeriodMapper());
+    private List<Period> setPeriodListFromDb(String currentDate) {
+        return jdbcTemplate.query("SELECT RN, SDATE FROM DATES WHERE RN <= ?", new Object[]{currentDate}, new PeriodMapper());
     }
 
     //returns all podstations on current period, used in @PostConstruct
@@ -92,7 +92,6 @@ public class PodstationDAO {
     }
 
     public String getPodstationRn(String type, String num, String currentDate){
-        System.out.println("type form dao is: " + type);
         String sqlTemplate = "SELECT RN FROM PODSTATION WHERE PODST_TYPE = ? AND NUM_STR = ? AND DATE_RN = ?";
         return (String) jdbcTemplate.queryForObject(sqlTemplate, new Object[]{type, num, currentDate}, String.class);
     }
