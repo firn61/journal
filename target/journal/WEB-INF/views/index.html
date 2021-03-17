@@ -13,6 +13,7 @@
 </head>
 <body>
 <header th:insert="header :: headerv"></header>
+<header th:insert="headerget :: headerv"></header>
 <p th:text="${sPodstation.getAddress()}"></p>
 <div th:replace="podstation :: stable"></div>
 <script>
