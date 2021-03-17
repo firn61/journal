@@ -27,11 +27,17 @@ public class MainController {
         mds.setPeriodList(podstationDAO.getPeriodList());
     }
 
-    private Podstation refreshMdsValues() {
+    private Podstation refreshMdsValues(String rn, String type) {
         List<Podstation> podstations = podstationDAO.getListPodstations(mds.getCurrentDate());
         mds.setPodstations(podstations);
-        if (mds.getCurrentPodstation() == null) {
+        if (rn.equals("norn")) {
             mds.setCurrentPodstation(String.valueOf(podstations.get(0).getRn()));
+        } else {
+            for (Podstation p : podstations){
+                if(p.getNumStr().equals(rn) && p.getPodstType().equals(type)){
+                    mds.setCurrentPodstation(String.valueOf(p.getRn()));
+                }
+            }
         }
         mds.setPodstationNum(podstationDAO.getPodstationNumByRn(mds.getCurrentPodstation()));
         mds.setPodstTypes(podstationDAO.getPodstationTypes(mds.getCurrentDate()));
@@ -42,39 +48,63 @@ public class MainController {
 
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("sPodstation", refreshMdsValues());
+        model.addAttribute("sPodstation", refreshMdsValues("norn", "notype"));
         model.addAttribute(mds);
         return "index";
     }
 
-    @PostMapping("/index")
-    public String selectedDateAndPodstation(@RequestParam(value = "period", required = false) String periodRnFromSelect,
-                                            @RequestParam(value = "podstation", required = false) String podstationRnFromSelect,
-                                            @RequestParam(value = "podstationNum", required = false) String podstationRnFromInput,
-                                            @RequestParam(value = "podstType", required = false) String podstTypeForm,
-                                            Model model) {
-        if (podstationRnFromInput.equals(podstationDAO.getPodstationNumByRn(mds.getCurrentPodstation()))
-                && mds.getPodstType().equals(podstTypeForm)) {
-            mds.setCurrentPodstation(podstationRnFromSelect);
-        } else {
-            mds.setPodstType(podstTypeForm);
-            mds.setCurrentPodstation(podstationDAO.getPodstationRn(mds.getPodstType(), podstationRnFromInput, mds.getCurrentDate()));
-        }
-        mds.setCurrentDate(periodRnFromSelect);
-        return "redirect:/";
-    }
+//    @PostMapping("/index")
+//    public String selectedDateAndPodstation(@RequestParam(value = "period", required = false) String periodRnFromSelect,
+//                                            @RequestParam(value = "podstation", required = false) String podstationRnFromSelect,
+//                                            @RequestParam(value = "podstationNum", required = false) String podstationRnFromInput,
+//                                            @RequestParam(value = "podstType", required = false) String podstTypeForm,
+//                                            Model model) {
+//        if (podstationRnFromInput.equals(podstationDAO.getPodstationNumByRn(mds.getCurrentPodstation()))
+//                && mds.getPodstType().equals(podstTypeForm)) {
+//            mds.setCurrentPodstation(podstationRnFromSelect);
+//        } else {
+//            mds.setPodstType(podstTypeForm);
+//            mds.setCurrentPodstation(podstationDAO.getPodstationRn(mds.getPodstType(), podstationRnFromInput, mds.getCurrentDate()));
+//        }
+//        mds.setCurrentDate(periodRnFromSelect);
+//        return "redirect:/";
+//    }
 
-    @RequestMapping("/{podstationRn}")
-    public String showPodstation(@PathVariable("podstationRn") String podstationRnFromPath,
+    @RequestMapping("/show")
+    public String showPodstation(@RequestParam(value = "period", required = false) String period,
                                  @RequestParam(value = "podstation", required = false) String podstationRnFromSelect,
-                                 @RequestParam(value = "podstationNum", required = false) String podstationRnFromInput,
+                                 @RequestParam(value = "podstationNum", required = false) String podstationNumFromInput,
                                  @RequestParam(value = "podstType", required = false) String podstTypeForm,
+                                 @RequestParam(value = "action", required = false) String action,
                                  Model model) {
-//        model.addAttribute("currentDate", currentDate);
-//        model.addAttribute("currentPodstation", podstationRn);
-//        model.addAttribute("podstations", podstationDAO.getListPodstations(currentDate));
-//        model.addAttribute("sPodstation", podstationDAO.getPodstation(podstationRn));
-//        model.addAttribute("periodList", podstationDAO.getPeriodList());
-        return "podstation";
+        if ((action == null) || (action.equals("find"))) {
+            if (!period.equals(mds.getCurrentDate())) {
+                mds.setCurrentDate(period);
+                model.addAttribute("sPodstation", refreshMdsValues(podstationNumFromInput, podstTypeForm));
+                model.addAttribute(mds);
+                return "showpodstation";
+            }
+            if (!podstationRnFromSelect.equals(mds.getCurrentPodstation())) {
+                mds.setCurrentPodstation(podstationRnFromSelect);
+                for (Podstation p : mds.getPodstations()){
+                    if(String.valueOf(p.getRn()).equals(mds.getCurrentPodstation())){
+                        mds.setPodstationNum(p.getNumStr());
+                    }
+                }
+                model.addAttribute(mds);
+                model.addAttribute("sPodstation", podstationDAO.getPodstation(mds.getCurrentPodstation()));
+                return "showpodstation";
+            }
+            mds.setPodstationNum(podstationNumFromInput);
+            mds.setPodstType(podstTypeForm);
+            String podstationRn = podstationDAO.getPodstationRn(mds.getPodstType(), podstationNumFromInput, mds.getCurrentDate());
+            mds.setCurrentPodstation(podstationRn);
+            model.addAttribute(mds);
+            model.addAttribute("sPodstation", podstationDAO.getPodstation(mds.getCurrentPodstation()));
+            return "showpodstation";
+
+        } else {
+            return "edit";
+        }
     }
 }
