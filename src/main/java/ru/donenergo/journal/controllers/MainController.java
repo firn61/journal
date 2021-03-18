@@ -70,6 +70,12 @@ public class MainController {
 //        return "redirect:/";
 //    }
 
+    @PostMapping("/show")
+    public String editMeasures(@ModelAttribute("sPodstation") Podstation sPodstation){
+        System.out.println(sPodstation.getAddress());
+        return "edit";
+    }
+
     @RequestMapping("/show")
     public String showPodstation(@RequestParam(value = "period", required = false) String period,
                                  @RequestParam(value = "podstation", required = false) String podstationRnFromSelect,
@@ -104,7 +110,9 @@ public class MainController {
             return "showpodstation";
 
         } else {
-            return "edit";
+            model.addAttribute(mds);
+            model.addAttribute("sPodstation", podstationDAO.getPodstation(mds.getCurrentPodstation()));
+            return "editpodstation";
         }
     }
 }

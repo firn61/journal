@@ -1,0 +1,58 @@
+<div th:fragment="stable">
+    <form th:action="@{/show}" th:method="POST" th:object="${sPodstation}" th:name="sPodstation">
+    <p th:text="${sPodstation.getAddress()}"></p> <button type="submit" th:name="action" th:value="save">Сохранить</button>
+    <th:block th:each="transformator : ${sPodstation.getTrList()}">
+        <div>
+            <table th:onclick="'showHideLines(\'' + ${transformator.getRn()} + '\');'">
+                <tr>
+                    <th>Номер</th>
+                    <th>Фидер</th>
+                    <th>Мощность</th>
+                    <th>U_A</th>
+                    <th>U_B</th>
+                    <th>U_C</th>
+                    <th>I_A</th>
+                    <th>I_B</th>
+                    <th>I_C</th>
+                    <th>I_N</th>
+                    <th>Дата</th>
+                    <th>Монтер</th>
+                </tr>
+                <td><p th:text="${transformator.getNum()}"/></td>
+                <td><p th:text="${transformator.getFider()}"/></td>
+                <td><p th:text="${transformator.getPower()}"/></td>
+                <td><input type="number" th:value="${transformator.getuA()}" th:name="transuA"/></td>
+                <td><input type="number" th:value="${transformator.getuB()}" th:name="transuB"/></td>
+                <td><input type="number" th:value="${transformator.getuC()}" th:name="transuC"/></td>
+                <td><p th:text="${transformator.getiA()}"/></td>
+                <td><p th:text="${transformator.getiB()}"/></td>
+                <td><p th:text="${transformator.getiC()}"/></td>
+                <td><p th:text="${transformator.getiN()}"/></td>
+                <td><input type="text" th:value="${transformator.getDateTime()}" th:name="transDate"></td>
+                <td><input type="text" th:value="${transformator.getMonter()}" th:name="transMonter"></td>
+                </tr>
+            </table>
+        </div>
+        <table th:id="${transformator.getRn()}">
+            <tr>
+                <th>Номер</th>
+                <th>Наименование</th>
+                <th>I A</th>
+                <th>I B</th>
+                <th>I C</th>
+                <th>I O</th>
+                <th>KA</th>
+            </tr>
+            <tr th:each="line : ${transformator.getListLines()}">
+                <td><p th:text="${line.getNum()}"></p></td>
+                <td><p th:text="${line.getName()}"></p></td>
+                <td><input type="number" th:value="${line.getiA()}" th:name="lineiA"></input></td>
+                <td><input type="number" th:value="${line.getiB()}" th:name="lineiB"></p></td>
+                <td><input type="number" th:value="${line.getiC()}" th:name="lineiC"></p></td>
+                <td><input type="number" th:value="${line.getiO()}" th:name="lineiO"></p></td>
+                <td><input type="text" th:value="${line.getkA()}" th:name="lineKa"></p></td>
+            </tr>
+        </table>
+    </th:block>
+    </form>
+</div>
