@@ -1,7 +1,9 @@
 <div th:fragment="stable">
     <form th:action="@{/show}" th:method="POST" th:object="${sPodstation}" th:name="sPodstation">
-    <p th:text="${sPodstation.getAddress()}"></p> <button type="submit" th:name="action" th:value="save">Сохранить</button>
-    <th:block th:each="transformator : ${sPodstation.getTrList()}">
+    <p th:text="*{address}"></p> <button type="submit" th:name="action" th:value="save">Сохранить</button>
+    <input type="hidden" th:field="*{address}"></input>
+    <th:block th:each="transformator : *{trList}">
+        <input type="hidden" th:value="${sPodstation.trList}" name="someName"/>
         <div>
             <table th:onclick="'showHideLines(\'' + ${transformator.getRn()} + '\');'">
                 <tr>
@@ -21,7 +23,7 @@
                 <td><p th:text="${transformator.getNum()}"/></td>
                 <td><p th:text="${transformator.getFider()}"/></td>
                 <td><p th:text="${transformator.getPower()}"/></td>
-                <td><input type="number" th:value="${transformator.getuA()}" th:name="transuA"/></td>
+                <td><input type="number" th:value="${transformator.getuA()}" th:name="${sPodstation.trList[__${transformatorStat.index}__].uA}"/></td>
                 <td><input type="number" th:value="${transformator.getuB()}" th:name="transuB"/></td>
                 <td><input type="number" th:value="${transformator.getuC()}" th:name="transuC"/></td>
                 <td><p th:text="${transformator.getiA()}"/></td>
