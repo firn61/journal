@@ -91,6 +91,7 @@ public class Line {
         this.iC = iC;
     }
 
+
     public int getiO() {
         return iO;
     }
@@ -105,5 +106,21 @@ public class Line {
 
     public void setkA(String kA) {
         this.kA = kA;
+    }
+
+    @Override
+    public String toString() {
+        return "Line{" +
+                "sectionNum=" + sectionNum +
+                ", rn=" + rn +
+                ", trRn=" + trRn +
+                ", num=" + num +
+                ", name='" + name + '\'' +
+                ", iA=" + iA +
+                ", iB=" + iB +
+                ", iC=" + iC +
+                ", iO=" + iO +
+                ", kA='" + kA + '\'' +
+                '}';
     }
 }

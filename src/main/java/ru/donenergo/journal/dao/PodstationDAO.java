@@ -31,8 +31,38 @@ public class PodstationDAO {
         getPodstationsListFromDb(currentDate);
     }
 
-    public void updatePodstation(Podstation podstation){
+    public void updatePodstationValues(Podstation podstation){
+        for (int i = 0; i <podstation.getTrList().size() ; i++) {
+            updateTransformatorValues(podstation.getTrList().get(i));
+        }
+    }
 
+    public void updateTransformatorValues(Transformator transformator){
+        int sumiA=0;
+        int sumiB=0;
+        int sumiC=0;
+        int sumiO=0;
+        for (int i = 0; i <transformator.getListLines().size() ; i++) {
+            sumiA +=transformator.getListLines().get(i).getiA();
+            sumiB +=transformator.getListLines().get(i).getiB();
+            sumiC +=transformator.getListLines().get(i).getiC();
+            sumiO +=transformator.getListLines().get(i).getiO();
+            updateLineValues(transformator.getListLines().get(i));
+        }
+        transformator.setiA(sumiA);
+        transformator.setiB(sumiB);
+        transformator.setiC(sumiC);
+        transformator.setiN(sumiO);
+        jdbcTemplate.update("execute procedure TRANS_VALUESUPDATE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                new Object[]{transformator.getRn(), transformator.getuA(), transformator.getuB(), transformator.getuC(),
+                transformator.getiA(), transformator.getiB(), transformator.getiC(), transformator.getiN(),
+                transformator.getDateTime(), transformator.getMonter()});
+    }
+
+    public void updateLineValues(Line line){
+        System.out.println(line);
+        jdbcTemplate.update("execute procedure LINE_VALUESUPDATE(?, ?, ?, ?, ?, ?)",
+                new Object[]{line.getRn(), line.getiA(), line.getiB(), line.getiC(), line.getiO(), line.getkA()});
     }
 
     //returns current period DATE_RN from database, used in @PostConstruct

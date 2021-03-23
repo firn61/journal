@@ -73,6 +73,7 @@ public class MainController {
     @PostMapping("/show")
     public String editMeasures(@ModelAttribute("sPodstation") Podstation sPodstation){
         System.out.println(sPodstation.getAddress());
+        podstationDAO.updatePodstationValues(sPodstation);
         return "edit";
     }
 

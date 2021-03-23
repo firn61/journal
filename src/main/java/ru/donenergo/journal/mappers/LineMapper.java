@@ -18,7 +18,7 @@ public class LineMapper implements RowMapper<Line> {
         line.setiA(resultSet.getInt("I_A"));
         line.setiB(resultSet.getInt("I_B"));
         line.setiC(resultSet.getInt("I_C"));
-        line.setiA(resultSet.getInt("I_O"));
+        line.setiO(resultSet.getInt("I_O"));
         line.setkA(resultSet.getString("KA"));
         return line;
     }
