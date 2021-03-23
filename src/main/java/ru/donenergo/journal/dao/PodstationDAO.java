@@ -31,6 +31,10 @@ public class PodstationDAO {
         getPodstationsListFromDb(currentDate);
     }
 
+    public void updatePodstation(Podstation podstation){
+
+    }
+
     //returns current period DATE_RN from database, used in @PostConstruct
     private String getCurrentDateFromDb() {
         return (String) jdbcTemplate.queryForObject("SELECT SVALUE FROM SYSTEM WHERE SPARAM = 'currentDate'", String.class);
