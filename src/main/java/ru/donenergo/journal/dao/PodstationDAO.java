@@ -31,6 +31,14 @@ public class PodstationDAO {
         getPodstationsListFromDb(currentDate);
     }
 
+    public void addTransformator(String podstationRn, int num){
+        jdbcTemplate.queryForObject("execute procedure TRANS_INSERT(?, ?, null, 0, 0, 0, 0, 0, 0, 0, 0, null, null)", new Object[]{podstationRn, num}, String.class);
+    }
+
+    public void addLine(String transformatorRn, String num){
+        jdbcTemplate.queryForObject("execute procedure LINE_INSERT(?, ?, ?, 0, 0, 0, 0, null)", new Object[]{transformatorRn, num, "Л-"}, String.class);
+    }
+
     public void updatePodstationValues(Podstation podstation){
         for (int i = 0; i <podstation.getTrList().size() ; i++) {
             updateTransformatorValues(podstation.getTrList().get(i));
@@ -42,7 +50,7 @@ public class PodstationDAO {
         int sumiB=0;
         int sumiC=0;
         int sumiO=0;
-        for (int i = 0; i <transformator.getListLines().size() ; i++) {
+        for (int i = 0; i <transformator.getListLines().size(); i++) {
             sumiA +=transformator.getListLines().get(i).getiA();
             sumiB +=transformator.getListLines().get(i).getiB();
             sumiC +=transformator.getListLines().get(i).getiC();
@@ -77,7 +85,8 @@ public class PodstationDAO {
 
     //returns all podstations on current period, used in @PostConstruct
     private List<Podstation> getPodstationsListFromDb(String currentDate) {
-        podstations = jdbcTemplate.query("SELECT * FROM PODSTATION WHERE DATE_RN=?", new Object[]{currentDate}, new PodstationMapper());
+        podstations = jdbcTemplate.query("SELECT RN, PODST_TYPE, NUM, NUM_STR, RES_NUM, DATE_RN, IS_ACTIVE, ADDRESS FROM PODSTATION WHERE DATE_RN=?",
+                new Object[]{currentDate}, new PodstationMapper());
         log.info(" Podstation list refreshed");
         return podstations;
     }
@@ -91,6 +100,7 @@ public class PodstationDAO {
         podstation.setTrCount(podstation.getTrList().size());
         for (int i = 0; i < podstation.getTrList().size(); i++) {
             podstation.getTrList().get(i).setListLines(getTransformatorLines(podstation.getTrList().get(i).getNum(), podstation.getTrList().get(i).getRn()));
+            podstation.getTrList().get(i).setLinesCount(podstation.getTrList().get(i).getListLines().size());
         }
         return podstation;
     }
@@ -98,7 +108,8 @@ public class PodstationDAO {
     //Get podstation transformators by TP_RN
     public List<Transformator> getTransformators(int tpRn) {
         log.info(" tpRn: " + tpRn);
-        return jdbcTemplate.query("SELECT * FROM TRANSFORMATOR WHERE TP_RN=?", new Object[]{tpRn}, new TransformatorMapper());
+        return jdbcTemplate.query("SELECT RN, TP_RN, NUM, FIDER, POWER, U_A, U_B, U_C, I_A, I_B, I_C, I_N, DATETIME, MONTER FROM TRANSFORMATOR WHERE TP_RN=?",
+                new Object[]{tpRn}, new TransformatorMapper());
     }
 
     //Not used

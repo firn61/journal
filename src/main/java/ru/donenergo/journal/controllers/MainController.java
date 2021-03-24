@@ -1,6 +1,7 @@
 package ru.donenergo.journal.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +9,7 @@ import ru.donenergo.journal.dao.PodstationDAO;
 import ru.donenergo.journal.models.Podstation;
 
 import javax.annotation.PostConstruct;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -33,8 +35,8 @@ public class MainController {
         if (rn.equals("norn")) {
             mds.setCurrentPodstation(String.valueOf(podstations.get(0).getRn()));
         } else {
-            for (Podstation p : podstations){
-                if(p.getNumStr().equals(rn) && p.getPodstType().equals(type)){
+            for (Podstation p : podstations) {
+                if (p.getNumStr().equals(rn) && p.getPodstType().equals(type)) {
                     mds.setCurrentPodstation(String.valueOf(p.getRn()));
                 }
             }
@@ -70,11 +72,38 @@ public class MainController {
 //        return "redirect:/";
 //    }
 
-    @PostMapping("/show")
-    public String editMeasures(@ModelAttribute("sPodstation") Podstation sPodstation){
-        System.out.println(sPodstation.getAddress());
+    @PostMapping("/editvalues")
+    public String editPodstationValues(@ModelAttribute("sPodstation") Podstation sPodstation,
+                                       Model model) {
         podstationDAO.updatePodstationValues(sPodstation);
-        return "edit";
+        model.addAttribute(mds);
+        model.addAttribute("sPodstation", sPodstation);
+        return "showpodstation";
+    }
+
+    @PostMapping("/edit")
+    public String editPodstation(@ModelAttribute("sPodstation") Podstation sPodstation,
+                                 @RequestParam(value = "action") String action,
+                                 Model model) {
+        String[] targetValues = action.split("&");
+        if (targetValues[0].equals("transformator")) {
+            podstationDAO.addTransformator(targetValues[2], sPodstation.getTrCount()+1);
+        }
+        if (targetValues[0].equals("line")) {
+            if (targetValues[1].equals("add")){
+                String[] addLineParams = targetValues[2].split("-");
+                int linesCount = Integer.valueOf(addLineParams[1]);
+                addLineParams[1] = String.valueOf(Integer.valueOf(linesCount+1));
+                podstationDAO.addLine(addLineParams[0], addLineParams[1]);
+            }
+            if (targetValues[1].equals("del")){
+
+            }
+        }
+        System.out.println(Arrays.toString(targetValues));
+        model.addAttribute(mds);
+        model.addAttribute("sPodstation", podstationDAO.getPodstation(String.valueOf(sPodstation.getRn())));
+        return "editpodstation";
     }
 
     @RequestMapping("/show")
@@ -93,8 +122,8 @@ public class MainController {
             }
             if (!podstationRnFromSelect.equals(mds.getCurrentPodstation())) {
                 mds.setCurrentPodstation(podstationRnFromSelect);
-                for (Podstation p : mds.getPodstations()){
-                    if(String.valueOf(p.getRn()).equals(mds.getCurrentPodstation())){
+                for (Podstation p : mds.getPodstations()) {
+                    if (String.valueOf(p.getRn()).equals(mds.getCurrentPodstation())) {
                         mds.setPodstationNum(p.getNumStr());
                     }
                 }
@@ -109,11 +138,18 @@ public class MainController {
             model.addAttribute(mds);
             model.addAttribute("sPodstation", podstationDAO.getPodstation(mds.getCurrentPodstation()));
             return "showpodstation";
-
-        } else {
+        }
+        if (action.equals("editvalues")) {
+            model.addAttribute(mds);
+            model.addAttribute("sPodstation", podstationDAO.getPodstation(mds.getCurrentPodstation()));
+            return "editpodstationvalues";
+        }
+        if (action.equals("editpodstation")) {
             model.addAttribute(mds);
             model.addAttribute("sPodstation", podstationDAO.getPodstation(mds.getCurrentPodstation()));
             return "editpodstation";
+        } else {
+            return "error";
         }
     }
 }

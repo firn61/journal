@@ -1,5 +1,5 @@
 <div th:fragment="stable">
-    <form th:action="@{/show}" th:method="POST" th:object="${sPodstation}">
+    <form th:action="@{/editvalues}" th:method="POST" th:object="${sPodstation}">
     <p th:text="*{address}"></p> <button type="submit" th:name="action" th:value="save">Сохранить</button>
     <input type="hidden" th:field="*{address}"></input>
     <input type="hidden" th:field="*{rn}"></input>

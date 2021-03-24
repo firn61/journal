@@ -1,5 +1,5 @@
 <div th:fragment="headerv">
-    <form th:action="@{/index}" th:method="POST" th:object="${period}">
+    <form th:action="@{/show}" th:method="GET">
         <div th:object="${period}">
             <select th:onchange="this.form.submit()" class="form-control" id="period1" name="period">
                 <option th:each="period : ${mds.periodList}"
@@ -29,6 +29,9 @@
             <span>
             <input type="number" th:value="${mds.podstationNum}" th:name="podstationNum"/>
         </span>
+            <button type="submit" th:name="action" th:value="find">Найти</button>
+            <button type="submit" th:name="action" th:value="editvalues">Ввод замеров</button>
+            <button type="submit" th:name="action" th:value="editpodstation">Редактор подстанции</button>
         </div>
     </form>
 </div>

@@ -12,17 +12,7 @@
     <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 </head>
 <body>
-<header th:insert="headerget :: headerv"></header>
-<div th:replace="podstatione :: stable"></div>
-<script>
-    function showHideLines(varId) {
-        var x = document.getElementById(varId);
-        if (x.style.display === "none") {
-            x.style.display = "block";
-        } else {
-            x.style.display = "none";
-        }
-    }
-</script>
+<header th:insert="frheader :: headerv"></header>
+<div th:replace="frpodstationedit :: stable"></div>
 </body>
 </html>

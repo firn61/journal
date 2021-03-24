@@ -13,17 +13,6 @@
 </head>
 <body>
 <header th:insert="frheader :: headerv"></header>
-<p th:text="${sPodstation.getAddress()}"></p>
-<div th:replace="frpodstationshow :: stable"></div>
-<script>
-    function showHideLines(varId) {
-        var x = document.getElementById(varId);
-        if (x.style.display === "none") {
-            x.style.display = "block";
-        } else {
-            x.style.display = "none";
-        }
-    }
-</script>
+<div th:replace="frpodstationeditvalues :: stable"></div>
 </body>
 </html>
