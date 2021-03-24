@@ -39,7 +39,7 @@
                     <td><input type="text" th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].name}"></input></td>
                     <td><button type="submit" th:name="action" th:value="'line&up&' + ${line.getRn()}" title="Вверх">&#8593</button>
                         <button type="submit" th:name="action" th:value="'line&down&' + ${line.getRn()}" title="Вниз">&#8595</button>
-                        <button type="submit" th:name="action" th:value="'line&del&' + ${transformator.getRn()}" title="Удалить">&#9746</button>
+                        <button type="submit" th:name="action" th:value="'line&del&' + ${line.getRn()}" title="Удалить">&#9746</button>
                     </td>
                 </tr>
             </table>

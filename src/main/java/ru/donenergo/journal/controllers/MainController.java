@@ -97,10 +97,16 @@ public class MainController {
                 podstationDAO.addLine(addLineParams[0], addLineParams[1]);
             }
             if (targetValues[1].equals("del")){
-
+                podstationDAO.deleteLine(targetValues[2]);
+            }
+            if (targetValues[1].equals("up")){
+                System.out.println("move UP!");
+                podstationDAO.moveLine(targetValues[2], "up");
+            }
+            if (targetValues[1].equals("down")){
+                podstationDAO.moveLine(targetValues[2], "down");
             }
         }
-        System.out.println(Arrays.toString(targetValues));
         model.addAttribute(mds);
         model.addAttribute("sPodstation", podstationDAO.getPodstation(String.valueOf(sPodstation.getRn())));
         return "editpodstation";
