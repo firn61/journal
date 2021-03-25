@@ -2,7 +2,7 @@
     <form th:action="@{/edit}" th:method="POST" th:object="${sPodstation}">
         <br>
         Адрес: <input type="text" th:field="*{address}">
-        <button type="submit" th:name="action" th:value="'transformator&add&' + ${sPodstation.getRn()}">Добавить трансформатор</button>
+        <button type="submit" th:name="action" th:value="'trans&add&' + ${sPodstation.getRn()}">Добавить трансформатор</button>
         <button type="submit" th:name="action" th:value="save">Сохранить</button>
         <input type="hidden" th:field="*{rn}"></input>
         <input type="hidden" th:field="*{trCount}">
@@ -21,7 +21,8 @@
                     <td><input type="text" th:field="*{trList[__${tstat.index}__].fider}"/></td>
                     <td><input type="text" th:field="*{trList[__${tstat.index}__].power}"/></td>
                     <input type="hidden" th:field="*{trList[__${tstat.index}__].linesCount}">
-                    <td><button type="submit" th:name="action" th:value="'line&add&' + ${transformator.getRn()}+'-' + ${transformator.linesCount}">Добавить линию</button></td>
+                    <td><button type="submit" th:name="action" th:value="'line&add&' + ${transformator.getRn()}+'-' + ${transformator.linesCount}">Добавить линию</button>
+                        <button type="submit" th:name="action" th:value="'trans&del&' + ${transformator.getRn()}">Удалить трансформатор</button></td>
                     </tr>
                 </table>
             </div>

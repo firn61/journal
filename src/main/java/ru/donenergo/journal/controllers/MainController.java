@@ -55,23 +55,6 @@ public class MainController {
         return "index";
     }
 
-//    @PostMapping("/index")
-//    public String selectedDateAndPodstation(@RequestParam(value = "period", required = false) String periodRnFromSelect,
-//                                            @RequestParam(value = "podstation", required = false) String podstationRnFromSelect,
-//                                            @RequestParam(value = "podstationNum", required = false) String podstationRnFromInput,
-//                                            @RequestParam(value = "podstType", required = false) String podstTypeForm,
-//                                            Model model) {
-//        if (podstationRnFromInput.equals(podstationDAO.getPodstationNumByRn(mds.getCurrentPodstation()))
-//                && mds.getPodstType().equals(podstTypeForm)) {
-//            mds.setCurrentPodstation(podstationRnFromSelect);
-//        } else {
-//            mds.setPodstType(podstTypeForm);
-//            mds.setCurrentPodstation(podstationDAO.getPodstationRn(mds.getPodstType(), podstationRnFromInput, mds.getCurrentDate()));
-//        }
-//        mds.setCurrentDate(periodRnFromSelect);
-//        return "redirect:/";
-//    }
-
     @PostMapping("/editvalues")
     public String editPodstationValues(@ModelAttribute("sPodstation") Podstation sPodstation,
                                        Model model) {
@@ -85,26 +68,34 @@ public class MainController {
     public String editPodstation(@ModelAttribute("sPodstation") Podstation sPodstation,
                                  @RequestParam(value = "action") String action,
                                  Model model) {
-        String[] targetValues = action.split("&");
-        if (targetValues[0].equals("transformator")) {
-            podstationDAO.addTransformator(targetValues[2], sPodstation.getTrCount()+1);
-        }
-        if (targetValues[0].equals("line")) {
-            if (targetValues[1].equals("add")){
-                String[] addLineParams = targetValues[2].split("-");
-                int linesCount = Integer.valueOf(addLineParams[1]);
-                addLineParams[1] = String.valueOf(Integer.valueOf(linesCount+1));
-                podstationDAO.addLine(addLineParams[0], addLineParams[1]);
+        if (action.equals("save")) {
+            podstationDAO.updatePodstation(sPodstation);
+        } else {
+            String[] targetValues = action.split("&");
+            if (targetValues[0].equals("trans")) {
+                if (targetValues[1].equals("add")) {
+                    podstationDAO.addTransformator(targetValues[2], sPodstation.getTrCount() + 1);
+                }
+                if (targetValues[1].equals("del")) {
+                    podstationDAO.deleteTrans(targetValues[2]);
+                }
             }
-            if (targetValues[1].equals("del")){
-                podstationDAO.deleteLine(targetValues[2]);
-            }
-            if (targetValues[1].equals("up")){
-                System.out.println("move UP!");
-                podstationDAO.moveLine(targetValues[2], "up");
-            }
-            if (targetValues[1].equals("down")){
-                podstationDAO.moveLine(targetValues[2], "down");
+            if (targetValues[0].equals("line")) {
+                if (targetValues[1].equals("add")) {
+                    String[] addLineParams = targetValues[2].split("-");
+                    int linesCount = Integer.valueOf(addLineParams[1]);
+                    addLineParams[1] = String.valueOf(Integer.valueOf(linesCount + 1));
+                    podstationDAO.addLine(addLineParams[0], addLineParams[1]);
+                }
+                if (targetValues[1].equals("del")) {
+                    podstationDAO.deleteLine(targetValues[2]);
+                }
+                if (targetValues[1].equals("up")) {
+                    podstationDAO.moveLine(targetValues[2], "up");
+                }
+                if (targetValues[1].equals("down")) {
+                    podstationDAO.moveLine(targetValues[2], "down");
+                }
             }
         }
         model.addAttribute(mds);

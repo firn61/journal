@@ -31,6 +31,22 @@ public class PodstationDAO {
         getPodstationsListFromDb(currentDate);
     }
 
+    public void deleteTrans(String rn){
+        jdbcTemplate.update("DELETE FROM TRANSFORMATOR WHERE RN = ?", new Object[]{rn});
+        jdbcTemplate.update("DELETE FROM LINE WHERE TR_RN = ?", new Object[]{rn});
+    }
+
+    public void updatePodstation(Podstation uPodstation){
+        jdbcTemplate.update("execute procedure PODST_UPDATE(?, ?)", new Object[]{uPodstation.getAddress(), uPodstation.getRn()});
+        for (Transformator transformator : uPodstation.getTrList()){
+            jdbcTemplate.update("execute procedure TRANS_UPDATE(?, ?, ?)",
+                    new Object[]{transformator.getFider(), transformator.getPower(), transformator.getRn()});
+            for (Line line : transformator.getListLines()){
+                updateLine(line.getNum(), line.getName(), line.getRn());
+            }
+        }
+    }
+
     public void addTransformator(String podstationRn, int num) {
         jdbcTemplate.queryForObject("execute procedure TRANS_INSERT(?, ?, null, 0, 0, 0, 0, 0, 0, 0, 0, null, null)", new Object[]{podstationRn, num}, String.class);
     }
@@ -66,8 +82,9 @@ public class PodstationDAO {
         }
     }
 
+
+
     public void updateLine(int num, String name, int rn) {
-        System.out.println("Line Updated");
         jdbcTemplate.update("execute procedure LINE_UPDATE(?, ?, ?)", new Object[]{num, name, rn});
     }
 
@@ -151,7 +168,7 @@ public class PodstationDAO {
     //Get podstation transformators by TP_RN
     public List<Transformator> getTransformators(int tpRn) {
         log.info(" tpRn: " + tpRn);
-        return jdbcTemplate.query("SELECT RN, TP_RN, NUM, FIDER, POWER, U_A, U_B, U_C, I_A, I_B, I_C, I_N, DATETIME, MONTER FROM TRANSFORMATOR WHERE TP_RN=?",
+        return jdbcTemplate.query("SELECT RN, TP_RN, NUM, FIDER, POWER, U_A, U_B, U_C, I_A, I_B, I_C, I_N, DATETIME, MONTER FROM TRANSFORMATOR WHERE TP_RN=? ORDER BY NUM",
                 new Object[]{tpRn}, new TransformatorMapper());
     }
 
