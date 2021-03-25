@@ -12,9 +12,9 @@
     <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 </head>
 <body>
-<header th:insert="frheader :: headerv"></header>
+<header th:insert="fragments/frheader :: headerv"></header>
 <p th:text="${sPodstation.getAddress()}"></p>
-<div th:replace="frpodstationshow :: stable"></div>
+<div th:replace="fragments/frpodstationshow :: stable"></div>
 <script>
     function showHideLines(varId) {
         var x = document.getElementById(varId);

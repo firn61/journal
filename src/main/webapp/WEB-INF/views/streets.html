@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        table, th, td {
+            border: 1px solid #000000;
+            border-collapse: collapse;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>Журнал нагрузок</title>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+</head>
+<body>
+<form th:action="@{/streets}" method="GET" th:object="${streets}">
+    <div class="form-group">
+
+        Улица: <input list="streets" class="form-control" id="streetsselect" name="street">  </input>
+        <datalist id="streets">
+            <option th:each="street : ${streets}"
+                    th:value = "${street.streetName} + ', ' + ${street.streetType}">
+        </datalist>
+        Номер дома: <input type="number" name="housenumber">
+        Корпус: <input type="text" name="letter">
+        <button>Поиск по номеру дома</button>
+    </div>
+</form>
+</body>
+</html>

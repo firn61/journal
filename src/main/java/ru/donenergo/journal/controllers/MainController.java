@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.donenergo.journal.dao.PodstationDAO;
+import ru.donenergo.journal.dao.StreetDAO;
 import ru.donenergo.journal.models.Podstation;
 
 import javax.annotation.PostConstruct;
@@ -15,11 +16,13 @@ import java.util.List;
 @Controller
 public class MainController {
     private final PodstationDAO podstationDAO;
+    private final StreetDAO streetDAO;
     private Mds mds;
 
     @Autowired
-    public MainController(PodstationDAO podstationDAO, Mds mds) {
+    public MainController(PodstationDAO podstationDAO, StreetDAO streetDAO, Mds mds) {
         this.podstationDAO = podstationDAO;
+        this.streetDAO = streetDAO;
         this.mds = mds;
     }
 
@@ -145,7 +148,14 @@ public class MainController {
             model.addAttribute(mds);
             model.addAttribute("sPodstation", podstationDAO.getPodstation(mds.getCurrentPodstation()));
             return "editpodstation";
-        } else {
+        }
+        if (action.equals("streets")){
+            model.addAttribute("streets", streetDAO.getStreets());
+            model.addAttribute(mds);
+            model.addAttribute("sPodstation", podstationDAO.getPodstation(mds.getCurrentPodstation()));
+            return "streets";
+        }
+        else {
             return "error";
         }
     }
