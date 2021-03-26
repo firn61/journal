@@ -15,6 +15,15 @@ public class Mds {
     private List<String> podstTypes;
     private List<Period> periodList;
     private List<Podstation> podstations;
+    private Podstation sPodstation;
+
+    public Podstation getsPodstation() {
+        return sPodstation;
+    }
+
+    public void setsPodstation(Podstation sPodstation) {
+        this.sPodstation = sPodstation;
+    }
 
     public String getPodstationNum() {
         return podstationNum;

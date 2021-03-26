@@ -58,6 +58,15 @@ public class MainController {
         return "index";
     }
 
+    @GetMapping("/streets")
+    public String getStreets(@RequestParam(value = "street") String street,
+                             @RequestParam(value = "housenum") int housenum,
+                             @RequestParam(value = "letter") String letter,
+                             @RequestParam(value = "action") String action) {
+        System.out.println(street + " " + housenum + " " + letter + " " + action);
+        return "streets";
+    }
+
     @PostMapping("/editvalues")
     public String editPodstationValues(@ModelAttribute("sPodstation") Podstation sPodstation,
                                        Model model) {
@@ -149,13 +158,12 @@ public class MainController {
             model.addAttribute("sPodstation", podstationDAO.getPodstation(mds.getCurrentPodstation()));
             return "editpodstation";
         }
-        if (action.equals("streets")){
+        if (action.equals("streets")) {
             model.addAttribute("streets", streetDAO.getStreets());
             model.addAttribute(mds);
             model.addAttribute("sPodstation", podstationDAO.getPodstation(mds.getCurrentPodstation()));
             return "streets";
-        }
-        else {
+        } else {
             return "error";
         }
     }
