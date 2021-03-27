@@ -47,6 +47,7 @@ public class MainController {
         mds.setPodstationNum(podstationDAO.getPodstationNumByRn(mds.getCurrentPodstation()));
         mds.setPodstTypes(podstationDAO.getPodstationTypes(mds.getCurrentDate()));
         Podstation sPodstation = podstationDAO.getPodstation(mds.getCurrentPodstation());
+        mds.setsPodstation(sPodstation);
         mds.setPodstType(sPodstation.getPodstType());
         return sPodstation;
     }
@@ -75,7 +76,8 @@ public class MainController {
                                        Model model) {
         podstationDAO.updatePodstationValues(sPodstation);
         model.addAttribute(mds);
-        model.addAttribute("sPodstation", sPodstation);
+        mds.setsPodstation(sPodstation);
+        model.addAttribute("sPodstation", mds.getsPodstation());
         return "showpodstation";
     }
 
@@ -114,7 +116,8 @@ public class MainController {
             }
         }
         model.addAttribute(mds);
-        model.addAttribute("sPodstation", podstationDAO.getPodstation(String.valueOf(sPodstation.getRn())));
+        mds.setsPodstation(podstationDAO.getPodstation(String.valueOf(sPodstation.getRn())));
+        model.addAttribute("sPodstation", mds.getsPodstation());
         return "editpodstation";
     }
 
@@ -128,8 +131,9 @@ public class MainController {
         if ((action == null) || (action.equals("find"))) {
             if (!period.equals(mds.getCurrentDate())) {
                 mds.setCurrentDate(period);
-                model.addAttribute("sPodstation", refreshMdsValues(podstationNumFromInput, podstTypeForm));
+                mds.setsPodstation(refreshMdsValues(podstationNumFromInput, podstTypeForm));
                 model.addAttribute(mds);
+                model.addAttribute("sPodstation", mds.getsPodstation());
                 return "showpodstation";
             }
             if (!podstationRnFromSelect.equals(mds.getCurrentPodstation())) {
@@ -139,32 +143,37 @@ public class MainController {
                         mds.setPodstationNum(p.getNumStr());
                     }
                 }
+                mds.setsPodstation(podstationDAO.getPodstation(mds.getCurrentPodstation()));
                 model.addAttribute(mds);
-                model.addAttribute("sPodstation", podstationDAO.getPodstation(mds.getCurrentPodstation()));
+                model.addAttribute("sPodstation", mds.getsPodstation());
                 return "showpodstation";
             }
             mds.setPodstationNum(podstationNumFromInput);
             mds.setPodstType(podstTypeForm);
             String podstationRn = podstationDAO.getPodstationRn(mds.getPodstType(), podstationNumFromInput, mds.getCurrentDate());
             mds.setCurrentPodstation(podstationRn);
+            mds.setsPodstation(podstationDAO.getPodstation(mds.getCurrentPodstation()));
             model.addAttribute(mds);
-            model.addAttribute("sPodstation", podstationDAO.getPodstation(mds.getCurrentPodstation()));
+            model.addAttribute("sPodstation", mds.getsPodstation());
             return "showpodstation";
         }
         if (action.equals("editvalues")) {
+            mds.setsPodstation(podstationDAO.getPodstation(mds.getCurrentPodstation()));
             model.addAttribute(mds);
-            model.addAttribute("sPodstation", podstationDAO.getPodstation(mds.getCurrentPodstation()));
+            model.addAttribute("sPodstation", mds.getsPodstation());
             return "editpodstationvalues";
         }
         if (action.equals("editpodstation")) {
+            mds.setsPodstation(podstationDAO.getPodstation(mds.getCurrentPodstation()));
             model.addAttribute(mds);
-            model.addAttribute("sPodstation", podstationDAO.getPodstation(mds.getCurrentPodstation()));
+            model.addAttribute("sPodstation", mds.getsPodstation());
             return "editpodstation";
         }
         if (action.equals("streets")) {
             model.addAttribute("streets", streetDAO.getStreets());
+            mds.setsPodstation(podstationDAO.getPodstation(mds.getCurrentPodstation()));
             model.addAttribute(mds);
-            model.addAttribute("sPodstation", podstationDAO.getPodstation(mds.getCurrentPodstation()));
+            model.addAttribute("sPodstation", mds.getsPodstation());
             return "streets";
         } else {
             return "error";
