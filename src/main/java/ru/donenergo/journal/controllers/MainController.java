@@ -60,10 +60,13 @@ public class MainController {
 
     @GetMapping("/streets")
     public String getStreets(@RequestParam(value = "street") String street,
-                             @RequestParam(value = "housenum") int housenum,
+                             @RequestParam(value = "housenum") String houseNum,
                              @RequestParam(value = "letter") String letter,
-                             @RequestParam(value = "action") String action) {
-        System.out.println(street + " " + housenum + " " + letter + " " + action);
+                             @RequestParam(value = "action") String action,
+                             @RequestParam(value = "podstNum") String podstNum,
+                             @RequestParam(value = "podstType") String podstType) {
+        System.out.println(street + " " + houseNum + " " + letter + " " + action + ", " + podstType + ", " + podstNum);
+
         return "streets";
     }
 

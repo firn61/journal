@@ -22,7 +22,17 @@
         </datalist>
         Номер дома: <input type="number" name="housenum">
         Корпус: <input type="text" name="letter">
-        <button type="submit" th:name="action" th:value="searchbyhousenum">Поиск по номеру дома</button>
+        <button type="submit" th:name="action" th:value="searchByHouseNum">Поиск по адресу</button>
+    </div>
+    <div>
+        <select class="form-control" id="type1" name="podstType">
+            <option th:each="podstType : ${mds.podstTypes}"
+                    th:value="${podstType}"
+                    th:selected="${podstType}==${sPodstation.getPodstType()}"
+                    th:text="${podstType}">
+            </option>
+        </select>
+        <input type="number" name="podstNum"><button type="submit" th:name="action" th:value="searchByNum">Поиск по подстанции</button>
     </div>
 </form>
 </body>
