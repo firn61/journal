@@ -14,11 +14,13 @@
 <body>
 <form th:action="@{/streets}" method="GET" th:object="${streets}">
     <div class="form-group">
-
+ <p th:text="${selectedStreet}"></p>
         Улица: <input list="streets" class="form-control" id="streetsselect" name="street">  </input>
         <datalist id="streets">
             <option th:each="street : ${streets}"
+                    th:selected="${street.streetName}==${selectedStreet}"
                     th:value = "${street.streetName} + ', ' + ${street.streetType}">
+            </option>
         </datalist>
         Номер дома: <input type="number" name="housenum">
         Корпус: <input type="text" name="letter">

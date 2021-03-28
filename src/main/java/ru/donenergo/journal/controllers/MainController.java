@@ -69,18 +69,34 @@ public class MainController {
                              @RequestParam(value = "podstType") String podstType,
                              Model model) {
         System.out.println(street + " " + houseNum + " " + letter + " " + action + ", " + podstType + ", " + podstNum);
-        if (!podstNum.equals(mds.getPodstationNum())) {
-            String newPodstationRn = podstationDAO.getPodstationRn(podstType, podstNum, mds.getCurrentDate());
-            mds.setsPodstation(podstationDAO.getPodstation(newPodstationRn));
-        }
-        List<HouseSegment> houseSegmentList;
-        if (podstType.equals("ТП")) {
-            houseSegmentList = streetDAO.getHouseSegmentsTp(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr());
+        if (action.equals("searchByNum")) {
+            if (!podstNum.equals(mds.getPodstationNum())) {
+                String newPodstationRn = podstationDAO.getPodstationRn(podstType, podstNum, mds.getCurrentDate());
+                mds.setsPodstation(podstationDAO.getPodstation(newPodstationRn));
+            }
+            List<HouseSegment> houseSegmentList;
+            if (podstType.equals("ТП")) {
+                houseSegmentList = streetDAO.getHouseSegmentsTp(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr());
+            } else {
+                houseSegmentList = streetDAO.getHouseSegmentsRp(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr());
+            }
+            model.addAttribute("streets", streetDAO.getStreets());
+            model.addAttribute(houseSegmentList);
+            model.addAttribute(mds);
         } else {
-            houseSegmentList = streetDAO.getHouseSegmentsRp(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr());
+            String[] streetParams = street.split(", ");
+            System.out.println(streetParams[0] + " " + streetParams[1]);
+            List<HouseSegment> houseSegmentList;
+            if ((houseNum.length() == 0) || (houseNum.equals("0"))) {
+                houseSegmentList = streetDAO.getHouseSegmentByStreet(streetParams[0], streetParams[1]);
+            } else {
+                houseSegmentList = streetDAO.getHouseSegmentByStreetAndNum(streetParams[0], streetParams[1], houseNum);
+            }
+            model.addAttribute("selectedStreet", streetParams[0]);
+            model.addAttribute("streets", streetDAO.getStreets());
+            model.addAttribute(houseSegmentList);
+            model.addAttribute(mds);
         }
-        model.addAttribute(houseSegmentList);
-        model.addAttribute(mds);
         return "streets";
     }
 
@@ -192,6 +208,8 @@ public class MainController {
             } else {
                 houseSegmentList = streetDAO.getHouseSegmentsRp(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr());
             }
+            model.addAttribute("selectedStreet", streetDAO.getStreets().get(0).getStreetName());
+            model.addAttribute("streets", streetDAO.getStreets());
             model.addAttribute(houseSegmentList);
             model.addAttribute("sPodstation", mds.getsPodstation());
             return "streets";

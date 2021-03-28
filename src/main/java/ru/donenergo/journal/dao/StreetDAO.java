@@ -31,7 +31,13 @@ public class StreetDAO {
     public List<HouseSegment> getHouseSegmentsRp(String rpName){
         return jdbcTemplate.query("SELECT RN, STR_PODSTATION, TR_NUM, FIDER, STREET_RN, STREET_NAME, STREET_TYPE, HOUSE1, HOUSE1BUILDING, HOUSE2, HOUSE2BUILDING FROM HOUSE_SEGMENT2 WHERE STR_PODSTATION = ? ", new Object[]{rpName}, new HouseSegmentMapper());
     }
+    public List<HouseSegment> getHouseSegmentByStreet(String streetName, String streetType){
+        return jdbcTemplate.query("SELECT RN, STR_PODSTATION, TR_NUM, FIDER, STREET_RN, STREET_NAME, STREET_TYPE, HOUSE1, HOUSE1BUILDING, HOUSE2, HOUSE2BUILDING FROM HOUSE_SEGMENT WHERE STREET_NAME = ? AND STREET_TYPE = ? ORDER BY HOUSE1", new Object[]{streetName, streetType}, new HouseSegmentMapper());
+    }
 
+    public List<HouseSegment> getHouseSegmentByStreetAndNum(String streetName, String streetType, String houseNum){
+        return jdbcTemplate.query("SELECT RN, STR_PODSTATION, TR_NUM, FIDER, STREET_RN, STREET_NAME, STREET_TYPE, HOUSE1, HOUSE1BUILDING, HOUSE2, HOUSE2BUILDING FROM HOUSE_SEGMENT WHERE STREET_NAME = ? AND STREET_TYPE = ? AND (HOUSE1 <= ? AND HOUSE2 >= ? ) ORDER BY HOUSE1", new Object[]{streetName, streetType, houseNum, houseNum}, new HouseSegmentMapper());
+    }
     public List<Street> getStreets() {
         return streets;
     }
