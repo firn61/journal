@@ -1,5 +1,5 @@
 <div th:fragment="stable">
-<th:block th:each="transformator : ${sPodstation.getTrList()}">
+<th:block th:each="transformator : ${mds.sPodstation.getTrList()}">
     <div>
         <table th:onclick="'showHideLines(\'' + ${transformator.getRn()} + '\');'">
             <tr>

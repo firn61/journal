@@ -28,13 +28,35 @@
         <select class="form-control" id="type1" name="podstType">
             <option th:each="podstType : ${mds.podstTypes}"
                     th:value="${podstType}"
-                    th:selected="${podstType}==${sPodstation.getPodstType()}"
+                    th:selected="${podstType}==${mds.sPodstation.getPodstType()}"
                     th:text="${podstType}">
             </option>
         </select>
-        <input type="number" name="podstNum" th:value="${sPodstation.getNum()}"><button type="submit" th:name="action" th:value="searchByNum">Поиск по подстанции</button>
-
+        <input type="number" name="podstNum" th:value="${mds.sPodstation.getNum()}"><button type="submit" th:name="action" th:value="searchByNum">Поиск по подстанции</button>
     </div>
 </form>
+<form th:action="@{/show}" method="GET">
+    <button type="submit" th:name="action" th:value="backfromstreets">Назад</button>
+</form>
+<div>
+    <table>
+        <tr>
+            <th>Подстанция</th>
+            <th>Трансформатор</th>
+            <th>Фидер</th>
+            <th>Улица</th>
+            <th>Дом1</th>
+            <th>Дом2</th>
+        </tr>
+        <tr th:each="houseSegment : ${houseSegmentList}">
+            <td><p th:text="${houseSegment.getStrPodstation()}"></p></td>
+            <td><p th:text="${houseSegment.getTrNum()}"></p></td>
+            <td><p th:text="${houseSegment.getFider()}"></p></td>
+            <td><p th:text="${houseSegment.getStreetType()} + ', '+ ${houseSegment.getStreetName()}"></p></td>
+            <td><p th:text="${houseSegment.getHouse1()} + ' ' + ${houseSegment.getHouse1Building()}"></p> </td>
+            <td><p th:text="${houseSegment.getHouse2()} + ' ' + ${houseSegment.getHouse2Building()}"></p> </td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>

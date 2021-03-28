@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.donenergo.journal.dao.PodstationDAO;
 import ru.donenergo.journal.dao.StreetDAO;
+import ru.donenergo.journal.models.HouseSegment;
 import ru.donenergo.journal.models.Podstation;
 
 import javax.annotation.PostConstruct;
@@ -65,9 +66,21 @@ public class MainController {
                              @RequestParam(value = "letter") String letter,
                              @RequestParam(value = "action") String action,
                              @RequestParam(value = "podstNum") String podstNum,
-                             @RequestParam(value = "podstType") String podstType) {
+                             @RequestParam(value = "podstType") String podstType,
+                             Model model) {
         System.out.println(street + " " + houseNum + " " + letter + " " + action + ", " + podstType + ", " + podstNum);
-
+        if (!podstNum.equals(mds.getPodstationNum())) {
+            String newPodstationRn = podstationDAO.getPodstationRn(podstType, podstNum, mds.getCurrentDate());
+            mds.setsPodstation(podstationDAO.getPodstation(newPodstationRn));
+        }
+        List<HouseSegment> houseSegmentList;
+        if (podstType.equals("ТП")) {
+            houseSegmentList = streetDAO.getHouseSegmentsTp(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr());
+        } else {
+            houseSegmentList = streetDAO.getHouseSegmentsRp(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr());
+        }
+        model.addAttribute(houseSegmentList);
+        model.addAttribute(mds);
         return "streets";
     }
 
@@ -173,8 +186,20 @@ public class MainController {
             model.addAttribute("streets", streetDAO.getStreets());
             mds.setsPodstation(podstationDAO.getPodstation(mds.getCurrentPodstation()));
             model.addAttribute(mds);
+            List<HouseSegment> houseSegmentList;
+            if (mds.getsPodstation().getPodstType().equals("ТП")) {
+                houseSegmentList = streetDAO.getHouseSegmentsTp(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr());
+            } else {
+                houseSegmentList = streetDAO.getHouseSegmentsRp(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr());
+            }
+            model.addAttribute(houseSegmentList);
             model.addAttribute("sPodstation", mds.getsPodstation());
             return "streets";
+        }
+        if (action.equals("backfromstreets")) {
+            model.addAttribute(mds);
+            model.addAttribute("sPodstation", mds.getsPodstation());
+            return "showpodstation";
         } else {
             return "error";
         }
