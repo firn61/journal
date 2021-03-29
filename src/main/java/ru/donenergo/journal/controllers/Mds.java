@@ -16,6 +16,26 @@ public class Mds {
     private List<Period> periodList;
     private List<Podstation> podstations;
     private Podstation sPodstation;
+    private String currentActivity;
+
+    public String getActivityView(String currentActivity) {
+        if (currentActivity.equals("edit")) {
+            return "editpodstation";
+        }
+        if (currentActivity.equals("values")) {
+            return "editpodstationvalues";
+        } else {
+            return "showpodstation";
+        }
+    }
+
+    public String getCurrentActivity() {
+        return currentActivity;
+    }
+
+    public void setCurrentActivity(String currentActivity) {
+        this.currentActivity = currentActivity;
+    }
 
     public Podstation getsPodstation() {
         return sPodstation;

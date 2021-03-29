@@ -56,6 +56,7 @@ public class MainController {
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("sPodstation", refreshMdsValues("norn", "notype"));
+        mds.setCurrentActivity("show");
         model.addAttribute(mds);
         return "index";
     }
@@ -156,15 +157,20 @@ public class MainController {
                                  @RequestParam(value = "podstationNum", required = false) String podstationNumFromInput,
                                  @RequestParam(value = "podstType", required = false) String podstTypeForm,
                                  @RequestParam(value = "action", required = false) String action,
+                                 @RequestParam(value = "currentActivity", required = false) String currentActivity,
                                  Model model) {
-        if ((action == null) || (action.equals("find"))) {
+        //если подстанция выбрана из списка, или выбран другой период или введен номер и нажата кнопка просмотр
+        System.out.println(action);
+        if ((action == null) || (action.equals("find")) || (action.equals("view"))) {
+            //если изменился период
             if (!period.equals(mds.getCurrentDate())) {
                 mds.setCurrentDate(period);
                 mds.setsPodstation(refreshMdsValues(podstationNumFromInput, podstTypeForm));
                 model.addAttribute(mds);
                 model.addAttribute("sPodstation", mds.getsPodstation());
-                return "showpodstation";
+                return mds.getActivityView(currentActivity);
             }
+            //если выбрана подстанция из списка
             if (!podstationRnFromSelect.equals(mds.getCurrentPodstation())) {
                 mds.setCurrentPodstation(podstationRnFromSelect);
                 for (Podstation p : mds.getPodstations()) {
@@ -175,8 +181,14 @@ public class MainController {
                 mds.setsPodstation(podstationDAO.getPodstation(mds.getCurrentPodstation()));
                 model.addAttribute(mds);
                 model.addAttribute("sPodstation", mds.getsPodstation());
-                return "showpodstation";
+                return mds.getActivityView(currentActivity);
             }
+            //если нажата кнопка просмотр
+            if (action.equals("view")) {
+                currentActivity="show";
+                mds.setCurrentActivity(currentActivity);
+            }
+            //если номер подстанции введен вручную
             mds.setPodstationNum(podstationNumFromInput);
             mds.setPodstType(podstTypeForm);
             String podstationRn = podstationDAO.getPodstationRn(mds.getPodstType(), podstationNumFromInput, mds.getCurrentDate());
@@ -184,15 +196,17 @@ public class MainController {
             mds.setsPodstation(podstationDAO.getPodstation(mds.getCurrentPodstation()));
             model.addAttribute(mds);
             model.addAttribute("sPodstation", mds.getsPodstation());
-            return "showpodstation";
+            return mds.getActivityView(currentActivity);
         }
         if (action.equals("editvalues")) {
+            mds.setCurrentActivity("values");
             mds.setsPodstation(podstationDAO.getPodstation(mds.getCurrentPodstation()));
             model.addAttribute(mds);
             model.addAttribute("sPodstation", mds.getsPodstation());
             return "editpodstationvalues";
         }
         if (action.equals("editpodstation")) {
+            mds.setCurrentActivity("edit");
             mds.setsPodstation(podstationDAO.getPodstation(mds.getCurrentPodstation()));
             model.addAttribute(mds);
             model.addAttribute("sPodstation", mds.getsPodstation());
