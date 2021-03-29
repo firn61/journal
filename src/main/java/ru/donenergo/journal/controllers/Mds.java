@@ -1,6 +1,8 @@
 package ru.donenergo.journal.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.donenergo.journal.dao.PodstationDAO;
 import ru.donenergo.journal.models.Period;
 import ru.donenergo.journal.models.Podstation;
 
@@ -8,6 +10,8 @@ import java.util.List;
 
 @Component
 public class Mds {
+    @Autowired
+    private PodstationDAO podstationDAO;
     private String currentPodstation;
     private String podstationNum;
     private String currentDate;
@@ -27,6 +31,26 @@ public class Mds {
         } else {
             return "showpodstation";
         }
+    }
+
+    public Podstation refreshMdsValues(String rn, String type) {
+        List<Podstation> podstations = podstationDAO.getListPodstations(getCurrentDate());
+        setPodstations(podstations);
+        if (rn.equals("norn")) {
+            setCurrentPodstation(String.valueOf(podstations.get(0).getRn()));
+        } else {
+            for (Podstation p : podstations) {
+                if (p.getNumStr().equals(rn) && p.getPodstType().equals(type)) {
+                    setCurrentPodstation(String.valueOf(p.getRn()));
+                }
+            }
+        }
+        setPodstationNum(podstationDAO.getPodstationNumByRn(getCurrentPodstation()));
+        setPodstTypes(podstationDAO.getPodstationTypes(getCurrentDate()));
+        Podstation sPodstation = podstationDAO.getPodstation(getCurrentPodstation());
+        setsPodstation(sPodstation);
+        setPodstType(sPodstation.getPodstType());
+        return sPodstation;
     }
 
     public String getCurrentActivity() {

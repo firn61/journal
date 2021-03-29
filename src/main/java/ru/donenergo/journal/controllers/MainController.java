@@ -5,12 +5,14 @@ import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.donenergo.journal.dao.HostDAO;
 import ru.donenergo.journal.dao.PodstationDAO;
 import ru.donenergo.journal.dao.StreetDAO;
 import ru.donenergo.journal.models.HouseSegment;
 import ru.donenergo.journal.models.Podstation;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,12 +20,14 @@ import java.util.List;
 public class MainController {
     private final PodstationDAO podstationDAO;
     private final StreetDAO streetDAO;
+    private final HostDAO hostDAO;
     private Mds mds;
 
     @Autowired
-    public MainController(PodstationDAO podstationDAO, StreetDAO streetDAO, Mds mds) {
+    public MainController(PodstationDAO podstationDAO, StreetDAO streetDAO, HostDAO hostDAO, Mds mds) {
         this.podstationDAO = podstationDAO;
         this.streetDAO = streetDAO;
+        this.hostDAO = hostDAO;
         this.mds = mds;
     }
 
@@ -33,29 +37,9 @@ public class MainController {
         mds.setPeriodList(podstationDAO.getPeriodList());
     }
 
-    private Podstation refreshMdsValues(String rn, String type) {
-        List<Podstation> podstations = podstationDAO.getListPodstations(mds.getCurrentDate());
-        mds.setPodstations(podstations);
-        if (rn.equals("norn")) {
-            mds.setCurrentPodstation(String.valueOf(podstations.get(0).getRn()));
-        } else {
-            for (Podstation p : podstations) {
-                if (p.getNumStr().equals(rn) && p.getPodstType().equals(type)) {
-                    mds.setCurrentPodstation(String.valueOf(p.getRn()));
-                }
-            }
-        }
-        mds.setPodstationNum(podstationDAO.getPodstationNumByRn(mds.getCurrentPodstation()));
-        mds.setPodstTypes(podstationDAO.getPodstationTypes(mds.getCurrentDate()));
-        Podstation sPodstation = podstationDAO.getPodstation(mds.getCurrentPodstation());
-        mds.setsPodstation(sPodstation);
-        mds.setPodstType(sPodstation.getPodstType());
-        return sPodstation;
-    }
-
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("sPodstation", refreshMdsValues("norn", "notype"));
+        model.addAttribute("sPodstation", mds.refreshMdsValues("norn", "notype"));
         mds.setCurrentActivity("show");
         model.addAttribute(mds);
         return "index";
@@ -68,8 +52,9 @@ public class MainController {
                              @RequestParam(value = "action") String action,
                              @RequestParam(value = "podstNum") String podstNum,
                              @RequestParam(value = "podstType") String podstType,
+                             HttpServletRequest request,
                              Model model) {
-        System.out.println(street + " " + houseNum + " " + letter + " " + action + ", " + podstType + ", " + podstNum);
+        System.out.println(request.getRemoteAddr());
         if (action.equals("searchByNum")) {
             if (!podstNum.equals(mds.getPodstationNum())) {
                 String newPodstationRn = podstationDAO.getPodstationRn(podstType, podstNum, mds.getCurrentDate());
@@ -165,7 +150,7 @@ public class MainController {
             //если изменился период
             if (!period.equals(mds.getCurrentDate())) {
                 mds.setCurrentDate(period);
-                mds.setsPodstation(refreshMdsValues(podstationNumFromInput, podstTypeForm));
+                mds.setsPodstation(mds.refreshMdsValues(podstationNumFromInput, podstTypeForm));
                 model.addAttribute(mds);
                 model.addAttribute("sPodstation", mds.getsPodstation());
                 return mds.getActivityView(currentActivity);
