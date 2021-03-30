@@ -20,13 +20,13 @@ public class HostDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Map<String, String> getHosts(){
-        Map<String, String> hostsMap = jdbcTemplate.query("select string1,string2 from table where x=1", new ResultSetExtractor<Map>(){
+    public Map<String, String> getHosts() {
+        Map<String, String> hostsMap = jdbcTemplate.query("SELECT IP, RIGHTS FROM HOSTS", new ResultSetExtractor<Map>() {
             @Override
             public Map extractData(ResultSet rs) throws SQLException, DataAccessException {
-                HashMap<String,String> extractedHosts = new HashMap<String,String>();
-                while(rs.next()){
-                    extractedHosts.put(rs.getString("IP"),rs.getString("RIGHTS"));
+                HashMap<String, String> extractedHosts = new HashMap<>();
+                while (rs.next()) {
+                    extractedHosts.put(rs.getString("IP"), rs.getString("RIGHTS"));
                 }
                 return extractedHosts;
             }
@@ -34,7 +34,7 @@ public class HostDAO {
         return hostsMap;
     }
 
-    public void addHost(String host, String rights){
+    public void addHost(String host, String rights) {
         //TODO
     }
 }

@@ -22,6 +22,9 @@ public class Mds {
     private Podstation sPodstation;
     private String currentActivity;
 
+    public void addNewPodstationToList(Podstation podstation){
+        podstations.add(podstation);
+    }
     public String getActivityView(String currentActivity) {
         if (currentActivity.equals("edit")) {
             return "editpodstation";

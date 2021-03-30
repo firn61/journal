@@ -31,6 +31,14 @@ public class PodstationDAO {
         getPodstationsListFromDb(currentDate);
     }
 
+    public String addPodstation(String podstType, String num, String resNum, String dateRn, String address){
+       return jdbcTemplate.queryForObject("execute procedure PODST_INSERT(?, ?, ?, ?, ?, ?, ?)", new Object[]{podstType, Integer.valueOf(num), num, resNum, dateRn, 0, address}, String.class);
+    }
+
+    public Integer isPodstationExist(String type, String num, String dateRn){
+        return (Integer) jdbcTemplate.queryForObject("SELECT COUNT(RN) FROM PODSTATION WHERE PODST_TYPE = ? AND NUM = ? AND DATE_RN = ?", new Object[]{type, num, dateRn}, Integer.class);
+    }
+
     public void deleteTrans(String rn){
         jdbcTemplate.update("DELETE FROM TRANSFORMATOR WHERE RN = ?", new Object[]{rn});
         jdbcTemplate.update("DELETE FROM LINE WHERE TR_RN = ?", new Object[]{rn});
