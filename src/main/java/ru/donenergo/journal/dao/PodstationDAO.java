@@ -90,8 +90,6 @@ public class PodstationDAO {
         }
     }
 
-
-
     public void updateLine(int num, String name, int rn) {
         jdbcTemplate.update("execute procedure LINE_UPDATE(?, ?, ?)", new Object[]{num, name, rn});
     }

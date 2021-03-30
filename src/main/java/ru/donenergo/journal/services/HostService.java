@@ -24,32 +24,41 @@ public class HostService {
 
     @PostConstruct
     private void setInitialState() {
-        hosts = hostDAO.getHosts();
+        updateHosts();
         res.put("vres1", "1");
         res.put("zres1", "2");
         res.put("sres1", "3");
         res.put("ures1", "4");
         res.put("rpvi1", "5");
         res.put("rges0", "6");
+
+    }
+
+    public void updateHosts() {
+        hosts = hostDAO.getHosts();
     }
 
     public String getRightsMessage(String ip, int targetRes) {
-        if (res.get(hosts.get(ip)).equals(String.valueOf(targetRes))){
+        if (res.get(hosts.get(ip)).equals(String.valueOf(targetRes))) {
             return "Ok";
         } else {
             return NO_RIGHTS_MESSAGE;
         }
     }
 
-    public boolean rightsExist(String ip){
-        if(hosts.get(ip) == null) {
+    public boolean rightsExist(String ip) {
+        if (hosts.get(ip) == null) {
             return false;
         } else {
             return true;
         }
     }
 
-    public String getResNumByIp(String ip){
+    public void addRO(String ip) {
+        hostDAO.addRO(ip);
+    }
+
+    public String getResNumByIp(String ip) {
         return res.get(hosts.get(ip));
     }
 

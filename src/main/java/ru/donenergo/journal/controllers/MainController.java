@@ -14,6 +14,7 @@ import ru.donenergo.journal.services.HostService;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,7 +40,12 @@ public class MainController {
     }
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model,
+                        HttpServletRequest request) {
+        if (!hostService.rightsExist(request.getRemoteAddr())) {
+            hostService.addRO(request.getRemoteAddr());
+            hostService.updateHosts();
+        }
         model.addAttribute("sPodstation", mds.refreshMdsValues("norn", "notype"));
         mds.setCurrentActivity("show");
         model.addAttribute(mds);
@@ -71,18 +77,18 @@ public class MainController {
             model.addAttribute("rightsMessage", hostService.getRightsMessage(request.getRemoteAddr(), mds.getsPodstation().getResNum()));
             model.addAttribute("sPodstation", mds.getsPodstation());
         } else {
-            if ((podstationDAO.isPodstationExist(podstType, num, mds.getCurrentDate()) == 0) && hostService.rightsExist(request.getRemoteAddr())) {
-                  String newPodstationRn =  podstationDAO.addPodstation(podstType, num, hostService.getResNumByIp(request.getRemoteAddr()), mds.getCurrentDate(), address);
-                  mds.setsPodstation(podstationDAO.getPodstation(newPodstationRn));
-                  mds.addNewPodstationToList(mds.getsPodstation());
-                  mds.setCurrentPodstation(String.valueOf(mds.getsPodstation().getRn()));
-                  model.addAttribute(mds);
-                  model.addAttribute("rightsMessage", hostService.getRightsMessage(request.getRemoteAddr(), mds.getsPodstation().getResNum()));
-                  model.addAttribute("sPodstation", mds.getsPodstation());
+            if ((podstationDAO.isPodstationExist(podstType, num, mds.getCurrentDate()) == 0) && (!hostService.getResNumByIp(request.getRemoteAddr()).equals("6"))) {
+                String newPodstationRn = podstationDAO.addPodstation(podstType, num, hostService.getResNumByIp(request.getRemoteAddr()), mds.getCurrentDate(), address);
+                mds.setsPodstation(podstationDAO.getPodstation(newPodstationRn));
+                mds.addNewPodstationToList(mds.getsPodstation());
+                mds.setCurrentPodstation(String.valueOf(mds.getsPodstation().getRn()));
+                model.addAttribute(mds);
+                model.addAttribute("rightsMessage", hostService.getRightsMessage(request.getRemoteAddr(), mds.getsPodstation().getResNum()));
+                model.addAttribute("sPodstation", mds.getsPodstation());
 
             } else {
                 model.addAttribute(mds);
-                model.addAttribute("rightsMessage", "Ошибка при добавлении подстанции.");
+                model.addAttribute("rightsMessage", "Ошибка при добавлении подстанции. Уже существует или недостачно прав.");
                 model.addAttribute("sPodstation", mds.getsPodstation());
             }
         }
@@ -113,14 +119,16 @@ public class MainController {
             model.addAttribute(houseSegmentList);
             model.addAttribute(mds);
         } else {
-            String[] streetParams = street.split(", ");
-            List<HouseSegment> houseSegmentList;
-            if ((houseNum.length() == 0) || (houseNum.equals("0"))) {
-                houseSegmentList = streetDAO.getHouseSegmentByStreet(streetParams[0], streetParams[1]);
-            } else {
-                houseSegmentList = streetDAO.getHouseSegmentByStreetAndNum(streetParams[0], streetParams[1], houseNum);
+            List<HouseSegment> houseSegmentList = new ArrayList<>();
+            if (street.length() > 0) {
+                String[] streetParams = street.split(", ");
+                if ((houseNum.length() == 0) || (houseNum.equals("0"))) {
+                    houseSegmentList = streetDAO.getHouseSegmentByStreet(streetParams[0], streetParams[1]);
+                } else {
+                    houseSegmentList = streetDAO.getHouseSegmentByStreetAndNum(streetParams[0], streetParams[1], houseNum);
+                    model.addAttribute("selectedStreet", streetParams[0]);
+                }
             }
-            model.addAttribute("selectedStreet", streetParams[0]);
             model.addAttribute("streets", streetDAO.getStreets());
             model.addAttribute(houseSegmentList);
             model.addAttribute(mds);
@@ -132,11 +140,12 @@ public class MainController {
     public String editPodstationValues(@ModelAttribute("sPodstation") Podstation sPodstation,
                                        Model model,
                                        HttpServletRequest request) {
-        if (hostService.checkRights(request.getRemoteAddr(), mds.getsPodstation().getResNum())) {
+        String ipAddr = request.getRemoteAddr();
+        if (hostService.checkRights(ipAddr, mds.getsPodstation().getResNum())) {
             podstationDAO.updatePodstationValues(sPodstation);
-            model.addAttribute("rightsMessage", hostService.getRightsMessage(request.getRemoteAddr(), mds.getsPodstation().getResNum()));
+            model.addAttribute("rightsMessage", hostService.getRightsMessage(ipAddr, mds.getsPodstation().getResNum()));
         } else {
-            model.addAttribute("rightsMessage", hostService.getRightsMessage(request.getRemoteAddr(), mds.getsPodstation().getResNum()) + ". Данные не сохранены.");
+            model.addAttribute("rightsMessage", hostService.getRightsMessage(ipAddr, mds.getsPodstation().getResNum()) + ". Данные не сохранены.");
 
         }
         mds.setsPodstation(podstationDAO.getPodstation(String.valueOf(sPodstation.getRn())));
@@ -232,13 +241,18 @@ public class MainController {
                 mds.setCurrentActivity(currentActivity);
             }
             //если номер подстанции введен вручную
-            mds.setPodstationNum(podstationNumFromInput);
-            mds.setPodstType(podstTypeForm);
-            String podstationRn = podstationDAO.getPodstationRn(mds.getPodstType(), podstationNumFromInput, mds.getCurrentDate());
-            mds.setCurrentPodstation(podstationRn);
-            mds.setsPodstation(podstationDAO.getPodstation(mds.getCurrentPodstation()));
-            model.addAttribute(mds);
+            if (podstationDAO.isPodstationExist(podstTypeForm, podstationNumFromInput, mds.getCurrentDate()) != 0) {
+                mds.setPodstationNum(podstationNumFromInput);
+                mds.setPodstType(podstTypeForm);
+                String podstationRn = podstationDAO.getPodstationRn(mds.getPodstType(), podstationNumFromInput, mds.getCurrentDate());
+                mds.setCurrentPodstation(podstationRn);
+                mds.setsPodstation(podstationDAO.getPodstation(mds.getCurrentPodstation()));
+
+            } else {
+                model.addAttribute("error", "Подстанция " + podstTypeForm + "-" + podstationNumFromInput + " не найдена");
+            }
             model.addAttribute("rightsMessage", hostService.getRightsMessage(ipAdr, mds.getsPodstation().getResNum()));
+            model.addAttribute(mds);
             model.addAttribute("sPodstation", mds.getsPodstation());
             return mds.getActivityView(currentActivity);
         }

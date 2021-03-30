@@ -14,7 +14,7 @@
 </head>
 <body>
 <div th:replace="fragments/frheader :: headerv"></div>
-<p th:text="${sPodstation.getAddress()}"></p>
+<p style="font-weight:bold" th:text="${sPodstation.podstType} + '-' + ${sPodstation.numStr} + ' ' + ${sPodstation.address}"></p>
 <div th:replace="fragments/frpodstationshow :: stable"></div>
 <script>
     function showHideLines(varId) {

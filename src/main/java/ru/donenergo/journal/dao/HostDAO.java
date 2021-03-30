@@ -34,7 +34,8 @@ public class HostDAO {
         return hostsMap;
     }
 
-    public void addHost(String host, String rights) {
-        //TODO
+    public void addRO(String ip){
+        jdbcTemplate.update("INSERT INTO HOSTS VALUES(?, ?)", new Object[]{ip, "rges0"});
     }
+
 }
