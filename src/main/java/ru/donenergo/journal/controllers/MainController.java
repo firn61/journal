@@ -163,6 +163,15 @@ public class MainController {
             model.addAttribute("rightsMessage", hostService.getRightsMessage(request.getRemoteAddr(), mds.getsPodstation().getResNum()));
             if (action.equals("save")) {
                 podstationDAO.updatePodstation(sPodstation);
+            } else if (action.equals("streetsedit")) {
+                if (sPodstation.getTrCount() > 0) {
+                    Integer selectedTransformator = sPodstation.getTrList().get(0).getRn();
+                    model.addAttribute("houseSegments", streetDAO.getHouseSegmentsByTr(sPodstation.getPodstType()+sPodstation.getNumStr(), selectedTransformator));
+                    model.addAttribute("selectedTransformator", selectedTransformator);
+                }
+                model.addAttribute("sPodstation", sPodstation);
+                model.addAttribute("streets", streetDAO.getStreets());
+                return "streetsedit";
             } else {
                 String[] targetValues = action.split("&");
                 if (targetValues[0].equals("trans")) {

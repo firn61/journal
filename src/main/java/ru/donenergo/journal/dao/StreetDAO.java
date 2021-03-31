@@ -24,6 +24,10 @@ public class StreetDAO {
         streets = jdbcTemplate.query("SELECT RN, STREET_NAME, STREET_TYPE, POSTCODE FROM STREETS", new StreetMapper());
     }
 
+    public List<HouseSegment> getHouseSegmentsByTr(String tpName, int trNum){
+        return jdbcTemplate.query("SELECT RN, STR_PODSTATION, TR_NUM, FIDER, STREET_RN, STREET_NAME, STREET_TYPE, HOUSE1, HOUSE1BUILDING, HOUSE2, HOUSE2BUILDING FROM HOUSE_SEGMENT WHERE STR_PODSTATION = ? AND TR_NUM = ?", new Object[]{tpName, trNum}, new HouseSegmentMapper());
+    }
+
     public List<HouseSegment> getHouseSegmentsTp(String tpName){
         return jdbcTemplate.query("SELECT RN, STR_PODSTATION, TR_NUM, FIDER, STREET_RN, STREET_NAME, STREET_TYPE, HOUSE1, HOUSE1BUILDING, HOUSE2, HOUSE2BUILDING FROM HOUSE_SEGMENT WHERE STR_PODSTATION = ? ", new Object[]{tpName}, new HouseSegmentMapper());
     }

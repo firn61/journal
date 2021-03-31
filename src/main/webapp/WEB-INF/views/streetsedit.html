@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Журнал нагрузок</title>
+</head>
+<body>
+<form th:action="@{/streets}" method="GET" th:object="${streets}">
+    <button type="submit" th:name="action" th:value="backfromstreetsedit">Назад</button>
+    <p style="font-weight:bold" th:text="${sPodstation.podstType} + '-' + ${sPodstation.numStr} + ' ' + ${sPodstation.address}">
+    <div class="input-group" th:each="transformator : ${sPodstation.getTrList()}">
+       <input type="radio" name = "trans" th:value="${transformator.getRn()}"
+                                          th:text="'Т-' + ${transformator.getNum()} + ' : ' + ${transformator.getFider()}"
+                                          th:checked="${transformator.getRn()==selectedTransformator}"/>
+    </div>
+    <div class="form-group">
+        Улица: <input list="streets" class="form-control" id="streetsselect" name="street">  </input>
+        <datalist id="streets">
+            <option th:each="street : ${streets}"
+                    th:value = "${street.streetName} + ', ' + ${street.streetType}">
+            </option>
+        </datalist>
+        Номер дома 1: <input type="number" name="housenum1">
+        Корпус 1: <input type="text" name="letter1">
+        Номер дома 2: <input type="number" name="housenum2">
+        Корпус 2: <input type="text" name="letter2">
+        <button type="submit" th:name="action" th:value="addInterval">Добавить интервал</button>
+        <button type="submit" th:name="action" th:value="addHouse">Добавить дом</button>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <th>Подстанция</th>
+                <th>Трансформатор</th>
+                <th>Фидер</th>
+                <th>Улица</th>
+                <th>Тип</th>
+                <th>Дом1</th>
+                <th>Литер1</th>
+                <th>Дом2</th>
+                <th>Литер2</th>
+                <th>Удалить</th>
+            </tr>
+            <tr th:each="houseSegment : ${houseSegments}">
+                <td><p th:text="${houseSegment.getStrPodstation()}"></p></td>
+                <td><p th:text="${houseSegment.getTrNum()}"></p></td>
+                <td><p th:text="${houseSegment.getFider()}"></p></td>
+                <td><p th:text="${houseSegment.getStreetName()}"></p></td>
+                <td><p th:text="${houseSegment.getStreetType()}"></p></td>
+                <td><p th:text="${houseSegment.getHouse1()}"></p> </td>
+                <td><p th:text="${houseSegment.getHouse1Building()}"></p></td>
+                <td><p th:text="${houseSegment.getHouse2()}"></p> </td>
+                <td><p th:text="${houseSegment.getHouse2Building()}"></p></td>
+                <td><button type="submit" th:name="action" th:value="'del&' + ${houseSegment.getRn()}" title="Удалить">&#9746</button></td>
+            </tr>
+        </table>
+    </div>
+</form>
+</body>
+</html>
