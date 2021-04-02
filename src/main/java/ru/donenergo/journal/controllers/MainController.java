@@ -97,12 +97,25 @@ public class MainController {
 
     @GetMapping("/streetsedit")
     public String backToEdit(@RequestParam(value = "action", required = false) String action,
+                             @RequestParam(value = "trans", required = false) String trans,
+                             @RequestParam(value = "delete", required = false) String delete,
                              HttpServletRequest request,
                              Model model) {
-        model.addAttribute("rightsMessage", hostService.getRightsMessage(request.getRemoteAddr(), mds.getsPodstation().getResNum()));
-        model.addAttribute(mds);
         model.addAttribute("sPodstation", mds.getsPodstation());
-        return "editpodstation";
+        System.out.println(action + trans + delete);
+        if (action != null) {
+            model.addAttribute("rightsMessage", hostService.getRightsMessage(request.getRemoteAddr(), mds.getsPodstation().getResNum()));
+            model.addAttribute(mds);
+            return "editpodstation";
+        } else if ((trans != null) || (delete != null)) {
+            if (delete != null){
+                streetDAO.deleteHouseSegment(delete);
+            }
+            model.addAttribute("houseSegments", streetDAO.getHouseSegmentsByTr(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr(), Integer.valueOf(trans)));
+            model.addAttribute("selectedTransformator", Integer.valueOf(trans));
+            model.addAttribute("streets", streetDAO.getStreets());
+        }
+        return "streetsedit";
     }
 
     @PostMapping("/streetsedit")

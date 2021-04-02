@@ -13,8 +13,6 @@
 <body>
 <form th:action="@{/streetsedit}" method="GET">
     <button type="submit" th:name="action" th:value="backfromstreetsedit">Назад</button>
-</form>
-<form th:action="@{/streetsedit}" method="POST" th:object="${streets}">
     <div class="input-group" th:each="transformator : ${sPodstation.getTrList()}">
        <input th:onchange="this.form.submit()" type="radio" th:name = "trans"
                                           th:value="${transformator.getNum()}"
@@ -60,7 +58,7 @@
                 <td><p th:text="${houseSegment.getHouse1Building()}"></p></td>
                 <td><p th:text="${houseSegment.getHouse2()}"></p> </td>
                 <td><p th:text="${houseSegment.getHouse2Building()}"></p></td>
-                <td><button type="submit" th:name="action" th:value="'del&' + ${houseSegment.getRn()}" title="Удалить">&#9746</button></td>
+                <td><button type="submit" th:name="delete" th:value="${houseSegment.getRn()}" title="Удалить">&#9746</button></td>
             </tr>
         </table>
     </div>
