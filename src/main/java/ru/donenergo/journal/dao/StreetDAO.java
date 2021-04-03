@@ -30,7 +30,20 @@ public class StreetDAO {
         jdbcTemplate.update("execute procedure SEGMENT_DELETE(?)", new Object[]{rn});
     }
 
-    public void addSegment(String strPodstation, int trNum, String fider, int streetRn, String streetName, String streetType, int house1, String house1b, int house2, String house2b) {
+    public Integer getStreetRnByName(String name, String type){
+        return jdbcTemplate.queryForObject("SELECT RN FROM STREETS WHERE STREET_NAME = ? AND STREET_TYPE = ?", new Object[]{name, type}, Integer.class);
+    }
+
+    public void addSegment(String strPodstation,
+                           int trNum,
+                           String fider,
+                           int streetRn,
+                           String streetName,
+                           String streetType,
+                           int house1,
+                           String house1b,
+                           int house2,
+                           String house2b) {
         jdbcTemplate.queryForObject("execute procedure SEGMENT_INSERT(?, ?, ?, ? ,?, ?, ?, ?, ?, ?)", new Object[]{strPodstation, trNum, fider, streetRn, streetName, streetType, house1, house1b, house2, house2b}, String.class);
     }
 

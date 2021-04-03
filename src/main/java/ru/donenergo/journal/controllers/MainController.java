@@ -96,31 +96,56 @@ public class MainController {
     }
 
     @GetMapping("/streetsedit")
-    public String backToEdit(@RequestParam(value = "action", required = false) String action,
-                             @RequestParam(value = "trans", required = false) String trans,
-                             @RequestParam(value = "delete", required = false) String delete,
-                             HttpServletRequest request,
-                             Model model) {
+    public String streetsEdit(@RequestParam(value = "street") String street,
+                              @RequestParam(value = "action", required = false) String action,
+                              @RequestParam(value = "trans", required = false) Integer trans,
+                              @RequestParam(value = "delete", required = false) String delete,
+                              @RequestParam(value = "housenum1", required = false) Integer housenum1,
+                              @RequestParam(value = "housenum2", required = false) Integer housenum2,
+                              @RequestParam(value = "letter1", required = false) String letter1,
+                              @RequestParam(value = "letter2", required = false) String letter2,
+                              HttpServletRequest request,
+                              Model model) {
         model.addAttribute("sPodstation", mds.getsPodstation());
-        System.out.println(action + trans + delete);
+
         if (action != null) {
-            model.addAttribute("rightsMessage", hostService.getRightsMessage(request.getRemoteAddr(), mds.getsPodstation().getResNum()));
-            model.addAttribute(mds);
-            return "editpodstation";
+            if (action.equals("backfromstreetsedit")) {
+                model.addAttribute("rightsMessage", hostService.getRightsMessage(request.getRemoteAddr(), mds.getsPodstation().getResNum()));
+                model.addAttribute(mds);
+                return "editpodstation";
+            }
+            if (action.equals("addHouse")) {
+                housenum2 = housenum1;
+            }
+            if ((action.equals("addInterval")) || action.equals("addHouse")) {
+                if ((housenum1 != null) && (housenum2 != null) && (street != null)) {
+                    String[] streetParams = street.split(", ");
+                    streetDAO.addSegment(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr(),
+                            trans,
+                            mds.getsPodstation().getTrList().get(trans - 1).getFider(),
+                            streetDAO.getStreetRnByName(streetParams[0], streetParams[1]),
+                            streetParams[0],
+                            streetParams[1],
+                            housenum1,
+                            letter1,
+                            housenum2,
+                            letter2);
+                }
+            }
         } else if ((trans != null) || (delete != null)) {
-            if (delete != null){
+            if (delete != null) {
                 streetDAO.deleteHouseSegment(delete);
             }
-            model.addAttribute("houseSegments", streetDAO.getHouseSegmentsByTr(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr(), Integer.valueOf(trans)));
-            model.addAttribute("selectedTransformator", Integer.valueOf(trans));
-            model.addAttribute("streets", streetDAO.getStreets());
         }
+        model.addAttribute("houseSegments", streetDAO.getHouseSegmentsByTr(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr(), Integer.valueOf(trans)));
+        model.addAttribute("selectedTransformator", trans);
+        model.addAttribute("streets", streetDAO.getStreets());
         return "streetsedit";
     }
 
     @PostMapping("/streetsedit")
     public String setStreets(@ModelAttribute("sPodstation") Podstation sPodstation,
-                             @RequestParam(value = "action", required = false) String action,
+                             @ModelAttribute(value = "action") String action,
                              @RequestParam(value = "trans", required = false) String transNum,
                              HttpServletRequest request,
                              Model model) {
