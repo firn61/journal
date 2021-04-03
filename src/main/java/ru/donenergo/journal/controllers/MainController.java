@@ -114,8 +114,10 @@ public class MainController {
                 model.addAttribute(mds);
                 return "editpodstation";
             }
+            String success = new String();
             if (action.equals("addHouse")) {
                 housenum2 = housenum1;
+                success = "Адрес добавлен";
             }
             if ((action.equals("addInterval")) || action.equals("addHouse")) {
                 if ((housenum1 != null) && (housenum2 != null) && (street != null)) {
@@ -130,6 +132,12 @@ public class MainController {
                             letter1,
                             housenum2,
                             letter2);
+                    if (success.length()==0){
+                        success = "Сегмент добавлен";
+                    }
+                    model.addAttribute("success", success);
+                } else {
+                    model.addAttribute("error", "Ошибка добавления сегмента. Заполните обязательные поля.");
                 }
             }
         } else if ((trans != null) || (delete != null)) {

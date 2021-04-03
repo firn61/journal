@@ -20,6 +20,8 @@
                                           th:checked="${transformator.getNum()==selectedTransformator}"/>
     </div>
     <p style="font-weight:bold" th:text="${sPodstation.podstType} + '-' + ${sPodstation.numStr} + ' ' + ${sPodstation.address}">
+    <div style="color:red;font-weight:bold" th:text="${error}" th:if="${error}"></div>
+    <div style="color:green;font-weight:bold" th:text="${success}" th:if="${success}"></div>
     <div class="form-group">
         Улица: <input list="streets" class="form-control" id="streetsselect" name="street">  </input>
         <datalist id="streets">
