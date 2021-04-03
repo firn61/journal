@@ -107,7 +107,6 @@ public class MainController {
                               HttpServletRequest request,
                               Model model) {
         model.addAttribute("sPodstation", mds.getsPodstation());
-
         if (action != null) {
             if (action.equals("backfromstreetsedit")) {
                 model.addAttribute("rightsMessage", hostService.getRightsMessage(request.getRemoteAddr(), mds.getsPodstation().getResNum()));
