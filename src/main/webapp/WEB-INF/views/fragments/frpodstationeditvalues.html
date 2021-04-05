@@ -1,78 +1,94 @@
 <div th:fragment="stable">
     <form th:action="@{/editvalues}" th:method="POST" th:object="${sPodstation}">
-    <span style="color:red;font-weight:bold" th:unless="${rightsMessage == 'Ok'}"><p th:text="${rightsMessage}"></p></span>
-    <p style="font-weight:bold" th:text="*{podstType} + '-' + *{numStr} + ' ' + *{address}"></p> <button type="submit" th:name="action" th:value="save">Сохранить</button>
-    <input type="hidden" th:field="*{podstType}"></input>
-    <input type="hidden" th:field="*{numStr}"></input>
-    <input type="hidden" th:field="*{address}"></input>
-    <input type="hidden" th:field="*{rn}"></input>
-    <th:block th:each="transformator, tstat : ${sPodstation.trList}">
-        <div>
-            <table th:onclick="'showHideLines(\'' + ${transformator.getRn()} + '\');'">
+        <span style="color:red;font-weight:bold" th:unless="${rightsMessage == 'Ok'}"><p th:text="${rightsMessage}"></p></span>
+        <p style="font-weight:bold" th:text="*{podstType} + '-' + *{numStr} + ' ' + *{address}"></p>
+        <button type="submit" th:name="action" th:value="save">Сохранить</button>
+        <input type="hidden" th:field="*{podstType}"></input>
+        <input type="hidden" th:field="*{numStr}"></input>
+        <input type="hidden" th:field="*{address}"></input>
+        <input type="hidden" th:field="*{rn}"></input>
+        <th:block th:each="transformator, tstat : ${sPodstation.trList}">
+            <div>
+                <table th:onclick="'showHideLines(\'' + ${transformator.getRn()} + '\');'">
+                    <tr>
+                        <th>Номер</th>
+                        <th>Фидер</th>
+                        <th>Мощность</th>
+                        <th>U_A</th>
+                        <th>U_B</th>
+                        <th>U_C</th>
+                        <th>I_A</th>
+                        <th>I_B</th>
+                        <th>I_C</th>
+                        <th>I_N</th>
+                        <th>Дата</th>
+                        <th>Монтер</th>
+                    </tr>
+                    <input type="hidden" th:field="*{trList[__${tstat.index}__].rn}"/>
+                    <input type="hidden" th:field="*{trList[__${tstat.index}__].tpRn}"/>
+                    <td><p th:text="${transformator.getNum()}"/></td>
+                    <input type="hidden" th:field="*{trList[__${tstat.index}__].num}"/>
+                    <td><p th:text="${transformator.getFider()}"/></td>
+                    <input type="hidden" th:field="*{trList[__${tstat.index}__].fider}"/>
+                    <td><p th:text="${transformator.getPower()}"/></td>
+                    <input type="hidden" th:field="*{trList[__${tstat.index}__].power}"/>
+                    <td><input type="number" th:field="*{trList[__${tstat.index}__].uA}"/></td>
+                    <td><input type="number" th:field="*{trList[__${tstat.index}__].uB}"/></td>
+                    <td><input type="number" th:field="*{trList[__${tstat.index}__].uC}"/></td>
+                    <td><p th:text="${transformator.getiA()}"/></td>
+                    <input type="hidden" th:field="*{trList[__${tstat.index}__].iA}"/>
+                    <td><p th:text="${transformator.getiB()}"/></td>
+                    <input type="hidden" th:field="*{trList[__${tstat.index}__].iB}"/>
+                    <td><p th:text="${transformator.getiC()}"/></td>
+                    <input type="hidden" th:field="*{trList[__${tstat.index}__].iC}"/>
+                    <td><p th:text="${transformator.getiN()}"/></td>
+                    <input type="hidden" th:field="*{trList[__${tstat.index}__].iN}"/>
+                    <input type="hidden" th:field="*{trList[__${tstat.index}__].linesCount}"/>
+                    <td><input type="text" pattern="[0-9]{2}.[0-9]{2}.[0-9]{2} [0-9]{2}:[0-9]{2}" title ="ДД.ММ.ГГ ЧЧ:ММ" th:field="*{trList[__${tstat.index}__].dateTime}"></td>
+<!--                    <td><input type ="datetime-local" th:value="*{trList[__${tstat.index}__].dateTime}"></td>&ndash;&gt;-->
+                    <td><input type="text" th:field="*{trList[__${tstat.index}__].monter}"></td>
+                    </tr>
+                </table>
+            </div>
+            <table th:id="${transformator.getRn()}">
                 <tr>
                     <th>Номер</th>
-                    <th>Фидер</th>
-                    <th>Мощность</th>
-                    <th>U_A</th>
-                    <th>U_B</th>
-                    <th>U_C</th>
-                    <th>I_A</th>
-                    <th>I_B</th>
-                    <th>I_C</th>
-                    <th>I_N</th>
-                    <th>Дата</th>
-                    <th>Монтер</th>
+                    <th>Наименование</th>
+                    <th>I A</th>
+                    <th>I B</th>
+                    <th>I C</th>
+                    <th>I O</th>
+                    <th>KA</th>
                 </tr>
-                <input type="hidden" th:field="*{trList[__${tstat.index}__].rn}"/>
-                <input type="hidden" th:field="*{trList[__${tstat.index}__].tpRn}"/>
-                <td><p th:text="${transformator.getNum()}"/></td>
-                <input type="hidden" th:field="*{trList[__${tstat.index}__].num}"/>
-                <td><p th:text="${transformator.getFider()}"/></td>
-                <input type="hidden" th:field="*{trList[__${tstat.index}__].fider}"/>
-                <td><p th:text="${transformator.getPower()}"/></td>
-                <input type="hidden" th:field="*{trList[__${tstat.index}__].power}"/>
-                <td><input type="number" th:field="*{trList[__${tstat.index}__].uA}"/></td>
-                <td><input type="number" th:field="*{trList[__${tstat.index}__].uB}"/></td>
-                <td><input type="number" th:field="*{trList[__${tstat.index}__].uC}"/></td>
-                <td><p th:text="${transformator.getiA()}"/></td>
-                <input type="hidden" th:field="*{trList[__${tstat.index}__].iA}"/>
-                <td><p th:text="${transformator.getiB()}"/></td>
-                <input type="hidden" th:field="*{trList[__${tstat.index}__].iB}"/>
-                <td><p th:text="${transformator.getiC()}"/></td>
-                <input type="hidden" th:field="*{trList[__${tstat.index}__].iC}"/>
-                <td><p th:text="${transformator.getiN()}"/></td>
-                <input type="hidden" th:field="*{trList[__${tstat.index}__].iN}"/>
-                <input type="hidden" th:field="*{trList[__${tstat.index}__].linesCount}"/>
-                <td><input type="text" th:field="*{trList[__${tstat.index}__].dateTime}"></td>
-                <td><input type="text" th:field="*{trList[__${tstat.index}__].monter}"></td>
+                <tr th:each="line, lstat : ${transformator.getListLines()}">
+                    <input type="hidden"
+                           th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].rn}"></input>
+                    <input type="hidden"
+                           th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].trRn}"></input>
+                    <input type="hidden"
+                           th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].sectionNum}"></input>
+                    <td><p th:text="${line.getNum()}"></p></td>
+                    <input type="hidden"
+                           th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].num}"></input>
+                    <td><p th:text="${line.getName()}"></p></td>
+                    <input type="hidden"
+                           th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].name}"></input>
+                    <td><input type="number" th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iA}"/>
+                    </td>
+                    <td><input type="number" th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iB}"/>
+                    </td>
+                    <td><input type="number" th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iC}"/>
+                    </td>
+                    <td><input type="number" th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iO}"/>
+                    </td>
+                    <!--                <td><input type="text" th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].kA}"/></td>-->
+                    <td><select th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].kA}">
+                        <option th:value = null th:text="--"></option>
+                        <option th:value="'вкл.'" th:text="вкл."></option>
+                        <option th:value="'откл.'" th:text="откл."></option>
+                    </select></td>
                 </tr>
             </table>
-        </div>
-        <table th:id="${transformator.getRn()}">
-            <tr>
-                <th>Номер</th>
-                <th>Наименование</th>
-                <th>I A</th>
-                <th>I B</th>
-                <th>I C</th>
-                <th>I O</th>
-                <th>KA</th>
-            </tr>
-            <tr th:each="line, lstat : ${transformator.getListLines()}">
-                <input type="hidden" th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].rn}"></input>
-                <input type="hidden" th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].trRn}"></input>
-                <input type="hidden" th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].sectionNum}"></input>
-                <td><p th:text="${line.getNum()}"></p></td>
-                <input type="hidden" th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].num}"></input>
-                <td><p th:text="${line.getName()}"></p></td>
-                <input type="hidden" th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].name}"></input>
-                <td><input type="number" th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iA}"/></td>
-                <td><input type="number" th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iB}"/></td>
-                <td><input type="number" th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iC}"/></td>
-                <td><input type="number" th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iO}"/></td>
-                <td><input type="text" th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].kA}"/></td>
-            </tr>
-        </table>
-    </th:block>
+        </th:block>
     </form>
 </div>

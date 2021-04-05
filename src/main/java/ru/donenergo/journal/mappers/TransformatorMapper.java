@@ -5,6 +5,7 @@ import ru.donenergo.journal.models.Transformator;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 public class TransformatorMapper implements RowMapper<Transformator> {
     @Override

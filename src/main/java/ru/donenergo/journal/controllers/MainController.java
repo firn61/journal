@@ -213,6 +213,7 @@ public class MainController {
                                        HttpServletRequest request) {
         String ipAddr = request.getRemoteAddr();
         if (hostService.checkRights(ipAddr, mds.getsPodstation().getResNum())) {
+            System.out.println("DATE" + sPodstation.getTrList().get(0).getDateTime());
             podstationDAO.updatePodstationValues(sPodstation);
             model.addAttribute("rightsMessage", hostService.getRightsMessage(ipAddr, mds.getsPodstation().getResNum()));
         } else {

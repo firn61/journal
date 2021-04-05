@@ -1,8 +1,15 @@
 package ru.donenergo.journal.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Transformator {
+    DateTimeFormatter dateTimeFormatterBase = DateTimeFormatter.ofPattern("dd.MM.yy' 'HH:mm");
+    DateTimeFormatter dateTimeFormatterForm = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
     private int rn;
     private int tpRn;
     private int num;
@@ -15,7 +22,8 @@ public class Transformator {
     private int iB;
     private int iC;
     private int iN;
-    private String dateTime;
+    @DateTimeFormat(pattern = "dd.MM.yy' 'HH:mm")
+    private LocalDateTime dateTime;
     private String monter;
     private int linesCount;
     private List<Line> listLines;
@@ -23,7 +31,7 @@ public class Transformator {
     public Transformator() {
     }
 
-    public Transformator(int rn, int tpRn, int num, String fider, int power, int uA, int uB, int uC, int iA, int iB, int iC, int iN, String dateTime, String monter) {
+    public Transformator(int rn, int tpRn, int num, String fider, int power, int uA, int uB, int uC, int iA, int iB, int iC, int iN, LocalDateTime dateTime, String monter) {
         this.rn = rn;
         this.tpRn = tpRn;
         this.num = num;
@@ -152,11 +160,25 @@ public class Transformator {
         this.iN = iN;
     }
 
-    public String getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
     public void setDateTime(String dateTime) {
+        if ((dateTime == null) || (dateTime.length() == 0)) {
+            this.dateTime = null;
+        } else {
+            try {
+                this.dateTime = LocalDateTime.parse(dateTime, dateTimeFormatterBase);
+            } catch (DateTimeException e) {
+                System.out.println(e);
+                this.dateTime = LocalDateTime.parse(dateTime, dateTimeFormatterForm);
+            }
+        }
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        // this.dateTime = LocalDateTime.parse(dateTime.toString(), DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
         this.dateTime = dateTime;
     }
 
