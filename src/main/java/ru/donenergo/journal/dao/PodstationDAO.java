@@ -31,25 +31,25 @@ public class PodstationDAO {
         getPodstationsListFromDb(currentDate);
     }
 
-    public String addPodstation(String podstType, String num, String resNum, String dateRn, String address){
-       return jdbcTemplate.queryForObject("execute procedure PODST_INSERT(?, ?, ?, ?, ?, ?, ?)", new Object[]{podstType, Integer.valueOf(num), num, resNum, dateRn, 0, address}, String.class);
+    public String addPodstation(String podstType, String num, String resNum, String dateRn, String address) {
+        return jdbcTemplate.queryForObject("execute procedure PODST_INSERT(?, ?, ?, ?, ?, ?, ?)", new Object[]{podstType, Integer.valueOf(num), num, resNum, dateRn, 0, address}, String.class);
     }
 
-    public Integer isPodstationExist(String type, String num, String dateRn){
+    public Integer isPodstationExist(String type, String num, String dateRn) {
         return (Integer) jdbcTemplate.queryForObject("SELECT COUNT(RN) FROM PODSTATION WHERE PODST_TYPE = ? AND NUM = ? AND DATE_RN = ?", new Object[]{type, num, dateRn}, Integer.class);
     }
 
-    public void deleteTrans(String rn){
+    public void deleteTrans(String rn) {
         jdbcTemplate.update("DELETE FROM TRANSFORMATOR WHERE RN = ?", new Object[]{rn});
         jdbcTemplate.update("DELETE FROM LINE WHERE TR_RN = ?", new Object[]{rn});
     }
 
-    public void updatePodstation(Podstation uPodstation){
+    public void updatePodstation(Podstation uPodstation) {
         jdbcTemplate.update("execute procedure PODST_UPDATE(?, ?)", new Object[]{uPodstation.getAddress(), uPodstation.getRn()});
-        for (Transformator transformator : uPodstation.getTrList()){
+        for (Transformator transformator : uPodstation.getTrList()) {
             jdbcTemplate.update("execute procedure TRANS_UPDATE(?, ?, ?)",
                     new Object[]{transformator.getFider(), transformator.getPower(), transformator.getRn()});
-            for (Line line : transformator.getListLines()){
+            for (Line line : transformator.getListLines()) {
                 updateLine(line.getNum(), line.getName(), line.getRn());
             }
         }
@@ -127,10 +127,29 @@ public class PodstationDAO {
         transformator.setiB(sumiB);
         transformator.setiC(sumiC);
         transformator.setiN(sumiO);
+        System.out.println(transformator);
+        String day = String.valueOf(transformator.getDateTime().getDayOfMonth());
+        if (day.length() == 1) {
+            day = "0" + day;
+        }
+        String month = String.valueOf(transformator.getDateTime().getMonthValue());
+        if (month.length() == 1) {
+            month = "0" + month;
+        }
+        String hour = String.valueOf(transformator.getDateTime().getHour());
+        if (hour.length() == 1) {
+            hour = "0" + hour;
+        }
+        String minute = String.valueOf(transformator.getDateTime().getMinute());
+        if (minute.length() == 1) {
+            minute = "0" + minute;
+        }
+        String stringDate = day + "." + month + "." + String.valueOf(transformator.getDateTime().getYear()).substring(2) + " " + hour + ":" + minute;
+        System.out.println(stringDate);
         jdbcTemplate.update("execute procedure TRANS_VALUESUPDATE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 new Object[]{transformator.getRn(), transformator.getuA(), transformator.getuB(), transformator.getuC(),
                         transformator.getiA(), transformator.getiB(), transformator.getiC(), transformator.getiN(),
-                        transformator.getDateTime(), transformator.getMonter()});
+                        stringDate, transformator.getMonter()});
     }
 
     public void updateLineValues(Line line) {

@@ -22,13 +22,34 @@ public class Transformator {
     private int iB;
     private int iC;
     private int iN;
-    @DateTimeFormat(pattern = "dd.MM.yy' 'HH:mm")
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateTime;
     private String monter;
     private int linesCount;
     private List<Line> listLines;
 
     public Transformator() {
+    }
+
+    @Override
+    public String toString() {
+        return "Transformator{" +
+                ", rn=" + rn +
+                ", tpRn=" + tpRn +
+                ", num=" + num +
+                ", fider='" + fider + '\'' +
+                ", power=" + power +
+                ", uA=" + uA +
+                ", uB=" + uB +
+                ", uC=" + uC +
+                ", iA=" + iA +
+                ", iB=" + iB +
+                ", iC=" + iC +
+                ", iN=" + iN +
+                ", dateTime=" + dateTime +
+                ", monter='" + monter + '\'' +
+                ", linesCount=" + linesCount +
+                '}';
     }
 
     public Transformator(int rn, int tpRn, int num, String fider, int power, int uA, int uB, int uC, int iA, int iB, int iC, int iN, LocalDateTime dateTime, String monter) {
@@ -165,20 +186,36 @@ public class Transformator {
     }
 
     public void setDateTime(String dateTime) {
+        System.out.println("str executed " + dateTime);
         if ((dateTime == null) || (dateTime.length() == 0)) {
             this.dateTime = null;
         } else {
             try {
+                this.dateTime = LocalDateTime.parse(dateTime, dateTimeFormatterForm);
+            } catch (DateTimeException e) {
+                System.out.println("iam here");
+                System.out.println(e);
+                this.dateTime = null;
+            }
+        }
+    }
+    public void setDateTimeFromDAO(String dateTime) {
+        if ((dateTime == null) || (dateTime.length() == 0)) {
+            this.dateTime = null;
+        } else {
+            try {
+
                 this.dateTime = LocalDateTime.parse(dateTime, dateTimeFormatterBase);
             } catch (DateTimeException e) {
+                System.out.println("iam herrrrrre");
                 System.out.println(e);
-                this.dateTime = LocalDateTime.parse(dateTime, dateTimeFormatterForm);
+                this.dateTime = null;
             }
         }
     }
 
     public void setDateTime(LocalDateTime dateTime) {
-        // this.dateTime = LocalDateTime.parse(dateTime.toString(), DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
+        System.out.println("ldt executed " + dateTime);
         this.dateTime = dateTime;
     }
 

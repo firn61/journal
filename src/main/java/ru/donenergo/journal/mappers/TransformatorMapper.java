@@ -23,7 +23,7 @@ public class TransformatorMapper implements RowMapper<Transformator> {
         transformator.setiB(resultSet.getInt("I_B"));
         transformator.setiC(resultSet.getInt("I_C"));
         transformator.setiN(resultSet.getInt("I_N"));
-        transformator.setDateTime(resultSet.getString("DATETIME"));
+        transformator.setDateTimeFromDAO(resultSet.getString("DATETIME"));
         transformator.setMonter(resultSet.getString("MONTER"));
         return transformator;
     }

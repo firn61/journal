@@ -44,8 +44,8 @@
                     <td><p th:text="${transformator.getiN()}"/></td>
                     <input type="hidden" th:field="*{trList[__${tstat.index}__].iN}"/>
                     <input type="hidden" th:field="*{trList[__${tstat.index}__].linesCount}"/>
-                    <td><input type="text" pattern="[0-9]{2}.[0-9]{2}.[0-9]{2} [0-9]{2}:[0-9]{2}" title ="ДД.ММ.ГГ ЧЧ:ММ" th:field="*{trList[__${tstat.index}__].dateTime}"></td>
-<!--                    <td><input type ="datetime-local" th:value="*{trList[__${tstat.index}__].dateTime}"></td>&ndash;&gt;-->
+<!--                    <td><input type="text" pattern="[0-9]{2}.[0-9]{2}.[0-9]{2} [0-9]{2}:[0-9]{2}" title ="ДД.ММ.ГГ ЧЧ:ММ" th:field="*{trList[__${tstat.index}__].dateTime}"></td>-->
+                    <td><input type ="datetime-local" th:field="*{trList[__${tstat.index}__].dateTime}"></td>
                     <td><input type="text" th:field="*{trList[__${tstat.index}__].monter}"></td>
                     </tr>
                 </table>

@@ -217,6 +217,7 @@ public class MainController {
             podstationDAO.updatePodstationValues(sPodstation);
             model.addAttribute("rightsMessage", hostService.getRightsMessage(ipAddr, mds.getsPodstation().getResNum()));
         } else {
+            System.out.println("DATE" + sPodstation.getTrList().get(0).getDateTime());
             model.addAttribute("rightsMessage", hostService.getRightsMessage(ipAddr, mds.getsPodstation().getResNum()) + ". Данные не сохранены.");
 
         }
