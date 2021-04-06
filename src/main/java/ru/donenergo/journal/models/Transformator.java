@@ -34,7 +34,7 @@ public class Transformator {
     @Override
     public String toString() {
         return "Transformator{" +
-                ", rn=" + rn +
+                "rn=" + rn +
                 ", tpRn=" + tpRn +
                 ", num=" + num +
                 ", fider='" + fider + '\'' +
@@ -183,6 +183,26 @@ public class Transformator {
 
     public LocalDateTime getDateTime() {
         return dateTime;
+    }
+
+    public String getDateTimeToDAO(){
+        String day = String.valueOf(dateTime.getDayOfMonth());
+        if (day.length() == 1) {
+            day = "0" + day;
+        }
+        String month = String.valueOf(dateTime.getMonthValue());
+        if (month.length() == 1) {
+            month = "0" + month;
+        }
+        String hour = String.valueOf(dateTime.getHour());
+        if (hour.length() == 1) {
+            hour = "0" + hour;
+        }
+        String minute = String.valueOf(dateTime.getMinute());
+        if (minute.length() == 1) {
+            minute = "0" + minute;
+        }
+        return day + "." + month + "." + String.valueOf(dateTime.getYear()).substring(2) + " " + hour + ":" + minute;
     }
 
     public void setDateTime(String dateTime) {

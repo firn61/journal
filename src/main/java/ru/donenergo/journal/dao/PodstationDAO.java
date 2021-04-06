@@ -128,28 +128,10 @@ public class PodstationDAO {
         transformator.setiC(sumiC);
         transformator.setiN(sumiO);
         System.out.println(transformator);
-        String day = String.valueOf(transformator.getDateTime().getDayOfMonth());
-        if (day.length() == 1) {
-            day = "0" + day;
-        }
-        String month = String.valueOf(transformator.getDateTime().getMonthValue());
-        if (month.length() == 1) {
-            month = "0" + month;
-        }
-        String hour = String.valueOf(transformator.getDateTime().getHour());
-        if (hour.length() == 1) {
-            hour = "0" + hour;
-        }
-        String minute = String.valueOf(transformator.getDateTime().getMinute());
-        if (minute.length() == 1) {
-            minute = "0" + minute;
-        }
-        String stringDate = day + "." + month + "." + String.valueOf(transformator.getDateTime().getYear()).substring(2) + " " + hour + ":" + minute;
-        System.out.println(stringDate);
         jdbcTemplate.update("execute procedure TRANS_VALUESUPDATE(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 new Object[]{transformator.getRn(), transformator.getuA(), transformator.getuB(), transformator.getuC(),
                         transformator.getiA(), transformator.getiB(), transformator.getiC(), transformator.getiN(),
-                        stringDate, transformator.getMonter()});
+                        transformator.getDateTimeToDAO(), transformator.getMonter()});
     }
 
     public void updateLineValues(Line line) {
