@@ -13,8 +13,13 @@ import java.util.Map;
 @Component
 public class HostService {
     private HostDAO hostDAO;
-    Map<String, String> hosts;
-    Map<String, String> res = new HashMap<>();
+    private Map<String, String> hosts;
+    private Map<String, String> res = new HashMap<>();
+
+    public Map<String, String> getRes() {
+        return res;
+    }
+
     public final String NO_RIGHTS_MESSAGE = "Недостаточно прав для внесения изменений";
 
     @Autowired
@@ -22,16 +27,14 @@ public class HostService {
         this.hostDAO = hostDAO;
     }
 
+    public Map<String, String> getHosts() {
+        return hosts;
+    }
+
     @PostConstruct
     private void setInitialState() {
         updateHosts();
-        res.put("vres1", "1");
-        res.put("zres1", "2");
-        res.put("sres1", "3");
-        res.put("ures1", "4");
-        res.put("rpvi1", "5");
-        res.put("rges0", "6");
-
+        res = hostDAO.getUsr();
     }
 
     public void updateHosts() {

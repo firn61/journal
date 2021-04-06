@@ -20,6 +20,20 @@ public class HostDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    public Map<String, String> getUsr() {
+        Map<String, String> usrMap = jdbcTemplate.query("SELECT USR_NAME, RES_NUM FROM USR_TABLE", new ResultSetExtractor<Map>() {
+            @Override
+            public Map extractData(ResultSet rs) throws SQLException, DataAccessException {
+                HashMap<String, String> extractedUsr = new HashMap<>();
+                while (rs.next()) {
+                    extractedUsr.put(rs.getString("USR_NAME"), rs.getString("RES_NUM"));
+                }
+                return extractedUsr;
+            }
+        });
+        return usrMap;
+    }
+
     public Map<String, String> getHosts() {
         Map<String, String> hostsMap = jdbcTemplate.query("SELECT IP, RIGHTS FROM HOSTS", new ResultSetExtractor<Map>() {
             @Override
@@ -34,7 +48,7 @@ public class HostDAO {
         return hostsMap;
     }
 
-    public void addRO(String ip){
+    public void addRO(String ip) {
         jdbcTemplate.update("INSERT INTO HOSTS VALUES(?, ?)", new Object[]{ip, "rges0"});
     }
 

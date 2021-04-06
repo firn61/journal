@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>admin</title>
+</head>
+<body>
+<form th:method="POST" th:action="@{/admin}" th:object="${adminService}">
+    <label for="currentDate">Текущий период:</label>
+    <input type="number" name="currentDate" id="currentDate" th:field="*{currentDate}">
+    <br>
+    <label for="filesDir1">Директория 1:</label>
+    <input type="text" name="filesDir1" id="filesDir1" th:field="*{filesDir1}">
+    <br>
+    <label for="filesDir2">Директория 2:</label>
+    <input type="text" name="filesDir2" id="filesDir2" th:field="*{filesDir2}">
+    <button type="submit">Сохранить</button>
+</form>
+<form th:method="POST" th:action="@{/hostsave}" th:object="${adminService}">
+
+</form>
+</body>
+</html>

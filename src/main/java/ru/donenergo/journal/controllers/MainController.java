@@ -1,21 +1,17 @@
 package ru.donenergo.journal.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.donenergo.journal.dao.HostDAO;
 import ru.donenergo.journal.dao.PodstationDAO;
 import ru.donenergo.journal.dao.StreetDAO;
 import ru.donenergo.journal.models.HouseSegment;
 import ru.donenergo.journal.models.Podstation;
 import ru.donenergo.journal.services.HostService;
-
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -216,6 +212,7 @@ public class MainController {
             System.out.println("DATE" + sPodstation.getTrList().get(0).getDateTime());
             podstationDAO.updatePodstationValues(sPodstation);
             model.addAttribute("rightsMessage", hostService.getRightsMessage(ipAddr, mds.getsPodstation().getResNum()));
+            model.addAttribute("successMessage", "Подстанция сохранена.");
         } else {
             System.out.println("DATE" + sPodstation.getTrList().get(0).getDateTime());
             model.addAttribute("rightsMessage", hostService.getRightsMessage(ipAddr, mds.getsPodstation().getResNum()) + ". Данные не сохранены.");
