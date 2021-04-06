@@ -5,9 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.donenergo.journal.dao.HostDAO;
+import ru.donenergo.journal.models.Host;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -15,9 +18,17 @@ public class HostService {
     private HostDAO hostDAO;
     private Map<String, String> hosts;
     private Map<String, String> res = new HashMap<>();
-
+    private List<Host> hostsList = new ArrayList<>();
     public Map<String, String> getRes() {
         return res;
+    }
+
+    public List<Host> getHostsList() {
+        return hostsList;
+    }
+
+    public void setHostsList(List<Host> hostsList) {
+        this.hostsList = hostsList;
     }
 
     public final String NO_RIGHTS_MESSAGE = "Недостаточно прав для внесения изменений";
@@ -35,10 +46,19 @@ public class HostService {
     private void setInitialState() {
         updateHosts();
         res = hostDAO.getUsr();
+        for (Map.Entry<String, String> entry : res.entrySet()){
+            System.out.println(entry.getKey() + " "  + entry.getValue());
+        }
     }
 
     public void updateHosts() {
         hosts = hostDAO.getHosts();
+        hostsList.clear();
+        System.out.println(hosts.size() + " hosts size");
+        for (Map.Entry<String, String> entry : hosts.entrySet()){
+            System.out.println(entry.getKey() + " " + entry.getValue());
+            hostsList.add(new Host(entry.getKey(), entry.getValue()));
+        }
     }
 
     public String getRightsMessage(String ip, int targetRes) {

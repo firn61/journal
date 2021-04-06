@@ -14,10 +14,18 @@
     <br>
     <label for="filesDir2">Директория 2:</label>
     <input type="text" name="filesDir2" id="filesDir2" th:field="*{filesDir2}">
-    <button type="submit">Сохранить</button>
+    <br>
+    <button type="submit">Сохранить системные параметры</button>
 </form>
 <form th:method="POST" th:action="@{/hostsave}" th:object="${adminService}">
-
+    <button type="submit">Сохранить права</button>
+    <table>
+        <tr th:each="host, hstat : ${adminService.hostService.hostsList}">
+            <td><p th:text="${host.ip}"></td>
+            <input type="hidden" th:field="*{hostService.hostsList[__${hstat.index}__].ip}">
+            <td><input type ="text" th:field="*{hostService.hostsList[__${hstat.index}__].rights}"></td>
+        </tr>
+    </table>
 </form>
 </body>
 </html>

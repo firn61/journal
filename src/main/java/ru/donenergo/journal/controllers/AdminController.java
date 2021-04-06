@@ -24,4 +24,14 @@ public class AdminController {
         model.addAttribute(adminService);
         return "admin";
     }
+
+    @PostMapping("/admin")
+    public String saveSystemParameters(){
+        return null;
+    }
+
+    @PostMapping("/hostsave")
+    public String saveHost(){
+        return null;
+    }
 }

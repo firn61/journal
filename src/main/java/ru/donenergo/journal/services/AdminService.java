@@ -3,6 +3,7 @@ package ru.donenergo.journal.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.donenergo.journal.dao.SystemDAO;
+import ru.donenergo.journal.models.Host;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -21,7 +22,6 @@ public class AdminService {
     public HostService getHostService() {
         return hostService;
     }
-
 
     public String getFilesDir1() {
         return filesDir1;
