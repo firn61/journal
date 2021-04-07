@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ведомость контрольного замера</title>
+    <style>
+        table, th, td {
+            border: 1px solid #000000;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+<h4 align="left">
+    <div>Филиал АО "Донэнерго" РГЭС</div>
+    <div th:text="'Подразделение: ' + ${res} + ', ' + ${date}"></div>
+    <div th:text="'Ведомость контрольного замера нагрузок, напряжений по ' + ${sPodstation.getPodstType()} + '-' + ${sPodstation.getNumStr()} + ', ' + ${sPodstation.getAddress()}"></div>
+</h4>
+<table>
+    <tr>
+        <th>№ тр-ра, мощность, (кВа)</th>
+        <th>Фаза</th>
+        <th>Напряжение, (В)</th>
+        <th>Ток, (А)</th>
+        <th>Линии</th>
+        <th>Положение ком. аппарата</th>
+        <th>Ia, (A)</th>
+        <th>Ib, (A)</th>
+        <th>Ic, (A)</th>
+        <th>Io, (A)</th>
+        <th>Дата, время замера</th>
+    </tr>
+    <tr th:each="transformator, tstat : ${sPodstation.getTrList()}">
+        <td><span th:text="'Т-' + ${transformator.getNum()} + ', ' + ${transformator.getPower()} + ' ' + ${transformator.getFider()}"></span></td>
+        <td>А</td>
+        <td><span th:text="${transformator.getuA()}"></span></td>
+        <td><span th:text="${transformator.getiA()}"></span></td>
+    </tr>
+</table>
+</body>
+</html>

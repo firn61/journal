@@ -8,6 +8,7 @@ import ru.donenergo.journal.dao.PodstationDAO;
 import ru.donenergo.journal.dao.StreetDAO;
 import ru.donenergo.journal.models.HouseSegment;
 import ru.donenergo.journal.models.Podstation;
+import ru.donenergo.journal.models.Res;
 import ru.donenergo.journal.services.HostService;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -368,7 +369,13 @@ public class MainController {
             model.addAttribute(mds);
             model.addAttribute("sPodstation", mds.getsPodstation());
             return "showpodstation";
-        } else {
+        } if (action.equals("measureshow")){
+            model.addAttribute("res", Res.resMap.get(mds.getsPodstation().getResNum()));
+            model.addAttribute("date", mds.getPeriodList().get(Integer.valueOf(mds.getCurrentDate())-1).getsDate());
+            model.addAttribute(mds);
+            model.addAttribute("sPodstation", mds.getsPodstation());
+            return "measurereport";
+        }else {
             return "error";
         }
     }
