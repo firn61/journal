@@ -6,13 +6,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.donenergo.journal.mappers.*;
 import ru.donenergo.journal.models.*;
-
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class PodstationDAO {
+
     private final JdbcTemplate jdbcTemplate;
     static Logger log = Logger.getLogger(PodstationDAO.class.getName());
     private String currentDate;

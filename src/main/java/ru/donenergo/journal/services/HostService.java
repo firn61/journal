@@ -15,23 +15,22 @@ import java.util.Map;
 
 @Component
 public class HostService {
-    private HostDAO hostDAO;
+
+    public HostDAO hostDAO;
     private Map<String, String> hosts;
     private Map<String, String> res = new HashMap<>();
     private List<Host> hostsList = new ArrayList<>();
     public Map<String, String> getRes() {
         return res;
     }
-
     public List<Host> getHostsList() {
         return hostsList;
     }
+    public final String NO_RIGHTS_MESSAGE = "Недостаточно прав для внесения изменений";
 
     public void setHostsList(List<Host> hostsList) {
         this.hostsList = hostsList;
     }
-
-    public final String NO_RIGHTS_MESSAGE = "Недостаточно прав для внесения изменений";
 
     @Autowired
     public HostService(HostDAO hostDAO) {
@@ -46,19 +45,19 @@ public class HostService {
     private void setInitialState() {
         updateHosts();
         res = hostDAO.getUsr();
-        for (Map.Entry<String, String> entry : res.entrySet()){
-            System.out.println(entry.getKey() + " "  + entry.getValue());
-        }
     }
 
     public void updateHosts() {
         hosts = hostDAO.getHosts();
         hostsList.clear();
-        System.out.println(hosts.size() + " hosts size");
+    }
+
+    public List<Host> populateHosts(){
+        List<Host> result = new ArrayList<>();
         for (Map.Entry<String, String> entry : hosts.entrySet()){
-            System.out.println(entry.getKey() + " " + entry.getValue());
-            hostsList.add(new Host(entry.getKey(), entry.getValue()));
+            result.add(new Host(entry.getKey(), entry.getValue()));
         }
+        return result;
     }
 
     public String getRightsMessage(String ip, int targetRes) {
@@ -89,5 +88,4 @@ public class HostService {
         System.out.println(res.get(hosts.get(ip)).equals(String.valueOf(targetRes)));
         return res.get(hosts.get(ip)).equals(String.valueOf(targetRes));
     }
-
 }

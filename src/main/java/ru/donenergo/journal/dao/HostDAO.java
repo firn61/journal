@@ -9,10 +9,12 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Component
 public class HostDAO {
+
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -35,10 +37,10 @@ public class HostDAO {
     }
 
     public Map<String, String> getHosts() {
-        Map<String, String> hostsMap = jdbcTemplate.query("SELECT IP, RIGHTS FROM HOSTS", new ResultSetExtractor<Map>() {
+        Map<String, String> hostsMap = jdbcTemplate.query("SELECT IP, RIGHTS FROM HOSTS ORDER BY IP", new ResultSetExtractor<Map>() {
             @Override
             public Map extractData(ResultSet rs) throws SQLException, DataAccessException {
-                HashMap<String, String> extractedHosts = new HashMap<>();
+                HashMap<String, String> extractedHosts = new LinkedHashMap<>();
                 while (rs.next()) {
                     extractedHosts.put(rs.getString("IP"), rs.getString("RIGHTS"));
                 }
@@ -52,4 +54,7 @@ public class HostDAO {
         jdbcTemplate.update("INSERT INTO HOSTS VALUES(?, ?)", new Object[]{ip, "rges0"});
     }
 
+    public void updateHost(String ip, String rights){
+        jdbcTemplate.update("UPDATE HOSTS SET RIGHTS = ? WHERE IP = ? ", new Object[]{rights, ip});
+    }
 }

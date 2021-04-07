@@ -17,4 +17,8 @@ public class SystemDAO {
         return (String) jdbcTemplate.queryForObject("SELECT SVALUE FROM SYSTEM WHERE SPARAM = ?", new Object[]{sparam}, String.class);
     }
 
+    public void updateSystemValue(String sValue, String sParam){
+        jdbcTemplate.update("UPDATE SYSTEM SET SVALUE = ? WHERE SPARAM = ?", new Object[]{sValue, sParam});
+    }
+
 }

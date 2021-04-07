@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.donenergo.journal.dao.SystemDAO;
 import ru.donenergo.journal.models.Host;
+import ru.donenergo.journal.models.Hosts;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -48,9 +49,29 @@ public class AdminService {
     }
 
     @Autowired
-    public AdminService(SystemDAO systemDAODAO, HostService hostService) {
-        this.systemDAO = systemDAODAO;
+    public AdminService(SystemDAO systemDAO, HostService hostService) {
+        this.systemDAO = systemDAO;
         this.hostService = hostService;
+    }
+
+    public void updateChangedHosts(Hosts oldHosts, Hosts newHosts){
+        for (Host oldHost : oldHosts.getHosts()) {
+            for (Host newHost : newHosts.getHosts()){
+                if(oldHost.getIp().equals(newHost.getIp())){
+                    if(!oldHost.getRights().equals(newHost.getRights())){
+                        hostService.hostDAO.updateHost(newHost.getIp(), newHost.getRights());
+                    }
+                }
+            }
+        }
+    }
+
+
+    public void updateSystemParams(String vFilesDir, String vFilesDir2, String vCurrentDate){
+        systemDAO.updateSystemValue(vFilesDir, "filesdir");
+        systemDAO.updateSystemValue(vFilesDir2, "filesdir2");
+        systemDAO.updateSystemValue(vCurrentDate, "currentDate");
+        initValues();
     }
 
     @PostConstruct
@@ -58,8 +79,5 @@ public class AdminService {
         setFilesDir1(systemDAO.getSystemValue("filesdir"));
         setFilesDir2(systemDAO.getSystemValue("filesdir2"));
         setCurrentDate(systemDAO.getSystemValue("currentDate"));
-
     }
-
-
 }

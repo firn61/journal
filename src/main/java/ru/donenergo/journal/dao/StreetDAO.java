@@ -7,12 +7,12 @@ import ru.donenergo.journal.mappers.HouseSegmentMapper;
 import ru.donenergo.journal.mappers.StreetMapper;
 import ru.donenergo.journal.models.HouseSegment;
 import ru.donenergo.journal.models.Street;
-
 import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Component
 public class StreetDAO {
+
     private final JdbcTemplate jdbcTemplate;
     List<Street> streets;
 

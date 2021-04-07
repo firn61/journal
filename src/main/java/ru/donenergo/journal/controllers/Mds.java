@@ -10,6 +10,7 @@ import java.util.List;
 
 @Component
 public class Mds {
+
     @Autowired
     private PodstationDAO podstationDAO;
     private String currentPodstation;
@@ -99,7 +100,6 @@ public class Mds {
         this.currentPodstation = currentPodstation;
     }
 
-
     public String getCurrentDate() {
         return currentDate;
     }
@@ -131,6 +131,4 @@ public class Mds {
     public void setPodstations(List<Podstation> podstations) {
         this.podstations = podstations;
     }
-
-
 }

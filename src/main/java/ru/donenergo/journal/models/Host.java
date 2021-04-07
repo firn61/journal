@@ -1,6 +1,7 @@
 package ru.donenergo.journal.models;
 
 public class Host {
+
     private String ip;
     private String rights;
 

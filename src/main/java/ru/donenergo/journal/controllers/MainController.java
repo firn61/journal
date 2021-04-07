@@ -209,12 +209,10 @@ public class MainController {
                                        HttpServletRequest request) {
         String ipAddr = request.getRemoteAddr();
         if (hostService.checkRights(ipAddr, mds.getsPodstation().getResNum())) {
-            System.out.println("DATE" + sPodstation.getTrList().get(0).getDateTime());
             podstationDAO.updatePodstationValues(sPodstation);
             model.addAttribute("rightsMessage", hostService.getRightsMessage(ipAddr, mds.getsPodstation().getResNum()));
             model.addAttribute("successMessage", "Подстанция сохранена.");
         } else {
-            System.out.println("DATE" + sPodstation.getTrList().get(0).getDateTime());
             model.addAttribute("rightsMessage", hostService.getRightsMessage(ipAddr, mds.getsPodstation().getResNum()) + ". Данные не сохранены.");
 
         }
