@@ -206,36 +206,30 @@ public class Transformator {
     }
 
     public void setDateTime(String dateTime) {
-        System.out.println("str executed " + dateTime);
         if ((dateTime == null) || (dateTime.length() == 0)) {
             this.dateTime = null;
         } else {
             try {
                 this.dateTime = LocalDateTime.parse(dateTime, dateTimeFormatterForm);
             } catch (DateTimeException e) {
-                System.out.println("iam here");
-                System.out.println(e);
                 this.dateTime = null;
             }
         }
     }
+
     public void setDateTimeFromDAO(String dateTime) {
         if ((dateTime == null) || (dateTime.length() == 0)) {
             this.dateTime = null;
         } else {
             try {
-
                 this.dateTime = LocalDateTime.parse(dateTime, dateTimeFormatterBase);
             } catch (DateTimeException e) {
-                System.out.println("iam herrrrrre");
-                System.out.println(e);
                 this.dateTime = null;
             }
         }
     }
 
     public void setDateTime(LocalDateTime dateTime) {
-        System.out.println("ldt executed " + dateTime);
         this.dateTime = dateTime;
     }
 

@@ -30,11 +30,18 @@
         <th>Io, (A)</th>
         <th>Дата, время замера</th>
     </tr>
-    <tr th:each="transformator, tstat : ${sPodstation.getTrList()}">
-        <td><span th:text="'Т-' + ${transformator.getNum()} + ', ' + ${transformator.getPower()} + ' ' + ${transformator.getFider()}"></span></td>
-        <td>А</td>
-        <td><span th:text="${transformator.getuA()}"></span></td>
-        <td><span th:text="${transformator.getiA()}"></span></td>
+    <tr th:each="list : ${measureTable}">
+        <td><span th:text="${list[0]}"></span></td>
+        <td><span th:text="${list[1]}"></span></td>
+        <td><span th:text="${list[2]}"></span></td>
+        <td><span th:text="${list[3]}"></span></td>
+        <td><span th:text="${list[4]}"></span></td>
+        <td><span th:text="${list[5]}"></span></td>
+        <td><span th:text="${list[6]}"></span></td>
+        <td><span th:text="${list[7]}"></span></td>
+        <td><span th:text="${list[8]}"></span></td>
+        <td><span th:text="${list[9]}"></span></td>
+        <td><span th:text="${list[10]}"></span></td>
     </tr>
 </table>
 </body>

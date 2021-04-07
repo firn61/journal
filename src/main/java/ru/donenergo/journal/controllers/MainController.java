@@ -10,6 +10,8 @@ import ru.donenergo.journal.models.HouseSegment;
 import ru.donenergo.journal.models.Podstation;
 import ru.donenergo.journal.models.Res;
 import ru.donenergo.journal.services.HostService;
+import ru.donenergo.journal.services.MeasureTableService;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ public class MainController {
     private final StreetDAO streetDAO;
     private final HostService hostService;
     private Mds mds;
+
 
     @Autowired
     public MainController(PodstationDAO podstationDAO, StreetDAO streetDAO, HostService hostService, Mds mds) {
@@ -370,6 +373,7 @@ public class MainController {
             model.addAttribute("sPodstation", mds.getsPodstation());
             return "showpodstation";
         } if (action.equals("measureshow")){
+            model.addAttribute("measureTable", MeasureTableService.getTable(mds.getsPodstation()));
             model.addAttribute("res", Res.resMap.get(mds.getsPodstation().getResNum()));
             model.addAttribute("date", mds.getPeriodList().get(Integer.valueOf(mds.getCurrentDate())-1).getsDate());
             model.addAttribute(mds);
