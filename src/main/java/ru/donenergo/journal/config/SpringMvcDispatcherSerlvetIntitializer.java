@@ -15,7 +15,8 @@ import java.util.EnumSet;
 public class SpringMvcDispatcherSerlvetIntitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return null;
+
+        return new Class[] { SecurityConfig.class };
     }
 
     @Override

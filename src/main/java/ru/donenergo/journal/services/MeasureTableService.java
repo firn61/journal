@@ -37,9 +37,6 @@ public class MeasureTableService {
             result.get(2+rowPrefix[i])[1] = "B";
             result.get(2+rowPrefix[i])[2] = p.getTrList().get(i).getuB() + "";
             result.get(2+rowPrefix[i])[3] = p.getTrList().get(i).getiB() + "";
-            result.get(2+rowPrefix[i])[1] = "B";
-            result.get(2+rowPrefix[i])[2] = p.getTrList().get(i).getuB() + "";
-            result.get(2+rowPrefix[i])[3] = p.getTrList().get(i).getiB() + "";
             result.get(4+rowPrefix[i])[1] = "C";
             result.get(4+rowPrefix[i])[2] = p.getTrList().get(i).getuC() + "";
             result.get(4+rowPrefix[i])[3] = p.getTrList().get(i).getiC() + "";
@@ -70,3 +67,4 @@ public class MeasureTableService {
         return result;
     }
 }
+

@@ -2,11 +2,17 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <style>
-        table, th, td {
-            border: 1px solid #000000;
-            border-collapse: collapse;
+        tr {
+            height: 20px;
+        }
+
+        body {
+            background: linear-gradient(#eee, #fff);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
     </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <meta charset="UTF-8">
     <title>Журнал нагрузок</title>
 </head>
@@ -37,7 +43,7 @@
         <button type="submit" th:name="action" th:value="addHouse">Добавить дом</button>
     </div>
     <div>
-        <table>
+        <table class="table table-striped table-bordered table-hover table-sm" style="width: 50%">
             <tr>
                 <th>Подстанция</th>
                 <th>Трансформатор</th>
