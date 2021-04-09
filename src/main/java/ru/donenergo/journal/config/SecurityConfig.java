@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Override
     protected void configure(HttpSecurity http) throws Exception{
         http.authorizeRequests()
@@ -23,8 +24,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web
                 .ignoring()
-                .antMatchers("/", "/edit/**", "/show/**", "/editpodstationvalues/**", "/editpodstation/**", "/streetsedit/**"); // #3
+                .antMatchers("/", "/edit/**", "/show/**", "/editpodstationvalues/**", "/editpodstation/**", "/streetsedit/**"," /editvalues/**");
     }
+
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
