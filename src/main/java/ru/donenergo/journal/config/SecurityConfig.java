@@ -3,6 +3,7 @@ package ru.donenergo.journal.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
@@ -16,6 +17,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .and()
                 .logout().logoutSuccessUrl("/");
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web
+                .ignoring()
+                .antMatchers("/", "/edit/**", "/show/**", "/editpodstationvalues/**", "/editpodstation/**", "/streetsedit/**"); // #3
     }
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

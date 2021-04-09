@@ -1,0 +1,9 @@
+tr {
+    height: 20px;
+}
+
+body {
+    background: linear-gradient(#aaa, #fff);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
