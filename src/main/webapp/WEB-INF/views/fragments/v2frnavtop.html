@@ -1,0 +1,44 @@
+<div th:fragment="navtop">
+    <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+        <div class="container-fluid">
+            <form th:action="@{/show}" th:method="GET" class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" style="width: 530px;">
+                <div class="row">
+                <input type="hidden" th:value="${mds.currentActivity}" th:name="currentActivity"/>
+                <select class="border rounded shadow custom-select custom-select-sm" style="height: 34px;width: 110px;"
+                        th:onchange="this.form.submit()" id="period1" name="period">
+                    <option th:each="period : ${mds.periodList}"
+                            th:selected="${period.getRn()}==${mds.currentDate}"
+                            th:value="${period.getRn()}"
+                            th:text="${period}">
+                    </option>
+                </select>
+                <select class="border rounded shadow custom-select custom-select-sm" style="height: 34px;width: 120px;"
+                        th:onchange="this.form.submit()" id="podstation1" name="podstation">
+                    <option th:each="podstation : ${mds.podstations}"
+                            th:selected="${podstation.getRn()}==${mds.currentPodstation}"
+                            th:value="${podstation.getRn()}"
+                            th:text="${podstation}">
+                    </option>
+                </select>
+                <div class="text-primary input-group" style="width: 300px;">
+                    <select class="shadow custom-select custom-select-sm" style="width: 60;height: 34px;" id="type1" name="podstType">
+                        <option th:each="podstType : ${mds.podstTypes}"
+                                th:value="${podstType}"
+                                th:selected="${podstType}==${sPodstation.getPodstType()}"
+                                th:text="${podstType}">
+                        </option>
+                    </select>
+                    <input class="shadow form-control small" type="text" placeholder="Поиск по номеру.."
+                           style="width: 151px;height: 34px;" th:value="${mds.podstationNum}" th:name="podstationNum">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary py-0" type="submit" th:name="action" th:value="find">
+                            <i class="fas fa-search shadow"></i>
+                        </button>
+                    </div>
+                </div>
+                </div>
+            </form>
+            <p style="margin: 0px;">Участок</p>
+        </div>
+    </nav>
+</div>

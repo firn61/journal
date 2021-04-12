@@ -1,0 +1,34 @@
+<div th:fragment="navleft">
+    <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
+        <div class="container-fluid d-flex flex-column p-0">
+            <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+                <div class="sidebar-brand-icon rotate-n-15"></div>
+                <div class="sidebar-brand-text mx-3"><span style="padding: 0px;filter: blur(0px);">JOURNAL</span></div>
+            </a>
+            <hr class="sidebar-divider my-0">
+            <ul class="nav navbar-nav text-light" id="accordionSidebar">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" href="table.html">
+                        <i class="fas fa-table"></i>
+                        <span>Просмотр</span></a></li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" href="login.html">
+                        <i class="far fa-user-circle"></i>
+                        <span>Ввод замеров</span></a></li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" href="404.html">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>Редактор подстанции</span></a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" href="blank.html">
+                        <i class="fas fa-window-maximize"></i>
+                        <span>Справочник адресов</span></a>
+                </li>
+            </ul>
+            <div class="text-center d-none d-md-inline">
+                <button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button>
+            </div>
+        </div>
+    </nav>
+</div>

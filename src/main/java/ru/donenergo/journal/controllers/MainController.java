@@ -49,7 +49,7 @@ public class MainController {
         model.addAttribute("sPodstation", mds.refreshMdsValues("norn", "notype"));
         mds.setCurrentActivity("show");
         model.addAttribute(mds);
-        return "index";
+        return "v2show";
     }
 
     @GetMapping("/addpodstation")
