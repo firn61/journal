@@ -1,11 +1,12 @@
 <div th:fragment="navtop">
     <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
         <div class="container-fluid">
-            <form th:action="@{/show}" th:method="GET" class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" style="width: 530px;">
+            <form th:action="@{/v2show}" th:method="GET" class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" style="width: 530px;">
                 <div class="row">
                 <input type="hidden" th:value="${mds.currentActivity}" th:name="currentActivity"/>
                 <select class="border rounded shadow custom-select custom-select-sm" style="height: 34px;width: 110px;"
-                        th:onchange="this.form.submit()" id="period1" name="period">
+                        th:onchange="this.form.submit()"
+                        id="period1" name="period">
                     <option th:each="period : ${mds.periodList}"
                             th:selected="${period.getRn()}==${mds.currentDate}"
                             th:value="${period.getRn()}"

@@ -33,7 +33,7 @@ public class Mds {
         if (currentActivity.equals("values")) {
             return "editpodstationvalues";
         } else {
-            return "showpodstation";
+            return "v2show";
         }
     }
 

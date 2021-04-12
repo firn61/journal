@@ -131,7 +131,7 @@ public class MainController {
                             letter1,
                             housenum2,
                             letter2);
-                    if (success.length()==0){
+                    if (success.length() == 0) {
                         success = "Сегмент добавлен";
                     }
                     model.addAttribute("success", success);
@@ -280,6 +280,68 @@ public class MainController {
         return "editpodstation";
     }
 
+    @GetMapping("/switchshow")
+    public String switchShow(Model model){
+        model.addAttribute(mds);
+        model.addAttribute("sPodstation", mds.getsPodstation());
+        return "v2show";
+    }
+
+    @GetMapping("/switchshow")
+    public String switchEditValues(Model model,
+                                   HttpServletRequest request){
+        model.addAttribute(mds);
+        model.addAttribute("rightsMessage", hostService.getRightsMessage(request.getRemoteAddr(), mds.getsPodstation().getResNum()));
+        model.addAttribute("sPodstation", mds.getsPodstation());
+        return "v2editvalues";
+    }
+
+    @GetMapping("/v2show")
+    public String showPodstation2(@RequestParam(value = "period", required = false) String period,
+                                  @RequestParam(value = "podstation", required = false) String podstationRnFromSelect,
+                                  @RequestParam(value = "podstationNum", required = false) String podstationNumFromInput,
+                                  @RequestParam(value = "podstType", required = false) String podstTypeForm,
+                                  @RequestParam(value = "action", required = false) String action,
+                                  @RequestParam(value = "currentActivity", required = false) String currentActivity,
+                                  HttpServletRequest request,
+                                  Model model) {
+        String ipAdr = request.getRemoteAddr();
+        //если изменился период
+        if (!period.equals(mds.getCurrentDate())) {
+            mds.setCurrentDate(period);
+            mds.setsPodstation(mds.refreshMdsValues(podstationNumFromInput, podstTypeForm));
+        }
+        //если выбрана подстанция из списка
+        if (!podstationRnFromSelect.equals(mds.getCurrentPodstation())) {
+            mds.setCurrentPodstation(podstationRnFromSelect);
+            for (Podstation p : mds.getPodstations()) {
+                if (String.valueOf(p.getRn()).equals(mds.getCurrentPodstation())) {
+                    mds.setPodstationNum(p.getNumStr());
+                }
+            }
+            mds.setsPodstation(podstationDAO.getPodstation(mds.getCurrentPodstation()));
+            podstationNumFromInput = mds.getsPodstation().getNumStr();
+            podstTypeForm = mds.getsPodstation().getPodstType();
+        }
+        //если номер подстанции введен вручную
+        if (!mds.getsPodstation().getNumStr().equals(podstationNumFromInput) ||
+        !mds.getsPodstation().getPodstType().equals(podstTypeForm)) {
+            if (podstationDAO.isPodstationExist(podstTypeForm, podstationNumFromInput, mds.getCurrentDate()) != 0) {
+                mds.setPodstationNum(podstationNumFromInput);
+                mds.setPodstType(podstTypeForm);
+                String podstationRn = podstationDAO.getPodstationRn(mds.getPodstType(), podstationNumFromInput, mds.getCurrentDate());
+                mds.setCurrentPodstation(podstationRn);
+                mds.setsPodstation(podstationDAO.getPodstation(mds.getCurrentPodstation()));
+            } else {
+                model.addAttribute("error", "Подстанция " + podstTypeForm + "-" + podstationNumFromInput + " не найдена");
+            }
+        }
+        model.addAttribute("rightsMessage", hostService.getRightsMessage(ipAdr, mds.getsPodstation().getResNum()));
+        model.addAttribute(mds);
+        model.addAttribute("sPodstation", mds.getsPodstation());
+        return mds.getActivityView(currentActivity);
+    }
+
     @RequestMapping("/show")
     public String showPodstation(@RequestParam(value = "period", required = false) String period,
                                  @RequestParam(value = "podstation", required = false) String podstationRnFromSelect,
@@ -372,14 +434,15 @@ public class MainController {
             model.addAttribute(mds);
             model.addAttribute("sPodstation", mds.getsPodstation());
             return "showpodstation";
-        } if (action.equals("measureshow")){
+        }
+        if (action.equals("measureshow")) {
             model.addAttribute("measureTable", MeasureTableService.getTable(mds.getsPodstation()));
             model.addAttribute("res", Res.resMap.get(mds.getsPodstation().getResNum()));
-            model.addAttribute("date", mds.getPeriodList().get(Integer.valueOf(mds.getCurrentDate())-1).getsDate());
+            model.addAttribute("date", mds.getPeriodList().get(Integer.valueOf(mds.getCurrentDate()) - 1).getsDate());
             model.addAttribute(mds);
             model.addAttribute("sPodstation", mds.getsPodstation());
             return "measurereport";
-        }else {
+        } else {
             return "error";
         }
     }
