@@ -207,6 +207,7 @@ public class MainController {
         return "streets";
     }
 
+    ///v2
     @PostMapping("/editvalues")
     public String editPodstationValues(@ModelAttribute("sPodstation") Podstation sPodstation,
                                        Model model,
@@ -218,12 +219,11 @@ public class MainController {
             model.addAttribute("successMessage", "Подстанция сохранена.");
         } else {
             model.addAttribute("rightsMessage", hostService.getRightsMessage(ipAddr, mds.getsPodstation().getResNum()) + ". Данные не сохранены.");
-
         }
         mds.setsPodstation(podstationDAO.getPodstation(String.valueOf(sPodstation.getRn())));
         model.addAttribute(mds);
         model.addAttribute("sPodstation", mds.getsPodstation());
-        return "editpodstationvalues";
+        return "v2editvalues";
     }
 
     @PostMapping("/edit")
@@ -280,16 +280,20 @@ public class MainController {
         return "editpodstation";
     }
 
+    ///v2
     @GetMapping("/switchshow")
     public String switchShow(Model model){
+        mds.setCurrentActivity("show");
         model.addAttribute(mds);
         model.addAttribute("sPodstation", mds.getsPodstation());
         return "v2show";
     }
 
-    @GetMapping("/switchshow")
+    ///v2
+    @GetMapping("/switcheditvalues")
     public String switchEditValues(Model model,
                                    HttpServletRequest request){
+        mds.setCurrentActivity("values");
         model.addAttribute(mds);
         model.addAttribute("rightsMessage", hostService.getRightsMessage(request.getRemoteAddr(), mds.getsPodstation().getResNum()));
         model.addAttribute("sPodstation", mds.getsPodstation());

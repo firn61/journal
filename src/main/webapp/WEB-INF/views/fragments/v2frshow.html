@@ -23,6 +23,7 @@
                                 <th>Дата</th>
                                 <th>Монтер</th>
                             </tr>
+                            <tr>
                             <td><span th:text="${transformator.getNum()}"/></span></td>
                             <td><span th:text="${transformator.getFider()}"/></span></td>
                             <td><span th:text="${transformator.getPower()}"/></span></td>
@@ -37,8 +38,7 @@
                             <td><span th:text="${transformator.getMonter()}"/></span></td>
                             </tr>
                         </table>
-                        <table th:id="${transformator.getRn()}"
-                               class="table table-striped table-bordered table-hover table-sm dataTable my-0">
+                        <table th:id="${transformator.getRn()}" class="table table-striped table-bordered table-hover table-sm dataTable my-0">
                             <tr>
                                 <th>Номер</th>
                                 <th>Наименование</th>

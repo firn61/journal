@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -17,14 +18,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .and()
-                .logout().logoutSuccessUrl("/");
+                .logout().logoutSuccessUrl("/")
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                .and()
+                .csrf().disable();
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
         web
                 .ignoring()
-                .antMatchers("/", "/edit/**", "/show/**", "/editpodstationvalues/**", "/editpodstation/**", "/streetsedit/**"," /editvalues/**");
+                .antMatchers("/", "/edit/**", "/show/**", "/editpodstationvalues/**", "/editpodstation/**", "/streetsedit/**"," /editvalues/**", "/switcheditvalues/**", "/switchshow/**");
     }
 
     @Autowired

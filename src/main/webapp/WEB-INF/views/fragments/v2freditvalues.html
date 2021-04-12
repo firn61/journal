@@ -1,66 +1,109 @@
 <div th:fragment="editvalues">
-    <div class="container-fluid">
-        <h4 class="text-dark mb-4 text-center">
-            <p th:text="${sPodstation.podstType} + '-' + ${sPodstation.numStr} + ', ' + ${sPodstation.address}"></h4>
-        <div class="card shadow">
-            <th:block th:each="transformator : ${mds.sPodstation.getTrList()}">
-                <div class="card-body">
-                    <div class="table-responsive table mt-2" id="dataTable" role="grid"
-                         aria-describedby="dataTable_info">
-                        <table class="table table-striped table-bordered table-hover table-sm dataTable my-0"
-                               th:onclick="'showHideLines(\'' + ${transformator.getRn()} + '\');'">
-                            <tr>
-                                <th>Номер</th>
-                                <th>Фидер</th>
-                                <th>Мощность</th>
-                                <th>U_A</th>
-                                <th>U_B</th>
-                                <th>U_C</th>
-                                <th>I_A</th>
-                                <th>I_B</th>
-                                <th>I_C</th>
-                                <th>I_N</th>
-                                <th>Дата</th>
-                                <th>Монтер</th>
-                            </tr>
-                            <td><span th:text="${transformator.getNum()}"/></span></td>
-                            <td><span th:text="${transformator.getFider()}"/></span></td>
-                            <td><span th:text="${transformator.getPower()}"/></span></td>
-                            <td><span th:text="${transformator.getuA()}"/></span></td>
-                            <td><span th:text="${transformator.getuB()}"/></span></td>
-                            <td><span th:text="${transformator.getuC()}"/></span></td>
-                            <td><span th:text="${transformator.getiA()}"/></span></td>
-                            <td><span th:text="${transformator.getiB()}"/></span></td>
-                            <td><span th:text="${transformator.getiC()}"/></span></td>
-                            <td><span th:text="${transformator.getiN()}"/></span></td>
-                            <td><span th:text="${transformator.getDateTime()}"/></span></td>
-                            <td><span th:text="${transformator.getMonter()}"/></span></td>
-                            </tr>
-                        </table>
-                        <table th:id="${transformator.getRn()}"
-                               class="table table-striped table-bordered table-hover table-sm dataTable my-0">
-                            <tr>
-                                <th>Номер</th>
-                                <th>Наименование</th>
-                                <th>I A</th>
-                                <th>I B</th>
-                                <th>I C</th>
-                                <th>I O</th>
-                                <th>KA</th>
-                            </tr>
-                            <tr th:each="line : ${transformator.getListLines()}">
-                                <td><span th:text="${line.getNum()}"></span></td>
-                                <td><span th:text="${line.getName()}"></span></td>
-                                <td><span th:text="${line.getiA()}"></span></td>
-                                <td><span th:text="${line.getiB()}"></span></td>
-                                <td><span th:text="${line.getiC()}"></span></td>
-                                <td><span th:text="${line.getiO()}"></span></td>
-                                <td><span th:text="${line.getkA()}"></span></td>
-                            </tr>
-                        </table>
+    <form th:action="@{/editvalues}" th:method="POST" th:object="${sPodstation}">
+        <input type="hidden" th:field="*{podstType}"></input>
+        <input type="hidden" th:field="*{numStr}"></input>
+        <input type="hidden" th:field="*{address}"></input>
+        <input type="hidden" th:field="*{rn}"></input>
+        <div class="container-fluid">
+            <span class="text-center" style="color:green;font-weight:bold" th:text="${successMessage}" th:if="${successMessage}"></span>
+            <span class="text-center" style="color:red;font-weight:bold" th:unless="${rightsMessage == 'Ok'}"><p th:text="${rightsMessage}"></p></span>
+            <h4 class="text-dark mb-4 text-center">
+                <button type="submit" th:name="action" th:value="save" class="btn btn-primary" th:disabled="${rightsMessage != 'Ok'}">Сохранить</button>
+                <span th:text="${sPodstation.podstType} + '-' + ${sPodstation.numStr} + ', ' + ${sPodstation.address}"></span>
+            </h4>
+            <div class="card shadow">
+                <th:block th:each="transformator, tstat : ${sPodstation.trList}">
+                    <div class="card-body">
+                        <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                             aria-describedby="dataTable_info">
+                            <table class="table table-striped table-bordered table-hover table-sm dataTable my-0">
+                                <tr>
+                                    <th>Номер</th>
+                                    <th>Фидер</th>
+                                    <th>Мощность</th>
+                                    <th>U_A</th>
+                                    <th>U_B</th>
+                                    <th>U_C</th>
+                                    <th>I_A</th>
+                                    <th>I_B</th>
+                                    <th>I_C</th>
+                                    <th>I_N</th>
+                                    <th>Дата</th>
+                                    <th>Монтер</th>
+                                </tr>
+                                <tr>
+                                    <input type="hidden" th:field="*{trList[__${tstat.index}__].rn}"/>
+                                    <input type="hidden" th:field="*{trList[__${tstat.index}__].tpRn}"/>
+                                    <td><p th:text="${transformator.getNum()}"/></td>
+                                    <input type="hidden" th:field="*{trList[__${tstat.index}__].num}"/>
+                                    <td><p th:text="${transformator.getFider()}"/></td>
+                                    <input type="hidden" th:field="*{trList[__${tstat.index}__].fider}"/>
+                                    <td><p th:text="${transformator.getPower()}"/></td>
+                                    <input type="hidden" th:field="*{trList[__${tstat.index}__].power}"/>
+                                    <td><input type="number" th:field="*{trList[__${tstat.index}__].uA}" th:disabled="${rightsMessage != 'Ok'}"/></td>
+                                    <td><input type="number" th:field="*{trList[__${tstat.index}__].uB}" th:disabled="${rightsMessage != 'Ok'}"/></td>
+                                    <td><input type="number" th:field="*{trList[__${tstat.index}__].uC}" th:disabled="${rightsMessage != 'Ok'}"/></td>
+                                    <td><p th:text="${transformator.getiA()}"/></td>
+                                    <input type="hidden" th:field="*{trList[__${tstat.index}__].iA}"/>
+                                    <td><p th:text="${transformator.getiB()}"/></td>
+                                    <input type="hidden" th:field="*{trList[__${tstat.index}__].iB}"/>
+                                    <td><p th:text="${transformator.getiC()}"/></td>
+                                    <input type="hidden" th:field="*{trList[__${tstat.index}__].iC}"/>
+                                    <td><p th:text="${transformator.getiN()}"/></td>
+                                    <input type="hidden" th:field="*{trList[__${tstat.index}__].iN}"/>
+                                    <input type="hidden" th:field="*{trList[__${tstat.index}__].linesCount}"/>
+                                    <td><input type="datetime-local" th:field="*{trList[__${tstat.index}__].dateTime}" th:disabled="${rightsMessage != 'Ok'}">
+                                    </td>
+                                    <td><input type="text" th:field="*{trList[__${tstat.index}__].monter}" th:disabled="${rightsMessage != 'Ok'}"></td>
+                                </tr>
+                            </table>
+                            <table class="table table-striped table-bordered table-hover table-sm dataTable my-0">
+                                <tr>
+                                    <th>Номер</th>
+                                    <th>Наименование</th>
+                                    <th>I A</th>
+                                    <th>I B</th>
+                                    <th>I C</th>
+                                    <th>I O</th>
+                                    <th>KA</th>
+                                </tr>
+                                <tr th:each="line, lstat : ${transformator.getListLines()}">
+                                    <input type="hidden"
+                                           th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].rn}"></input>
+                                    <input type="hidden"
+                                           th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].trRn}"></input>
+                                    <input type="hidden"
+                                           th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].sectionNum}"></input>
+                                    <td><p th:text="${line.getNum()}"></p></td>
+                                    <input type="hidden"
+                                           th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].num}"></input>
+                                    <td><p th:text="${line.getName()}"></p></td>
+                                    <input type="hidden"
+                                           th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].name}"></input>
+                                    <td><input type="number"
+                                               th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iA}" th:disabled="${rightsMessage != 'Ok'}"/>
+                                    </td>
+                                    <td><input type="number"
+                                               th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iB}" th:disabled="${rightsMessage != 'Ok'}"/>
+                                    </td>
+                                    <td><input type="number"
+                                               th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iC}" th:disabled="${rightsMessage != 'Ok'}"/>
+                                    </td>
+                                    <td><input type="number"
+                                               th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iO}" th:disabled="${rightsMessage != 'Ok'}"/>
+                                    </td>
+                                    <td><select
+                                            th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].kA}" th:disabled="${rightsMessage != 'Ok'}">
+                                        <option th:value=null th:text="--"></option>
+                                        <option th:value="'вкл.'" th:text="вкл."></option>
+                                        <option th:value="'откл.'" th:text="откл."></option>
+                                    </select></td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
-                </div>
-            </th:block>
+                </th:block>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
