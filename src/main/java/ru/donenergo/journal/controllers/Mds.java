@@ -14,6 +14,7 @@ public class Mds {
     @Autowired
     private PodstationDAO podstationDAO;
     private String currentPodstation;
+    private String resName;
     private String podstationNum;
     private String currentDate;
     private String podstType;
@@ -26,16 +27,24 @@ public class Mds {
     public void addNewPodstationToList(Podstation podstation){
         podstations.add(podstation);
     }
+
     public String getActivityView(String currentActivity) {
         if (currentActivity.equals("edit")) {
-            return "editpodstation";
+            return "v2editpodstation";
+        }
+        if(currentActivity.equals("streetsshow")){
+            return "v2streetsshow";
         }
         if (currentActivity.equals("values")) {
             return "v2editvalues";
-        } else {
+        }
+        if (currentActivity.equals("streetsedit")){
+            return "v2streetsedit";
+        }else {
             return "v2show";
         }
     }
+
 
     public Podstation refreshMdsValues(String rn, String type) {
         List<Podstation> podstations = podstationDAO.getListPodstations(getCurrentDate());
@@ -55,6 +64,14 @@ public class Mds {
         setsPodstation(sPodstation);
         setPodstType(sPodstation.getPodstType());
         return sPodstation;
+    }
+
+    public String getResName() {
+        return resName;
+    }
+
+    public void setResName(String resName) {
+        this.resName = resName;
     }
 
     public String getCurrentActivity() {

@@ -20,12 +20,15 @@ public class HostService {
     private Map<String, String> hosts;
     private Map<String, String> res = new HashMap<>();
     private List<Host> hostsList = new ArrayList<>();
+
     public Map<String, String> getRes() {
         return res;
     }
+
     public List<Host> getHostsList() {
         return hostsList;
     }
+
     public final String NO_RIGHTS_MESSAGE = "Недостаточно прав для внесения изменений";
 
     public void setHostsList(List<Host> hostsList) {
@@ -52,9 +55,9 @@ public class HostService {
         hostsList.clear();
     }
 
-    public List<Host> populateHosts(){
+    public List<Host> populateHosts() {
         List<Host> result = new ArrayList<>();
-        for (Map.Entry<String, String> entry : hosts.entrySet()){
+        for (Map.Entry<String, String> entry : hosts.entrySet()) {
             result.add(new Host(entry.getKey(), entry.getValue()));
         }
         return result;
@@ -74,6 +77,30 @@ public class HostService {
         } else {
             return true;
         }
+    }
+
+    public String getUserResName(String ip) {
+        String codeRes = hosts.get(ip);
+        String result = new String();
+        if ("zres1".equals(codeRes)) {
+            result = "ЗРЭС";
+        }
+        if ("sres1".equals(codeRes)) {
+            result = "СРЭС";
+        }
+        if ("ures1".equals(codeRes)) {
+            result = "ЮРЭС";
+        }
+        if ("vres1".equals(codeRes)) {
+            result = "ВРЭС";
+        }
+        if ("rpvi1".equals(codeRes)) {
+            result = "РПИВИ";
+        }
+        if ("rges0".equals(codeRes)) {
+            result = "РГЭС";
+        }
+        return result;
     }
 
     public void addRO(String ip) {
