@@ -1,33 +1,36 @@
 <div th:fragment="streets">
     <div class="container-fluid">
-        <div class="d-sm-flex justify-content-between align-items-center mb-4"></div>
-        <div class="row" style="max-width: 100%;">
-            <div class="col">
                 <form th:action="@{/v2streets}" method="GET" th:object="${streets}">
-                    <input list="streets" class="border rounded shadow custom-select" id="streetsselect" name="street" style="height: 34px;width: 300px;"></input>
-                    <datalist id="streets" class="border rounded shadow custom-select"
-                              style="height: 34px;width: 0px;" hidden>
-                        <option th:each="street : ${streets}"
-                                th:selected="${street.streetName}==${selectedStreet}"
-                                th:value="${street.streetName} + ', ' + ${street.streetType}">
-                        </option>
-                    </datalist>
-                    <input
-                            class="border rounded shadow" type="number" name="housenum" placeholder="Номер дома.."
-                            style="height: 34px;width: 150px;margin-left: 5px;"><input class="border rounded shadow"
-                                                                                       type="text"
-                                                                                       name="letter"
-                                                                                       placeholder="Корпус.."
-                                                                                       style="height: 34px;width: 150px;margin-left: 5px;">
-                    <button class="btn btn-primary btn-sm shadow" type="submit"
-                            th:name="action" th:value="searchByHouseNum"
-                            style="margin-left: 40px;height: 34px;width: 100px;">Поиск
-                    </button>
+                    <div class="card shadow" style="max-width: 1100px;margin-right: auto;margin-left: auto;">
+                        <div class="card-body">
+                            <input list="streets" class="border rounded shadow custom-select" id="streetsselect"
+                                   name="street" style="height: 34px;width: 300px;"></input>
+                            <datalist id="streets" class="border rounded shadow custom-select"
+                                      style="height: 34px;width: 0px;" hidden>
+                                <option th:each="street : ${streets}"
+                                        th:selected="${street.streetName}==${selectedStreet}"
+                                        th:value="${street.streetName} + ', ' + ${street.streetType}">
+                                </option>
+                            </datalist>
+                            <input
+                                    class="border rounded shadow" type="number" name="housenum"
+                                    placeholder="Номер дома.."
+                                    style="height: 34px;width: 150px;margin-left: 5px;"><input
+                                class="border rounded shadow"
+                                type="text"
+                                name="letter"
+                                placeholder="Корпус.."
+                                style="height: 34px;width: 150px;margin-left: 5px;">
+                            <button class="btn btn-primary btn-sm shadow" type="submit"
+                                    th:name="action" th:value="searchByHouseNum"
+                                    style="margin-left: 40px;height: 34px;width: 100px;">Поиск
+                            </button>
+                        </div>
+                    </div>
                 </form>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
+
+        <div class="card shadow" style="max-width: 1100px;margin-right: auto;margin-left: auto;">
+            <div class="card-body">
                 <div class="table-responsive shadow" style="margin-top: 20px;">
                     <table class="table table-striped table-bordered table-hover table-sm dataTable my-0">
                         <tr>
@@ -54,6 +57,7 @@
                         </tr>
                     </table>
                 </div>
+
             </div>
         </div>
     </div>
