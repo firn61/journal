@@ -40,9 +40,9 @@
                                     <input type="hidden" th:field="*{trList[__${tstat.index}__].fider}"/>
                                     <td><p th:text="${transformator.getPower()}"/></td>
                                     <input type="hidden" th:field="*{trList[__${tstat.index}__].power}"/>
-                                    <td><input type="number" th:field="*{trList[__${tstat.index}__].uA}" th:disabled="${rightsMessage != 'Ok'}"/></td>
-                                    <td><input type="number" th:field="*{trList[__${tstat.index}__].uB}" th:disabled="${rightsMessage != 'Ok'}"/></td>
-                                    <td><input type="number" th:field="*{trList[__${tstat.index}__].uC}" th:disabled="${rightsMessage != 'Ok'}"/></td>
+                                    <td><input class="border rounded shadow" type="number" th:field="*{trList[__${tstat.index}__].uA}" th:disabled="${rightsMessage != 'Ok'}"/></td>
+                                    <td><input class="border rounded shadow" type="number" th:field="*{trList[__${tstat.index}__].uB}" th:disabled="${rightsMessage != 'Ok'}"/></td>
+                                    <td><input class="border rounded shadow" type="number" th:field="*{trList[__${tstat.index}__].uC}" th:disabled="${rightsMessage != 'Ok'}"/></td>
                                     <td><p th:text="${transformator.getiA()}"/></td>
                                     <input type="hidden" th:field="*{trList[__${tstat.index}__].iA}"/>
                                     <td><p th:text="${transformator.getiB()}"/></td>
@@ -52,9 +52,9 @@
                                     <td><p th:text="${transformator.getiN()}"/></td>
                                     <input type="hidden" th:field="*{trList[__${tstat.index}__].iN}"/>
                                     <input type="hidden" th:field="*{trList[__${tstat.index}__].linesCount}"/>
-                                    <td><input type="datetime-local" th:field="*{trList[__${tstat.index}__].dateTime}" th:disabled="${rightsMessage != 'Ok'}">
+                                    <td><input type="datetime-local" class="border rounded shadow" th:field="*{trList[__${tstat.index}__].dateTime}" th:disabled="${rightsMessage != 'Ok'}">
                                     </td>
-                                    <td><input type="text" th:field="*{trList[__${tstat.index}__].monter}" th:disabled="${rightsMessage != 'Ok'}"></td>
+                                    <td><input type="text" class="border rounded shadow" th:field="*{trList[__${tstat.index}__].monter}" th:disabled="${rightsMessage != 'Ok'}"></td>
                                 </tr>
                             </table>
                             <table class="table table-striped table-bordered table-hover table-sm dataTable my-0">
@@ -80,19 +80,19 @@
                                     <td><p th:text="${line.getName()}"></p></td>
                                     <input type="hidden"
                                            th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].name}"></input>
-                                    <td><input type="number"
+                                    <td><input type="number" class="border rounded shadow"
                                                th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iA}" th:disabled="${rightsMessage != 'Ok'}"/>
                                     </td>
-                                    <td><input type="number"
+                                    <td><input type="number" class="border rounded shadow"
                                                th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iB}" th:disabled="${rightsMessage != 'Ok'}"/>
                                     </td>
-                                    <td><input type="number"
+                                    <td><input type="number" class="border rounded shadow"
                                                th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iC}" th:disabled="${rightsMessage != 'Ok'}"/>
                                     </td>
-                                    <td><input type="number"
+                                    <td><input type="number" class="border rounded shadow"
                                                th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iO}" th:disabled="${rightsMessage != 'Ok'}"/>
                                     </td>
-                                    <td><select
+                                    <td><select class="border rounded shadow"
                                             th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].kA}" th:disabled="${rightsMessage != 'Ok'}">
                                         <option th:value=null th:text="--"></option>
                                         <option th:value="'вкл.'" th:text="вкл."></option>

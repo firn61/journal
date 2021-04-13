@@ -186,6 +186,9 @@ public class Transformator {
     }
 
     public String getDateTimeToDAO(){
+        if(dateTime == null) {
+            dateTime = LocalDateTime.now();
+        }
         String day = String.valueOf(dateTime.getDayOfMonth());
         if (day.length() == 1) {
             day = "0" + day;
@@ -207,12 +210,12 @@ public class Transformator {
 
     public void setDateTime(String dateTime) {
         if ((dateTime == null) || (dateTime.length() == 0)) {
-            this.dateTime = null;
+            this.dateTime = LocalDateTime.now();
         } else {
             try {
                 this.dateTime = LocalDateTime.parse(dateTime, dateTimeFormatterForm);
             } catch (DateTimeException e) {
-                this.dateTime = null;
+                this.dateTime = LocalDateTime.now();
             }
         }
     }
