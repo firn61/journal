@@ -67,18 +67,13 @@ public class MainController {
         }
     }
 
+    ///2
     @GetMapping("/savepodstation")
-    public String savePodstation(@RequestParam(value = "action") String action,
-                                 @RequestParam(value = "podsttype") String podstType,
+    public String savePodstation(@RequestParam(value = "podsttype") String podstType,
                                  @RequestParam(value = "num") String num,
                                  @RequestParam(value = "address") String address,
                                  HttpServletRequest request,
                                  Model model) {
-        if (action.equals("cancel")) {
-            model.addAttribute(mds);
-            model.addAttribute("rightsMessage", hostService.getRightsMessage(request.getRemoteAddr(), mds.getsPodstation().getResNum()));
-            model.addAttribute("sPodstation", mds.getsPodstation());
-        } else {
             if ((podstationDAO.isPodstationExist(podstType, num, mds.getCurrentDate()) == 0) && (!hostService.getResNumByIp(request.getRemoteAddr()).equals("6"))) {
                 String newPodstationRn = podstationDAO.addPodstation(podstType, num, hostService.getResNumByIp(request.getRemoteAddr()), mds.getCurrentDate(), address);
                 mds.setsPodstation(podstationDAO.getPodstation(newPodstationRn));
@@ -87,14 +82,12 @@ public class MainController {
                 model.addAttribute(mds);
                 model.addAttribute("rightsMessage", hostService.getRightsMessage(request.getRemoteAddr(), mds.getsPodstation().getResNum()));
                 model.addAttribute("sPodstation", mds.getsPodstation());
-
             } else {
                 model.addAttribute(mds);
                 model.addAttribute("rightsMessage", "Ошибка при добавлении подстанции. Уже существует или недостачно прав.");
                 model.addAttribute("sPodstation", mds.getsPodstation());
             }
-        }
-        return "editpodstation";
+        return "v2editpodstation";
     }
 
     ///v2

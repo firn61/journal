@@ -113,4 +113,46 @@
             </div>
         </div>
     </form>
+    <div class="d-md-flex text-center">
+        <button type="button" class="btn btn-primary btn-sm shadow" style="margin-right: auto;margin-left: auto;margin-top:10px;"
+                data-toggle="modal"
+                data-target="#exampleModal">
+            Добавить подстанцию
+        </button>
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Добавить подстанцию</h5>
+                </div>
+                <form th:action="@{/savepodstation}" th:method="GET">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col>" style="margin-left: 20px;">
+                                <p>Тип:</p>
+                                <select name="podsttype" class="border rounded shadow">
+                                    <option>ТП</option>
+                                    <option>РП</option>
+                                    <option>КТП</option>
+                                </select>
+                            </div>
+                            <div class="col>">
+                                <p>Номер:</p>
+                                <input type="number" class="border rounded shadow" name="num">
+                            </div>
+                        </div>
+                        <p>Адрес:</p>
+                        <input type="text" class="border rounded shadow" style="width: 400px;max-width: 400px;"
+                               name="address">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm shadow" data-dismiss="modal">Отмена
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-sm shadow">Добавить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

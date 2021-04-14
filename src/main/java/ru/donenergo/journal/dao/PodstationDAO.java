@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.donenergo.journal.mappers.*;
 import ru.donenergo.journal.models.*;
+
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,11 +47,16 @@ public class PodstationDAO {
 
     public void updatePodstation(Podstation uPodstation) {
         jdbcTemplate.update("execute procedure PODST_UPDATE(?, ?)", new Object[]{uPodstation.getAddress(), uPodstation.getRn()});
-        for (Transformator transformator : uPodstation.getTrList()) {
-            jdbcTemplate.update("execute procedure TRANS_UPDATE(?, ?, ?)",
-                    new Object[]{transformator.getFider(), transformator.getPower(), transformator.getRn()});
-            for (Line line : transformator.getListLines()) {
-                updateLine(line.getNum(), line.getName(), line.getRn());
+        System.out.println(uPodstation.getTrList().size() + " tr size");
+        if (uPodstation.getTrList() != null) {
+            for (Transformator transformator : uPodstation.getTrList()) {
+                jdbcTemplate.update("execute procedure TRANS_UPDATE(?, ?, ?)",
+                        new Object[]{transformator.getFider(), transformator.getPower(), transformator.getRn()});
+                if (transformator.getListLines() != null) {
+                    for (Line line : transformator.getListLines()) {
+                        updateLine(line.getNum(), line.getName(), line.getRn());
+                    }
+                }
             }
         }
     }
