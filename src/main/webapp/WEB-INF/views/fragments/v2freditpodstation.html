@@ -10,12 +10,12 @@
                   th:if="${successMessage}"></span>
             <span class="text-center" style="color:red;font-weight:bold" th:unless="${rightsMessage == 'Ok'}"><p
                     th:text="${rightsMessage}"></p></span>
+            <h4 class="text-dark mb-4 text-center">
+                <span th:text="${sPodstation.podstType} + '-' + ${sPodstation.numStr} + ', ' + ${sPodstation.address}"></span>
+                <button type="submit" th:name="action" th:value="save" class="btn btn-primary btn-sm shadow" th:disabled="${rightsMessage != 'Ok'}">Сохранить</button>
+            </h4>
             <div class="card shadow" style="max-width: 1100px;margin-right: auto;margin-left: auto;">
                 <div class="card-body">
-                    <h4 class="text-dark mb-4 text-center">
-                        <span class="text-dark mb-4 text-center"
-                              th:text="${sPodstation.podstType} + '-' + ${sPodstation.numStr}"></span>
-                    </h4>
                     <span style="text-align: center">Адрес:<input class="border rounded shadow"
                                                                   style="width: 500px;max-width: 500px;margin-right: auto;margin-left: auto;"
                                                                   type="text" th:field="*{address}"
@@ -113,18 +113,18 @@
             </div>
         </div>
     </form>
-    <div class="d-md-flex text-center">
-        <button type="button" class="btn btn-primary btn-sm shadow" style="margin-right: auto;margin-left: auto;margin-top:10px;"
+    <div class="d-md-flex text-center" style="max-width: 1100px;margin-right: auto;margin-left: auto;">
+        <button type="button" class="btn btn-primary btn-sm shadow" th:disabled="${mds.resName == 'РГЭС'}" style="margin-right: auto;margin-left: 5px;margin-top:10px;"
                 data-toggle="modal"
-                data-target="#exampleModal">
+                data-target="#addModal">
             Добавить подстанцию
         </button>
     </div>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Добавить подстанцию</h5>
+                    <h5 class="modal-title" id="addModalLabel" th:text="'Добавить подстанцию: ' + ${mds.resName}"></h5>
                 </div>
                 <form th:action="@{/savepodstation}" th:method="GET">
                     <div class="modal-body">
@@ -137,7 +137,7 @@
                                     <option>КТП</option>
                                 </select>
                             </div>
-                            <div class="col>">
+                            <div class="col>" style="margin-left: 5px;">
                                 <p>Номер:</p>
                                 <input type="number" class="border rounded shadow" name="num">
                             </div>
