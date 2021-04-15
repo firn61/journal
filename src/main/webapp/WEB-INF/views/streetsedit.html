@@ -1,66 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
-    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/resources/css/main.css"/>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Журнал нагрузок</title>
+    <link rel="stylesheet" href="/resources/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="/resources/assets/fonts/fontawesome-all.min.css">
 </head>
-<body>
-<form th:action="@{/streetsedit}" method="GET" th:object="${streets}">
-    <button type="submit" th:name="action" th:value="backfromstreetsedit">Назад</button>
-    <div class="input-group" th:each="transformator : ${sPodstation.getTrList()}">
-       <input th:onchange="this.form.submit()" type="radio" th:name = "trans"
-                                          th:value="${transformator.getNum()}"
-                                          th:text="'Т-' + ${transformator.getNum()} + ' : ' + ${transformator.getFider()}"
-                                          th:checked="${transformator.getNum()==selectedTransformator}"/>
+<body id="page-top">
+<div id="wrapper">
+    <nav th:replace="fragments/v2frnavleft :: navleft"></nav>
+    <div class="d-flex flex-column" id="content-wrapper">
+        <div id="content">
+            <nav th:replace="fragments/v2frnavtop :: navtop"></nav>
+            <div class="container-fluid">
+                <div th:replace="fragments/v2frstreetsedit :: streetsedit"></div>
+            </div>
+        </div>
+        <div th:replace="fragments/v2frfooter :: footer"></div>
     </div>
-    <p style="font-weight:bold" th:text="${sPodstation.podstType} + '-' + ${sPodstation.numStr} + ' ' + ${sPodstation.address}">
-    <div style="color:red;font-weight:bold" th:text="${error}" th:if="${error}"></div>
-    <div style="color:green;font-weight:bold" th:text="${success}" th:if="${success}"></div>
-    <div class="form-group">
-        Улица: <input list="streets" class="form-control" id="streetsselect" name="street">  </input>
-        <datalist id="streets">
-            <option th:each="street : ${streets}"
-                    th:value = "${street.streetName} + ', ' + ${street.streetType}">
-            </option>
-        </datalist>
-        Номер дома 1: <input type="number" name="housenum1">
-        Корпус 1: <input type="text" name="letter1">
-        Номер дома 2: <input type="number" name="housenum2">
-        Корпус 2: <input type="text" name="letter2">
-        <button type="submit" th:name="action" th:value="addInterval">Добавить интервал</button>
-        <button type="submit" th:name="action" th:value="addHouse">Добавить дом</button>
-    </div>
-    <div>
-        <table class="table table-striped table-bordered table-hover table-sm" style="width: 50%">
-            <tr>
-                <th>Подстанция</th>
-                <th>Трансформатор</th>
-                <th>Фидер</th>
-                <th>Улица</th>
-                <th>Тип</th>
-                <th>Дом1</th>
-                <th>Литер1</th>
-                <th>Дом2</th>
-                <th>Литер2</th>
-                <th>Удалить</th>
-            </tr>
-            <tr th:each="houseSegment : ${houseSegments}">
-                <td><p th:text="${houseSegment.getStrPodstation()}"></p></td>
-                <td><p th:text="${houseSegment.getTrNum()}"></p></td>
-                <td><p th:text="${houseSegment.getFider()}"></p></td>
-                <td><p th:text="${houseSegment.getStreetName()}"></p></td>
-                <td><p th:text="${houseSegment.getStreetType()}"></p></td>
-                <td><p th:text="${houseSegment.getHouse1()}"></p> </td>
-                <td><p th:text="${houseSegment.getHouse1Building()}"></p></td>
-                <td><p th:text="${houseSegment.getHouse2()}"></p> </td>
-                <td><p th:text="${houseSegment.getHouse2Building()}"></p></td>
-                <td><button type="submit" th:name="delete" th:value="${houseSegment.getRn()}" title="Удалить">&#9746</button></td>
-            </tr>
-        </table>
-    </div>
-</form>
+    <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+</div>
+<script src="/resources/assets/js/jquery.min.js"></script>
+<script src="/resources/assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="/resources/assets/js/chart.min.js"></script>
+<script src="/resources/assets/js/bs-init.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+<script src="/resources/assets/js/theme.js"></script>
+<script src="/resources/assets/js/showHideLines.js"></script>
 </body>
 </html>

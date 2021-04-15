@@ -10,6 +10,7 @@ import ru.donenergo.journal.models.HouseSegment;
 import ru.donenergo.journal.models.Podstation;
 import ru.donenergo.journal.reports.MeasureBlankReport;
 import ru.donenergo.journal.services.HostService;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class MainController {
         model.addAttribute("sPodstation", mds.refreshMdsValues("norn", "notype"));
         mds.setCurrentActivity("show");
         model.addAttribute(mds);
-        return "v2show";
+        return "show";
     }
 
     ///v2
@@ -59,20 +60,20 @@ public class MainController {
                                  @RequestParam(value = "address") String address,
                                  HttpServletRequest request,
                                  Model model) {
-            if ((podstationDAO.isPodstationExist(podstType, num, mds.getCurrentDate()) == 0) && (!hostService.getResNumByIp(request.getRemoteAddr()).equals("6"))) {
-                String newPodstationRn = podstationDAO.addPodstation(podstType, num, hostService.getResNumByIp(request.getRemoteAddr()), mds.getCurrentDate(), address);
-                mds.setsPodstation(podstationDAO.getPodstation(newPodstationRn));
-                mds.addNewPodstationToList(mds.getsPodstation());
-                mds.setCurrentPodstation(String.valueOf(mds.getsPodstation().getRn()));
-                model.addAttribute(mds);
-                model.addAttribute("rightsMessage", hostService.getRightsMessage(request.getRemoteAddr(), mds.getsPodstation().getResNum()));
-                model.addAttribute("sPodstation", mds.getsPodstation());
-            } else {
-                model.addAttribute(mds);
-                model.addAttribute("rightsMessage", "Ошибка при добавлении подстанции. Уже существует или недостачно прав.");
-                model.addAttribute("sPodstation", mds.getsPodstation());
-            }
-        return "v2editpodstation";
+        if ((podstationDAO.isPodstationExist(podstType, num, mds.getCurrentDate()) == 0) && (!hostService.getResNumByIp(request.getRemoteAddr()).equals("6"))) {
+            String newPodstationRn = podstationDAO.addPodstation(podstType, num, hostService.getResNumByIp(request.getRemoteAddr()), mds.getCurrentDate(), address);
+            mds.setsPodstation(podstationDAO.getPodstation(newPodstationRn));
+            mds.addNewPodstationToList(mds.getsPodstation());
+            mds.setCurrentPodstation(String.valueOf(mds.getsPodstation().getRn()));
+            model.addAttribute(mds);
+            model.addAttribute("rightsMessage", hostService.getRightsMessage(request.getRemoteAddr(), mds.getsPodstation().getResNum()));
+            model.addAttribute("sPodstation", mds.getsPodstation());
+        } else {
+            model.addAttribute(mds);
+            model.addAttribute("rightsMessage", "Ошибка при добавлении подстанции. Уже существует или недостачно прав.");
+            model.addAttribute("sPodstation", mds.getsPodstation());
+        }
+        return "editpodstation";
     }
 
     ///v2
@@ -122,7 +123,7 @@ public class MainController {
         model.addAttribute("houseSegments", streetDAO.getHouseSegmentsByTr(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr(), Integer.valueOf(trans)));
         model.addAttribute("selectedTransformator", trans);
         model.addAttribute("streets", streetDAO.getStreets());
-        return "v2streetsedit";
+        return "streetsedit";
     }
 
     ///v2
@@ -145,7 +146,7 @@ public class MainController {
         model.addAttribute(houseSegmentList);
         model.addAttribute(mds);
         model.addAttribute("sPodstation", mds.getsPodstation());
-        return "v2streetsshow";
+        return "streetsshow";
     }
 
     ///v2
@@ -164,16 +165,22 @@ public class MainController {
         mds.setsPodstation(podstationDAO.getPodstation(String.valueOf(sPodstation.getRn())));
         model.addAttribute(mds);
         model.addAttribute("sPodstation", mds.getsPodstation());
-        return "v2editvalues";
+        return "editvalues";
     }
 
     ///v2
     @GetMapping("/measureblank")
-    public String getMeasureBlank(Model model){
+    public String getMeasureBlank(Model model) {
         model.addAttribute(mds);
         model.addAttribute("mbr", MeasureBlankReport.getBlankReportLines(mds.getsPodstation()));
         model.addAttribute("sPodstation", mds.getsPodstation());
-        return "measureblank";
+        if (mds.getsPodstation().getTrList().size() == 2) {
+            return "measureblankdouble";
+        } else if (mds.getsPodstation().getTrList().size() == 1) {
+            return "measureblanksingle";
+        } else {
+            return null;
+        }
     }
 
     ///v2
@@ -195,7 +202,7 @@ public class MainController {
                 model.addAttribute(mds);
                 model.addAttribute("sPodstation", sPodstation);
                 model.addAttribute("streets", streetDAO.getStreets());
-                return "v2streetsedit";
+                return "streetsedit";
             } else {
                 String[] targetValues = action.split("&");
                 if (targetValues[0].equals("trans")) {
@@ -230,7 +237,7 @@ public class MainController {
         model.addAttribute(mds);
         mds.setsPodstation(podstationDAO.getPodstation(String.valueOf(sPodstation.getRn())));
         model.addAttribute("sPodstation", mds.getsPodstation());
-        return "v2editpodstation";
+        return "editpodstation";
     }
 
     ///v2
@@ -241,7 +248,7 @@ public class MainController {
         model.addAttribute("houseSegmentList", streetDAO.getHouseSegmentsTp(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr()));
         model.addAttribute(mds);
         model.addAttribute("sPodstation", mds.getsPodstation());
-        return "v2streetsshow";
+        return "streetsshow";
     }
 
     ///v2
@@ -250,11 +257,11 @@ public class MainController {
         mds.setCurrentActivity("show");
         model.addAttribute(mds);
         model.addAttribute("sPodstation", mds.getsPodstation());
-        return "v2show";
+        return "show";
     }
 
     @GetMapping("/overload")
-    public String overloadPodstations(Model model){
+    public String overloadPodstations(Model model) {
         model.addAttribute("overloadtable", podstationDAO.getOverloadedPodstations(mds.getCurrentDate()));
         return "overload";
     }
@@ -267,7 +274,7 @@ public class MainController {
         model.addAttribute(mds);
         model.addAttribute("rightsMessage", hostService.getRightsMessage(request.getRemoteAddr(), mds.getsPodstation().getResNum()));
         model.addAttribute("sPodstation", mds.getsPodstation());
-        return "v2editvalues";
+        return "editvalues";
     }
 
     ///v2
@@ -278,7 +285,7 @@ public class MainController {
         model.addAttribute(mds);
         model.addAttribute("rightsMessage", hostService.getRightsMessage(request.getRemoteAddr(), mds.getsPodstation().getResNum()));
         model.addAttribute("sPodstation", mds.getsPodstation());
-        return "v2editpodstation";
+        return "editpodstation";
     }
 
     ///v2
@@ -324,11 +331,12 @@ public class MainController {
         }
         if (currentActivity.equals("streetsshow")) {
             model.addAttribute("streets", streetDAO.getStreets());
-            model.addAttribute("houseSegmentList", streetDAO.getHouseSegmentsTp(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr()));}
-            if (currentActivity.equals("streetsedit")) {
-                model.addAttribute("houseSegments", streetDAO.getHouseSegmentsByTr(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr(), mds.getsPodstation().getTrList().get(0).getNum()));
-                model.addAttribute("selectedTransformator", mds.getsPodstation().getTrList().get(0).getNum());
-            }
+            model.addAttribute("houseSegmentList", streetDAO.getHouseSegmentsTp(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr()));
+        }
+        if (currentActivity.equals("streetsedit")) {
+            model.addAttribute("houseSegments", streetDAO.getHouseSegmentsByTr(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr(), mds.getsPodstation().getTrList().get(0).getNum()));
+            model.addAttribute("selectedTransformator", mds.getsPodstation().getTrList().get(0).getNum());
+        }
         model.addAttribute("rightsMessage", hostService.getRightsMessage(ipAdr, mds.getsPodstation().getResNum()));
         model.addAttribute(mds);
         model.addAttribute("sPodstation", mds.getsPodstation());

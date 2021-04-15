@@ -19,19 +19,13 @@ public class MeasureBlankReport {
                 rowCounts.add(podstation.getTrList().get(i).getListLines().size());
             }
             maxRowCount = Collections.max(rowCounts);
-            for (int i = 0; i < maxRowCount + 2; i++) {
+            for (int i = 0; i < maxRowCount; i++) {
                 result.add(new String[trNum]);
             }
             for (int i = 0; i < trNum; i++) {
                 for (int j = 0; j < podstation.getTrList().get(i).getListLines().size(); j++) {
                     result.get(j)[i] = podstation.getTrList().get(i).getListLines().get(j).getName();
                 }
-            }
-        }
-        for (String[] s : result){
-            System.out.println();
-            for (int i = 0; i < s.length; i++) {
-                System.out.print(s[i] + " ");
             }
         }
         return result;
