@@ -9,7 +9,9 @@
             <span class="text-center" style="color:red;font-weight:bold" th:unless="${rightsMessage == 'Ok'}"><p th:text="${rightsMessage}"></p></span>
             <h4 class="text-dark mb-4 text-center">
                 <span th:text="${sPodstation.podstType} + '-' + ${sPodstation.numStr} + ', ' + ${sPodstation.address}"></span>
-                <button type="submit" th:name="action" th:value="save" class="btn btn-primary btn-sm shadow" th:disabled="${rightsMessage != 'Ok'}">Сохранить</button>
+                <button type="submit" th:name="action" th:value="save" class="btn btn-primary btn-sm shadow" th:disabled="${rightsMessage != 'Ok'}">
+                    <i class="fa fa-save" style="margin-right: 5px;"></i>
+                    Сохранить</button>
             </h4>
             <div class="card shadow" style="max-width: 1100px;margin-right: auto;margin-left: auto;">
                 <th:block th:each="transformator, tstat : ${sPodstation.trList}">

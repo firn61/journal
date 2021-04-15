@@ -1,4 +1,4 @@
-package ru.donenergo.journal.services;
+package ru.donenergo.journal.reports;
 
 import ru.donenergo.journal.models.Podstation;
 import ru.donenergo.journal.models.Transformator;
@@ -6,7 +6,7 @@ import ru.donenergo.journal.models.Transformator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MeasureTableService {
+public class MeasureTableReport {
 
     public static List<String[]> getTable(Podstation p) {
         int[] rowPrefix = new int[p.getTrCount()];

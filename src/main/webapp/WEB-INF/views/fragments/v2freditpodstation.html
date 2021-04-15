@@ -1,4 +1,4 @@
-<div th:fragment="editpodstation">
+<div th:fragment="editpodstation" xmlns:th="http://www.w3.org/1999/xhtml">
     <form th:action="@{/edit}" th:method="POST" th:object="${sPodstation}">
 
         <input type="hidden" th:field="*{podstType}"></input>
@@ -12,7 +12,10 @@
                     th:text="${rightsMessage}"></p></span>
             <h4 class="text-dark mb-4 text-center">
                 <span th:text="${sPodstation.podstType} + '-' + ${sPodstation.numStr} + ', ' + ${sPodstation.address}"></span>
-                <button type="submit" th:name="action" th:value="save" class="btn btn-primary btn-sm shadow" th:disabled="${rightsMessage != 'Ok'}">Сохранить</button>
+                <button type="submit" th:name="action" th:value="save" class="btn btn-primary btn-sm shadow"
+                        th:disabled="${rightsMessage != 'Ok'}"><i class="fa fa-save" style="margin-right: 5px;"></i>
+                    Сохранить
+                </button>
             </h4>
             <div class="card shadow" style="max-width: 1100px;margin-right: auto;margin-left: auto;">
                 <div class="card-body">
@@ -22,13 +25,13 @@
                                                                   th:disabled="${rightsMessage != 'Ok'}"></span>
                     <button type="submit" th:name="action" th:value="'trans&add&' + ${sPodstation.getRn()}"
                             class="btn btn-success btn-sm shadow" th:disabled="${rightsMessage != 'Ok'}">
+                        <i class="fa fa-plus" style="margin-right: 5px;"></i>
                         Добавить трансформатор
                     </button>
                     <button type="submit" th:name="action" th:value="streetsedit" class="btn btn-warning btn-sm shadow"
-                            th:disabled="${rightsMessage != 'Ok'}">Редактор улиц
-                    </button>
-                    <button type="submit" th:name="action" th:value="save" class="btn btn-primary btn-sm shadow"
-                            th:disabled="${rightsMessage != 'Ok'}">Сохранить
+                            th:disabled="${rightsMessage != 'Ok'}">
+                        <i class="fa fa-pencil-alt" style="margin-right: 5px;"></i>
+                        Редактор улиц
                     </button>
                 </div>
             </div>
@@ -60,12 +63,16 @@
                                         <button type="submit" th:name="action"
                                                 th:value="'line&add&' + ${transformator.getRn()}+'-' + ${transformator.linesCount}"
                                                 class="btn btn-success btn-sm shadow"
-                                                th:disabled="${rightsMessage != 'Ok'}">Добавить линию
+                                                th:disabled="${rightsMessage != 'Ok'}">
+                                            <i class="fa fa-plus" style="margin-right: 5px;"></i>
+                                            Добавить линию
                                         </button>
                                         <button type="submit" th:name="action"
                                                 th:value="'trans&del&' + ${transformator.getRn()}"
                                                 class="btn btn-danger btn-sm shadow"
-                                                th:disabled="${rightsMessage != 'Ok'}">Удалить трансформатор
+                                                th:disabled="${rightsMessage != 'Ok'}">
+                                            <i class="fa fa-trash-alt" style="margin-right: 5px;"></i>
+                                            Удалить трансформатор
                                         </button>
                                     </td>
                                 </tr>
@@ -94,15 +101,18 @@
                                     <td>
                                         <button type="submit" th:name="action" th:value="'line&up&' + ${line.getRn()}"
                                                 title="Вверх" class="btn btn-secondary btn-sm shadow"
-                                                th:disabled="${rightsMessage != 'Ok'}">&#8593
+                                                th:disabled="${rightsMessage != 'Ok'}">
+                                            <i class="fa fa-arrow-up" style="margin-right: 5px;"></i>
                                         </button>
                                         <button type="submit" th:name="action" th:value="'line&down&' + ${line.getRn()}"
                                                 title="Вниз" class="btn btn-secondary btn-sm shadow"
-                                                th:disabled="${rightsMessage != 'Ok'}">&#8595
+                                                th:disabled="${rightsMessage != 'Ok'}">
+                                            <i class="fa fa-arrow-down" style="margin-right: 5px;"></i>
                                         </button>
                                         <button type="submit" th:name="action" th:value="'line&del&' + ${line.getRn()}"
                                                 title="Удалить" class="btn btn-danger btn-sm shadow"
-                                                th:disabled="${rightsMessage != 'Ok'}">&#9746
+                                                th:disabled="${rightsMessage != 'Ok'}">
+                                            <i class="fa fa-trash-alt" style="margin-right: 5px;"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -114,9 +124,11 @@
         </div>
     </form>
     <div class="d-md-flex text-center" style="max-width: 1100px;margin-right: auto;margin-left: auto;">
-        <button type="button" class="btn btn-primary btn-sm shadow" th:disabled="${mds.resName == 'РГЭС'}" style="margin-right: auto;margin-left: 5px;margin-top:10px;"
+        <button type="button" class="btn btn-primary btn-sm shadow" th:disabled="${mds.resName == 'РГЭС'}"
+                style="margin-right: auto;margin-left: 5px;margin-top:10px;"
                 data-toggle="modal"
                 data-target="#addModal">
+            <i class="fa fa-plus" style="margin-right: 5px;"></i>
             Добавить подстанцию
         </button>
     </div>
@@ -147,9 +159,12 @@
                                name="address">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-sm shadow" data-dismiss="modal">Отмена
+                        <button type="button" class="btn btn-secondary btn-sm shadow" data-dismiss="modal"><i
+                                class="fa fa-clos" style="margin-right: 5px;"></i>Отмена
                         </button>
-                        <button type="submit" class="btn btn-primary btn-sm shadow">Добавить</button>
+                        <button type="submit" class="btn btn-primary btn-sm shadow"><i class="fa fa-plus"
+                                                                                       style="margin-right: 5px;"></i>Добавить
+                        </button>
                     </div>
                 </form>
             </div>

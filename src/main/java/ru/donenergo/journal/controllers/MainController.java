@@ -8,6 +8,7 @@ import ru.donenergo.journal.dao.PodstationDAO;
 import ru.donenergo.journal.dao.StreetDAO;
 import ru.donenergo.journal.models.HouseSegment;
 import ru.donenergo.journal.models.Podstation;
+import ru.donenergo.journal.reports.MeasureBlankReport;
 import ru.donenergo.journal.services.HostService;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -167,6 +168,15 @@ public class MainController {
     }
 
     ///v2
+    @GetMapping("/measureblank")
+    public String getMeasureBlank(Model model){
+        model.addAttribute(mds);
+        model.addAttribute("mbr", MeasureBlankReport.getBlankReportLines(mds.getsPodstation()));
+        model.addAttribute("sPodstation", mds.getsPodstation());
+        return "measureblank";
+    }
+
+    ///v2
     @PostMapping("/edit")
     public String editPodstation(@ModelAttribute("sPodstation") Podstation sPodstation,
                                  @RequestParam(value = "action") String action,
@@ -241,6 +251,12 @@ public class MainController {
         model.addAttribute(mds);
         model.addAttribute("sPodstation", mds.getsPodstation());
         return "v2show";
+    }
+
+    @GetMapping("/overload")
+    public String overloadPodstations(Model model){
+        model.addAttribute("overloadtable", podstationDAO.getOverloadedPodstations(mds.getCurrentDate()));
+        return "overload";
     }
 
     ///v2

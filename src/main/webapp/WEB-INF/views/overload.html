@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Untitled</title>
+    <link rel="stylesheet" href="/resources/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/resources/assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="/resources/assets/css/styles.css">
+</head>
+
+<body>
+<button class="btn btn-primary btn-sm shadow" type="button" onclick="goBack()" style="margin-top: 20px;margin-left: 20px;margin-bottom: 20px;"><i class="fa fa-chevron-left" style="margin-right: 5px;"></i>Назад</button>
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive border rounded shadow">
+            <table class="table table-striped table-bordered table-hover table-sm dataTable my-0">
+                <thead>
+                <tr>
+                    <th>РЭС</th>
+                    <th>ТП</th>
+                    <th>Секция</th>
+                    <th>Фидер</th>
+                    <th>Мощность</th>
+                    <th>P/0,692</th>
+                    <th>&#x2C87 A</th>
+                    <th>&#x2C87 B</th>
+                    <th>&#x2C87 C</th>
+                    <th>I_A</th>
+                    <th>I_B</th>
+                    <th>I_C</th>
+                    <th>I_N</th>
+                    <th>U_A</th>
+                    <th>U_B</th>
+                    <th>U_C</th>
+                    <th>Дата</th>
+                    <th>Монтер</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="String, tstat : ${overloadtable}">
+                    <td><span th:text="${String[0]}"></span></td>
+                    <td><span th:text="${String[1]}"></span></td>
+                    <td><span th:text="${String[2]}"></span></td>
+                    <td><span th:text="${String[3]}"></span></td>
+                    <td><span th:text="${String[4]}"></span></td>
+                    <td><span th:text="${String[5]}"></span></td>
+                    <td><span th:text="${String[6]}"></span></td>
+                    <td><span th:text="${String[7]}"></span></td>
+                    <td><span th:text="${String[8]}"></span></td>
+                    <td><span th:text="${String[9]}"></span></td>
+                    <td><span th:text="${String[10]}"></span></td>
+                    <td><span th:text="${String[11]}"></span></td>
+                    <td><span th:text="${String[12]}"></span></td>
+                    <td><span th:text="${String[13]}"></span></td>
+                    <td><span th:text="${String[14]}"></span></td>
+                    <td><span th:text="${String[15]}"></span></td>
+                    <td><span th:text="${String[16]}"></span></td>
+                    <td><span th:text="${String[17]}"></span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="/resources/assets/js/jquery.min.js"></script>
+<script src="/resources/assets/bootstrap/js/bootstrap.min.js"></script>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+</body>
+
+</html>

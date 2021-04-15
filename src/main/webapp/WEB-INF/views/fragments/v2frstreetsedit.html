@@ -28,6 +28,7 @@
                            style="height: 34px;width: 150px;margin-left: 5px;width: 140px;max-width: 140px;" th:disabled="${rightsMessage != 'Ok'}">
                     <button class="btn btn-primary btn-sm shadow" type="submit" th:name="action" th:value="add"
                             style="margin-left: 10px;height: 34px;width: 100px;" th:disabled="${rightsMessage != 'Ok'}">
+                        <i class="fa fa-plus" style="margin-right: 5px;"></i>
                         Добавить
                     </button>
                 </div>
@@ -61,7 +62,8 @@
                                 <td>
                                     <button type="submit" class="btn btn-danger btn-sm shadow" th:name="delete"
                                             th:value="${houseSegment.getRn()}" title="Удалить"
-                                            th:disabled="${rightsMessage != 'Ok'}">&#9746
+                                            th:disabled="${rightsMessage != 'Ok'}">
+                                        <i class="fa fa-trash-alt" style="margin-right: 5px;"></i>
                                     </button>
                                 </td>
                             </tr>
