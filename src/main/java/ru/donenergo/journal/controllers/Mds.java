@@ -30,18 +30,18 @@ public class Mds {
 
     public String getActivityView(String currentActivity) {
         if (currentActivity.equals("edit")) {
-            return "v2editpodstation";
+            return "editpodstation";
         }
         if(currentActivity.equals("streetsshow")){
-            return "v2streetsshow";
+            return "streetsshow";
         }
         if (currentActivity.equals("values")) {
-            return "v2editvalues";
+            return "editvalues";
         }
         if (currentActivity.equals("streetsedit")){
-            return "v2streetsedit";
+            return "streetsedit";
         }else {
-            return "v2show";
+            return "show";
         }
     }
 

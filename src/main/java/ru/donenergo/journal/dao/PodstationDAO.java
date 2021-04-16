@@ -164,7 +164,7 @@ public class PodstationDAO {
 
     //returns all podstations on current period, used in @PostConstruct
     private List<Podstation> getPodstationsListFromDb(String currentDate) {
-        podstations = jdbcTemplate.query("SELECT RN, PODST_TYPE, NUM, NUM_STR, RES_NUM, DATE_RN, IS_ACTIVE, ADDRESS FROM PODSTATION WHERE DATE_RN=?",
+        podstations = jdbcTemplate.query("SELECT RN, PODST_TYPE, NUM, NUM_STR, RES_NUM, DATE_RN, IS_ACTIVE, ADDRESS FROM PODSTATION WHERE DATE_RN=? ORDER BY PODST_TYPE, NUM",
                 new Object[]{currentDate}, new PodstationMapper());
         log.info(" Podstation list refreshed");
         return podstations;
@@ -238,6 +238,34 @@ public class PodstationDAO {
 
     public void setCurrentDate(String currentDate) {
         this.currentDate = currentDate;
+    }
+
+
+    public List<String[]> getReportAllPodstations(String currentDate){
+        List<String[]> result = jdbcTemplate.query("SELECT a.PODST_TYPE|| '-' || a.NUM, r.NAME,  a.ADDRESS, d.SDATE, t.i_a, t.i_b, t.i_c, t.i_n \n" +
+                "FROM PODSTATION a  \n" +
+                "left join (SELECT TP_RN, sum(I_A) as i_a, sum(I_B) as i_b, sum(I_C)as i_c, sum(I_N) as i_n FROM TRANSFORMATOR group by tp_rn) as t on t.TP_RN = a.RN \n" +
+                "left join (select NAME, NUM from RES) as r on r.NUM=a.RES_NUM \n" +
+                "left join (select RN, SDATE from DATES) as d on d.RN=a.DATE_RN where d.RN = ? ORDER BY a.PODST_TYPE, a.NUM", new Object[]{currentDate}, new ResultSetExtractor<List>() {
+            @Override
+            public List extractData(ResultSet rs) throws SQLException, DataAccessException {
+                List<String[]> extractedList = new ArrayList<String[]>();
+                while (rs.next()) {
+                    String[] singlerow = new String[8];
+                    singlerow[0] = rs.getString("CONCATENATION");
+                    singlerow[1] = rs.getString("NAME");
+                    singlerow[2] = rs.getString("ADDRESS");
+                    singlerow[3] = rs.getString("SDATE");
+                    singlerow[5] = rs.getString("I_A");
+                    singlerow[6] = rs.getString("I_B");
+                    singlerow[7] = rs.getString("I_C");
+                    singlerow[8] = rs.getString("I_N");
+                    extractedList.add(singlerow);
+                }
+                return extractedList;
+            }
+        });
+        return result;
     }
 
     public List<String[]> getOverloadedPodstations(String currentDate) {
