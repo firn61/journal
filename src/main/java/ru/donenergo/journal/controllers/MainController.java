@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.donenergo.journal.dao.PodstationDAO;
+import ru.donenergo.journal.dao.ReportsDAO;
 import ru.donenergo.journal.dao.StreetDAO;
 import ru.donenergo.journal.models.HouseSegment;
 import ru.donenergo.journal.models.Podstation;
@@ -20,14 +21,16 @@ import java.util.List;
 public class MainController {
     private final PodstationDAO podstationDAO;
     private final StreetDAO streetDAO;
+    private final ReportsDAO reportsDAO;
     private final HostService hostService;
     private Mds mds;
 
 
     @Autowired
-    public MainController(PodstationDAO podstationDAO, StreetDAO streetDAO, HostService hostService, Mds mds) {
+    public MainController(PodstationDAO podstationDAO, StreetDAO streetDAO, ReportsDAO reportsDAO, HostService hostService, Mds mds) {
         this.podstationDAO = podstationDAO;
         this.streetDAO = streetDAO;
+        this.reportsDAO = reportsDAO;
         this.hostService = hostService;
         this.mds = mds;
     }
@@ -168,6 +171,12 @@ public class MainController {
         return "editvalues";
     }
 
+    @GetMapping("/reportall")
+    public String getReportAll(Model model){
+        model.addAttribute("allReportList", reportsDAO.getReportAllPodstations(mds.getCurrentDate()));
+        return "reportall";
+    }
+
     ///v2
     @GetMapping("/measureblank")
     public String getMeasureBlank(Model model) {
@@ -262,7 +271,7 @@ public class MainController {
 
     @GetMapping("/overload")
     public String overloadPodstations(Model model) {
-        model.addAttribute("overloadtable", podstationDAO.getOverloadedPodstations(mds.getCurrentDate()));
+        model.addAttribute("overloadtable", reportsDAO.getOverloadedPodstations(mds.getCurrentDate()));
         return "overload";
     }
 

@@ -13,6 +13,7 @@ public class Podstation {
     private String address;
     private int trCount;
     private List<Transformator> trList;
+    //private List<Transformator> intermediateTransformators;
 
     public Podstation() {
     }
