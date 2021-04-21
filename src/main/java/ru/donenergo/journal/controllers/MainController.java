@@ -172,7 +172,7 @@ public class MainController {
     }
 
     @GetMapping("/reportall")
-    public String getReportAll(Model model){
+    public String getReportAll(Model model) {
         model.addAttribute("allReportList", reportsDAO.getReportAllPodstations(mds.getCurrentDate()));
         return "reportall";
     }
@@ -307,14 +307,18 @@ public class MainController {
                                   @RequestParam(value = "currentActivity", required = false) String currentActivity,
                                   HttpServletRequest request,
                                   Model model) {
+        System.out.println("period: " + period + " psRnSel: " + podstationRnFromSelect + " pNum: " + podstationNumFromInput + " pType: " + podstTypeForm +
+                " cAct: " + currentActivity + " action: " + action);
         String ipAdr = request.getRemoteAddr();
+        boolean actionPerformed = false;
         //если изменился период
-        if (!period.equals(mds.getCurrentDate())) {
+        if (!period.equals(mds.getCurrentDate()) && !actionPerformed) {
             mds.setCurrentDate(period);
-            mds.setsPodstation(mds.refreshMdsValues(podstationNumFromInput, podstTypeForm));
+            mds.setsPodstation(mds.refreshMdsValues(mds.getsPodstation().getNumStr(), mds.getsPodstation().getPodstType()));
+            actionPerformed = true;
         }
         //если выбрана подстанция из списка
-        if (!podstationRnFromSelect.equals(mds.getCurrentPodstation())) {
+        if (!podstationRnFromSelect.equals(mds.getCurrentPodstation()) && !actionPerformed) {
             mds.setCurrentPodstation(podstationRnFromSelect);
             for (Podstation p : mds.getPodstations()) {
                 if (String.valueOf(p.getRn()).equals(mds.getCurrentPodstation())) {
@@ -324,18 +328,22 @@ public class MainController {
             mds.setsPodstation(podstationDAO.getPodstation(mds.getCurrentPodstation()));
             podstationNumFromInput = mds.getsPodstation().getNumStr();
             podstTypeForm = mds.getsPodstation().getPodstType();
+            actionPerformed = true;
         }
         //если номер подстанции введен вручную
-        if (!mds.getsPodstation().getNumStr().equals(podstationNumFromInput) ||
-                !mds.getsPodstation().getPodstType().equals(podstTypeForm)) {
-            if (podstationDAO.isPodstationExist(podstTypeForm, podstationNumFromInput, mds.getCurrentDate()) != 0) {
-                mds.setPodstationNum(podstationNumFromInput);
-                mds.setPodstType(podstTypeForm);
-                String podstationRn = podstationDAO.getPodstationRn(mds.getPodstType(), podstationNumFromInput, mds.getCurrentDate());
-                mds.setCurrentPodstation(podstationRn);
-                mds.setsPodstation(podstationDAO.getPodstation(mds.getCurrentPodstation()));
-            } else {
-                model.addAttribute("error", "Подстанция " + podstTypeForm + "-" + podstationNumFromInput + " не найдена");
+        if (podstationNumFromInput.length() > 0) {
+            if ((!mds.getsPodstation().getNumStr().equals(podstationNumFromInput) ||
+                    !mds.getsPodstation().getPodstType().equals(podstTypeForm)) && !actionPerformed) {
+                if (podstationDAO.isPodstationExist(podstTypeForm, podstationNumFromInput, mds.getCurrentDate()) != 0) {
+                    mds.setPodstationNum(podstationNumFromInput);
+                    mds.setPodstType(podstTypeForm);
+                    String podstationRn = podstationDAO.getPodstationRn(mds.getPodstType(), podstationNumFromInput, mds.getCurrentDate());
+                    mds.setCurrentPodstation(podstationRn);
+                    mds.setsPodstation(podstationDAO.getPodstation(mds.getCurrentPodstation()));
+                } else {
+                    model.addAttribute("error", "Подстанция " + podstTypeForm + "-" + podstationNumFromInput + " не найдена");
+                }
+                actionPerformed = true;
             }
         }
         if (currentActivity.equals("streetsshow")) {
@@ -349,6 +357,7 @@ public class MainController {
         model.addAttribute("rightsMessage", hostService.getRightsMessage(ipAdr, mds.getsPodstation().getResNum()));
         model.addAttribute(mds);
         model.addAttribute("sPodstation", mds.getsPodstation());
+        System.out.println("rn: " + mds.getCurrentPodstation() + " num: " + mds.getsPodstation().getNum());
         return mds.getActivityView(currentActivity);
     }
 }
