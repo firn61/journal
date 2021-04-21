@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Untitled</title>
+    <title>Свод по ТП</title>
     <link rel="stylesheet" href="/resources/assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/resources/assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="/resources/assets/css/styles.css">
@@ -15,7 +15,7 @@
 <div class="card">
     <div class="card-body">
         <div class="table-responsive border rounded shadow">
-            <table class="table table-striped table-bordered table-hover table-sm dataTable my-0">
+            <table id="dtReportAll" class="table table-striped table-bordered table-hover table-sm dataTable my-0">
                 <thead>
                 <tr>
                     <th>Подстанция</th>
@@ -50,12 +50,6 @@
     function goBack() {
         window.history.back();
     }
-</script>
-<script>
-    $(document).ready(function () {
-        $('#dtReportAll').DataTable();
-        $('.dataTables_length').addClass('bs-select');
-    });
 </script>
 </body>
 

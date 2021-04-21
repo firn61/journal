@@ -5,7 +5,7 @@
         <input type="hidden" th:field="*{address}"></input>
         <input type="hidden" th:field="*{rn}"></input>
         <div class="container-fluid">
-            <span class="text-center" style="color:green;font-weight:bold" th:text="${successMessage}" th:if="${successMessage}"></span>
+            <span class="text-center" style="color:green;font-weight:bold" th:if="${successMessage}"><p th:text="${successMessage}"></p></span>
             <span class="text-center" style="color:red;font-weight:bold" th:unless="${rightsMessage == 'Ok'}"><p th:text="${rightsMessage}"></p></span>
             <h4 class="text-dark mb-4 text-center">
                 <span th:text="${sPodstation.podstType} + '-' + ${sPodstation.numStr} + ', ' + ${sPodstation.address}"></span>
