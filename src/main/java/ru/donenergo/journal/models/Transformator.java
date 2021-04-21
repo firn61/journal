@@ -27,7 +27,6 @@ public class Transformator {
     private String monter;
     private int linesCount;
     private List<Line> listLines;
-    //private List<Line> intermediateLines;
 
     public Transformator() {
     }

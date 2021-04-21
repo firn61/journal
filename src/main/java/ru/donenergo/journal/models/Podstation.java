@@ -13,7 +13,16 @@ public class Podstation {
     private String address;
     private int trCount;
     private List<Transformator> trList;
-    //private List<Transformator> intermediateTransformators;
+
+    public List<Transformator> getpTransformators() {
+        return pTransformators;
+    }
+
+    public void setpTransformators(List<Transformator> pTransformators) {
+        this.pTransformators = pTransformators;
+    }
+
+    private List<Transformator> pTransformators;
 
     public Podstation() {
     }

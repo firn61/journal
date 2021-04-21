@@ -106,6 +106,48 @@ public class PodstationDAO {
         jdbcTemplate.update("execute procedure LINE_UPDATE(?, ?, ?)", new Object[]{num, name, rn});
     }
 
+    public boolean isPTransformatorsExist(String rn) {
+        Integer pTransformatorsCount = jdbcTemplate.queryForObject("SELECT count(RN) FROM TRANSFORMATOR_P WHERE TP_RN = ?", new Object[]{rn}, Integer.class);
+        return (pTransformatorsCount > 0);
+    }
+
+    public List<Transformator> getPTransformators(String rn) {
+            List<Transformator> pTransformators =  jdbcTemplate.query("SELECT RN, TP_RN, NUM, FIDER, POWER, U_A, U_B, U_C, I_A, I_B, I_C, I_N, DATETIME, MONTER FROM TRANSFORMATOR_P WHERE TP_RN=? ORDER BY NUM",
+                    new Object[]{rn}, new TransformatorMapper());
+        for (int i = 0; i < pTransformators.size(); i++) {
+            pTransformators.get(i).setListLines(getPLines(pTransformators.get(i).getNum(), pTransformators.get(i).getRn()));
+            pTransformators.get(i).setLinesCount(pTransformators.get(i).getListLines().size());
+        }
+            return pTransformators;
+        }
+
+    public List<Line> getPLines(int trNum, int trRn) {
+        log.info(" trRn: " + trNum + " trRn: " + trRn);
+        String sqlTemplate = "SELECT RN, TR_RN, NUM, NAME, I_A, I_B, I_C, I_O, KA FROM LINE_P WHERE TR_RN = ? ORDER BY NUM";
+        List<Line> pLines = jdbcTemplate.query(sqlTemplate, new Object[]{trRn}, new LineMapper());
+        for (Line line : pLines) {
+            line.setSectionNum(trNum);
+        }
+        return pLines;
+    }
+
+
+
+
+    public void savePTransValues(List<Transformator> pTransformators) {
+
+    }
+
+    public void addPTransformator(String rn) {
+
+    }
+
+
+    public void deletePTransformator(String rn) {
+
+    }
+
+
     public void deleteLine(String lineRn) {
         Line currentLine = getLine(lineRn);
         jdbcTemplate.update("execute procedure LINE_DELETE(?)", new Object[]{lineRn});
@@ -147,7 +189,6 @@ public class PodstationDAO {
     }
 
     public void updateLineValues(Line line) {
-        System.out.println(line);
         jdbcTemplate.update("execute procedure LINE_VALUESUPDATE(?, ?, ?, ?, ?, ?)",
                 new Object[]{line.getRn(), line.getiA(), line.getiB(), line.getiC(), line.getiO(), line.getkA()});
     }
@@ -239,7 +280,6 @@ public class PodstationDAO {
     public void setCurrentDate(String currentDate) {
         this.currentDate = currentDate;
     }
-
 
 
 }
