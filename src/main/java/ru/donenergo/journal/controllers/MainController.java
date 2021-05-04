@@ -9,7 +9,9 @@ import ru.donenergo.journal.dao.ReportsDAO;
 import ru.donenergo.journal.dao.StreetDAO;
 import ru.donenergo.journal.models.HouseSegment;
 import ru.donenergo.journal.models.Podstation;
+import ru.donenergo.journal.models.Res;
 import ru.donenergo.journal.reports.MeasureBlankReport;
+import ru.donenergo.journal.reports.MeasureTableReport;
 import ru.donenergo.journal.services.HostService;
 
 import javax.annotation.PostConstruct;
@@ -188,6 +190,15 @@ public class MainController {
     public String getReportAll(Model model) {
         model.addAttribute("allReportList", reportsDAO.getReportAllPodstations(mds.getCurrentDate()));
         return "reportall";
+    }
+
+    @GetMapping("/report")
+    public String getReport(Model model) {
+        model.addAttribute("sPodstation", mds.getsPodstation());
+        model.addAttribute("res", Res.resMap.get(mds.getsPodstation().getResNum()));
+        model.addAttribute("date", mds.getPeriodList().get(Integer.valueOf(mds.getCurrentDate())-1));
+        model.addAttribute("measureTable", MeasureTableReport.getTable(mds.getsPodstation()));
+        return "measurereport";
     }
 
     ///v2
