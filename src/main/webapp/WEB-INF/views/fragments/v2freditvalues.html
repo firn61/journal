@@ -5,13 +5,22 @@
         <input type="hidden" th:field="*{address}"></input>
         <input type="hidden" th:field="*{rn}"></input>
         <div class="container-fluid">
-            <span class="text-center" style="color:green;font-weight:bold" th:if="${successMessage}"><p th:text="${successMessage}"></p></span>
-            <span class="text-center" style="color:red;font-weight:bold" th:unless="${rightsMessage == 'Ok'}"><p th:text="${rightsMessage}"></p></span>
+            <span class="text-center" style="color:green;font-weight:bold" th:if="${successMessage}"><p
+                    th:text="${successMessage}"></p></span>
+            <span class="text-center" style="color:red;font-weight:bold" th:unless="${rightsMessage == 'Ok'}"><p
+                    th:text="${rightsMessage}"></p></span>
             <h4 class="text-dark mb-4 text-center">
                 <span th:text="${sPodstation.podstType} + '-' + ${sPodstation.numStr} + ', ' + ${sPodstation.address}"></span>
-                <button type="submit" th:name="action" th:value="save" class="btn btn-primary btn-sm shadow" th:disabled="${rightsMessage != 'Ok'}">
+                <button type="submit" th:name="action" th:value="save" class="btn btn-primary btn-sm shadow"
+                        th:disabled="${rightsMessage != 'Ok'}">
                     <i class="fa fa-save" style="margin-right: 5px;"></i>
-                    Сохранить</button>
+                    Сохранить
+                </button>
+                <button type="submit" th:name="action" th:value="addP" class="btn btn-success btn-sm shadow"
+                        th:disabled="${rightsMessage != 'Ok'}">
+                    <i class="fa fa-plus-square" style="margin-right: 5px;"></i>
+                    Промежуточный
+                </button>
             </h4>
             <div class="card shadow" style="max-width: 1100px;margin-right: auto;margin-left: auto;">
                 <th:block th:each="transformator, tstat : ${sPodstation.trList}">
@@ -20,7 +29,7 @@
                              aria-describedby="dataTable_info">
                             <table class="table table-striped table-bordered table-hover table-sm dataTable my-0">
                                 <tr>
-                                    <th style = "width: 40px;max-width: 40px;">№</th>
+                                    <th style="width: 40px;max-width: 40px;">№</th>
                                     <th>Фидер</th>
                                     <th>Мощность</th>
                                     <th>U_A</th>
@@ -42,9 +51,15 @@
                                     <input type="hidden" th:field="*{trList[__${tstat.index}__].fider}"/>
                                     <td><p th:text="${transformator.getPower()}"/></td>
                                     <input type="hidden" th:field="*{trList[__${tstat.index}__].power}"/>
-                                    <td><input class="border rounded shadow" style = "width: 60px;max-width: 60px;" type="number" th:field="*{trList[__${tstat.index}__].uA}" th:disabled="${rightsMessage != 'Ok'}"/></td>
-                                    <td><input class="border rounded shadow" style = "width: 60px;max-width: 60px;" type="number" th:field="*{trList[__${tstat.index}__].uB}" th:disabled="${rightsMessage != 'Ok'}"/></td>
-                                    <td><input class="border rounded shadow" style = "width: 60px;max-width: 60px;" type="number" th:field="*{trList[__${tstat.index}__].uC}" th:disabled="${rightsMessage != 'Ok'}"/></td>
+                                    <td><input class="border rounded shadow" style="width: 60px;max-width: 60px;"
+                                               type="number" th:field="*{trList[__${tstat.index}__].uA}"
+                                               th:disabled="${rightsMessage != 'Ok'}"/></td>
+                                    <td><input class="border rounded shadow" style="width: 60px;max-width: 60px;"
+                                               type="number" th:field="*{trList[__${tstat.index}__].uB}"
+                                               th:disabled="${rightsMessage != 'Ok'}"/></td>
+                                    <td><input class="border rounded shadow" style="width: 60px;max-width: 60px;"
+                                               type="number" th:field="*{trList[__${tstat.index}__].uC}"
+                                               th:disabled="${rightsMessage != 'Ok'}"/></td>
                                     <td><p th:text="${transformator.getiA()}"/></td>
                                     <input type="hidden" th:field="*{trList[__${tstat.index}__].iA}"/>
                                     <td><p th:text="${transformator.getiB()}"/></td>
@@ -54,15 +69,19 @@
                                     <td><p th:text="${transformator.getiN()}"/></td>
                                     <input type="hidden" th:field="*{trList[__${tstat.index}__].iN}"/>
                                     <input type="hidden" th:field="*{trList[__${tstat.index}__].linesCount}"/>
-                                    <td><input type="datetime-local" class="border rounded shadow" th:field="*{trList[__${tstat.index}__].dateTime}" th:disabled="${rightsMessage != 'Ok'}">
+                                    <td><input type="datetime-local" class="border rounded shadow"
+                                               th:field="*{trList[__${tstat.index}__].dateTime}"
+                                               th:disabled="${rightsMessage != 'Ok'}">
                                     </td>
-                                    <td><input type="text" class="border rounded shadow" th:field="*{trList[__${tstat.index}__].monter}" th:disabled="${rightsMessage != 'Ok'}"></td>
+                                    <td><input type="text" class="border rounded shadow"
+                                               th:field="*{trList[__${tstat.index}__].monter}"
+                                               th:disabled="${rightsMessage != 'Ok'}"></td>
                                 </tr>
                             </table>
                             <table class="table table-striped table-bordered table-hover table-sm dataTable my-0">
                                 <tr>
-                                    <th style = "width: 40px;max-width: 40px;">№</th>
-                                    <th style = "width: 600px;max-width: 600px;">Наименование</th>
+                                    <th style="width: 40px;max-width: 40px;">№</th>
+                                    <th style="width: 600px;max-width: 600px;">Наименование</th>
                                     <th>I A</th>
                                     <th>I B</th>
                                     <th>I C</th>
@@ -82,20 +101,29 @@
                                     <td><p th:text="${line.getName()}"></p></td>
                                     <input type="hidden"
                                            th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].name}"></input>
-                                    <td><input type="number" class="border rounded shadow" style = "width: 60px;max-width: 60px;"
-                                               th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iA}" th:disabled="${rightsMessage != 'Ok'}"/>
+                                    <td><input type="number" class="border rounded shadow"
+                                               style="width: 60px;max-width: 60px;"
+                                               th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iA}"
+                                               th:disabled="${rightsMessage != 'Ok'}"/>
                                     </td>
-                                    <td><input type="number" class="border rounded shadow" style = "width: 60px;max-width: 60px;"
-                                               th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iB}" th:disabled="${rightsMessage != 'Ok'}"/>
+                                    <td><input type="number" class="border rounded shadow"
+                                               style="width: 60px;max-width: 60px;"
+                                               th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iB}"
+                                               th:disabled="${rightsMessage != 'Ok'}"/>
                                     </td>
-                                    <td><input type="number" class="border rounded shadow" style = "width: 60px;max-width: 60px;"
-                                               th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iC}" th:disabled="${rightsMessage != 'Ok'}"/>
+                                    <td><input type="number" class="border rounded shadow"
+                                               style="width: 60px;max-width: 60px;"
+                                               th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iC}"
+                                               th:disabled="${rightsMessage != 'Ok'}"/>
                                     </td>
-                                    <td><input type="number" class="border rounded shadow" style = "width: 60px;max-width: 60px;"
-                                               th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iO}" th:disabled="${rightsMessage != 'Ok'}"/>
+                                    <td><input type="number" class="border rounded shadow"
+                                               style="width: 60px;max-width: 60px;"
+                                               th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].iO}"
+                                               th:disabled="${rightsMessage != 'Ok'}"/>
                                     </td>
-                                    <td><select class="border rounded shadow" style = "width: 90px;max-width: 90px;"
-                                            th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].kA}" th:disabled="${rightsMessage != 'Ok'}">
+                                    <td><select class="border rounded shadow" style="width: 90px;max-width: 90px;"
+                                                th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].kA}"
+                                                th:disabled="${rightsMessage != 'Ok'}">
                                         <option th:value=null th:text="--"></option>
                                         <option th:value="'вкл.'" th:text="вкл."></option>
                                         <option th:value="'откл.'" th:text="откл."></option>
@@ -105,6 +133,125 @@
                         </div>
                     </div>
                 </th:block>
+                <!--INTERMEDIATE BLOCK -->
+                <th:block th:each="transformator, tstat : ${sPodstation.pTransformators}">
+                    <span class="text-center" style="color:red;font-weight:bold">Промежуточный замер
+                        <button type="submit" th:name="action" th:value="'pTransDel&' + ${transformator.getRn()}"
+                                title="Удалить" class="btn btn-danger btn-sm shadow"
+                                th:disabled="${rightsMessage != 'Ok'}">
+                                <i class="fa fa-trash-alt" style="margin-right: 5px;"></i>
+                            Удалить
+                        </button></span>
+                    <div class="card-body" style="font-style: italic">
+                        <div class="table-responsive table mt-2" id="dataTable" role="grid"
+                             aria-describedby="dataTable_info">
+                            <table class="table table-striped table-bordered table-hover table-sm dataTable my-0">
+                                <tr style = "background: linen">
+                                    <th style="width: 40px;max-width: 40px;">№</th>
+                                    <th>Фидер</th>
+                                    <th>Мощность</th>
+                                    <th>U_A</th>
+                                    <th>U_B</th>
+                                    <th>U_C</th>
+                                    <th>I_A</th>
+                                    <th>I_B</th>
+                                    <th>I_C</th>
+                                    <th>I_N</th>
+                                    <th>Дата</th>
+                                    <th>Монтер</th>
+                                </tr>
+                                <tr>
+                                    <input type="hidden" th:field="*{pTransformators[__${tstat.index}__].rn}"/>
+                                    <input type="hidden" th:field="*{pTransformators[__${tstat.index}__].tpRn}"/>
+                                    <td><p th:text="${transformator.getNum()}"/></td>
+                                    <input type="hidden" th:field="*{pTransformators[__${tstat.index}__].num}"/>
+                                    <td><p th:text="${transformator.getFider()}"/></td>
+                                    <input type="hidden" th:field="*{pTransformators[__${tstat.index}__].fider}"/>
+                                    <td><p th:text="${transformator.getPower()}"/></td>
+                                    <input type="hidden" th:field="*{pTransformators[__${tstat.index}__].power}"/>
+                                    <td><input class="border rounded shadow" style="width: 60px;max-width: 60px;"
+                                               type="number" th:field="*{pTransformators[__${tstat.index}__].uA}"
+                                               th:disabled="${rightsMessage != 'Ok'}"/></td>
+                                    <td><input class="border rounded shadow" style="width: 60px;max-width: 60px;"
+                                               type="number" th:field="*{pTransformators[__${tstat.index}__].uB}"
+                                               th:disabled="${rightsMessage != 'Ok'}"/></td>
+                                    <td><input class="border rounded shadow" style="width: 60px;max-width: 60px;"
+                                               type="number" th:field="*{pTransformators[__${tstat.index}__].uC}"
+                                               th:disabled="${rightsMessage != 'Ok'}"/></td>
+                                    <td><p th:text="${transformator.getiA()}"/></td>
+                                    <input type="hidden" th:field="*{pTransformators[__${tstat.index}__].iA}"/>
+                                    <td><p th:text="${transformator.getiB()}"/></td>
+                                    <input type="hidden" th:field="*{pTransformators[__${tstat.index}__].iB}"/>
+                                    <td><p th:text="${transformator.getiC()}"/></td>
+                                    <input type="hidden" th:field="*{pTransformators[__${tstat.index}__].iC}"/>
+                                    <td><p th:text="${transformator.getiN()}"/></td>
+                                    <input type="hidden" th:field="*{pTransformators[__${tstat.index}__].iN}"/>
+                                    <input type="hidden" th:field="*{pTransformators[__${tstat.index}__].linesCount}"/>
+                                    <td><input type="datetime-local" class="border rounded shadow"
+                                               th:field="*{pTransformators[__${tstat.index}__].dateTime}"
+                                               th:disabled="${rightsMessage != 'Ok'}">
+                                    </td>
+                                    <td><input type="text" class="border rounded shadow"
+                                               th:field="*{pTransformators[__${tstat.index}__].monter}"
+                                               th:disabled="${rightsMessage != 'Ok'}"></td>
+                                </tr>
+                            </table>
+                            <table class="table table-striped table-bordered table-hover table-sm dataTable my-0">
+                                <tr>
+                                    <th style="width: 40px;max-width: 40px;">№</th>
+                                    <th style="width: 600px;max-width: 600px;">Наименование</th>
+                                    <th>I A</th>
+                                    <th>I B</th>
+                                    <th>I C</th>
+                                    <th>I O</th>
+                                    <th>KA</th>
+                                </tr>
+                                <tr th:each="line, lstat : ${transformator.getListLines()}">
+                                    <input type="hidden"
+                                           th:field="*{pTransformators[__${tstat.index}__].listLines[__${lstat.index}__].rn}"></input>
+                                    <input type="hidden"
+                                           th:field="*{pTransformators[__${tstat.index}__].listLines[__${lstat.index}__].trRn}"></input>
+                                    <input type="hidden"
+                                           th:field="*{pTransformators[__${tstat.index}__].listLines[__${lstat.index}__].sectionNum}"></input>
+                                    <td><p th:text="${line.getNum()}"></p></td>
+                                    <input type="hidden"
+                                           th:field="*{pTransformators[__${tstat.index}__].listLines[__${lstat.index}__].num}"></input>
+                                    <td><p th:text="${line.getName()}"></p></td>
+                                    <input type="hidden"
+                                           th:field="*{pTransformators[__${tstat.index}__].listLines[__${lstat.index}__].name}"></input>
+                                    <td><input type="number" class="border rounded shadow"
+                                               style="width: 60px;max-width: 60px;"
+                                               th:field="*{pTransformators[__${tstat.index}__].listLines[__${lstat.index}__].iA}"
+                                               th:disabled="${rightsMessage != 'Ok'}"/>
+                                    </td>
+                                    <td><input type="number" class="border rounded shadow"
+                                               style="width: 60px;max-width: 60px;"
+                                               th:field="*{pTransformators[__${tstat.index}__].listLines[__${lstat.index}__].iB}"
+                                               th:disabled="${rightsMessage != 'Ok'}"/>
+                                    </td>
+                                    <td><input type="number" class="border rounded shadow"
+                                               style="width: 60px;max-width: 60px;"
+                                               th:field="*{pTransformators[__${tstat.index}__].listLines[__${lstat.index}__].iC}"
+                                               th:disabled="${rightsMessage != 'Ok'}"/>
+                                    </td>
+                                    <td><input type="number" class="border rounded shadow"
+                                               style="width: 60px;max-width: 60px;"
+                                               th:field="*{pTransformators[__${tstat.index}__].listLines[__${lstat.index}__].iO}"
+                                               th:disabled="${rightsMessage != 'Ok'}"/>
+                                    </td>
+                                    <td><select class="border rounded shadow" style="width: 90px;max-width: 90px;"
+                                                th:field="*{pTransformators[__${tstat.index}__].listLines[__${lstat.index}__].kA}"
+                                                th:disabled="${rightsMessage != 'Ok'}">
+                                        <option th:value=null th:text="--"></option>
+                                        <option th:value="'вкл.'" th:text="вкл."></option>
+                                        <option th:value="'откл.'" th:text="откл."></option>
+                                    </select></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </th:block>
+                <!-- -->
             </div>
         </div>
     </form>

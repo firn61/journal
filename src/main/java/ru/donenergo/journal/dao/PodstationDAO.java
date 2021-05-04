@@ -78,15 +78,15 @@ public class PodstationDAO {
         }
     }
 
-    public void addTransformator(String podstationRn, int num, boolean additional) {
+    public String addTransformator(String podstationRn, int num, boolean additional) {
         String postfix = createPostfix(additional);
         String sqlAddTransformator = "execute procedure TRANS_INSERT" + postfix +"(?, ?, null, 0, 0, 0, 0, 0, 0, 0, 0, null, null)";
-        jdbcTemplate.queryForObject(sqlAddTransformator, new Object[]{podstationRn, num}, String.class);
+        return jdbcTemplate.queryForObject(sqlAddTransformator, new Object[]{podstationRn, num}, String.class);
     }
 
-    public void addLine(String transformatorRn, String num, boolean additional) {
+    public String addLine(String transformatorRn, String num, boolean additional) {
         String postfix = createPostfix(additional);
-        jdbcTemplate.queryForObject("execute procedure LINE_INSERT" + postfix +"(?, ?, ?, 0, 0, 0, 0, null)", new Object[]{transformatorRn, num, "Л-"}, String.class);
+        return jdbcTemplate.queryForObject("execute procedure LINE_INSERT" + postfix +"(?, ?, ?, 0, 0, 0, 0, null)", new Object[]{transformatorRn, num, "Л-"}, String.class);
     }
 
     public Line getLine(String rn, boolean additional) {
@@ -126,42 +126,6 @@ public class PodstationDAO {
         return (pTransformatorsCount > 0);
     }
 
-//    public List<Transformator> getPTransformators(String rn) {
-//            List<Transformator> pTransformators =  jdbcTemplate.query("SELECT RN, TP_RN, NUM, FIDER, POWER, U_A, U_B, U_C, I_A, I_B, I_C, I_N, DATETIME, MONTER FROM TRANSFORMATOR_P WHERE TP_RN=? ORDER BY NUM",
-//                    new Object[]{rn}, new TransformatorMapper());
-//        for (int i = 0; i < pTransformators.size(); i++) {
-//            pTransformators.get(i).setListLines(getPLines(pTransformators.get(i).getNum(), pTransformators.get(i).getRn()));
-//            pTransformators.get(i).setLinesCount(pTransformators.get(i).getListLines().size());
-//        }
-//            return pTransformators;
-//        }
-//
-//    public List<Line> getPLines(int trNum, int trRn) {
-//        log.info(" trRn: " + trNum + " trRn: " + trRn);
-//        String sqlTemplate = "SELECT RN, TR_RN, NUM, NAME, I_A, I_B, I_C, I_O, KA FROM LINE_P WHERE TR_RN = ? ORDER BY NUM";
-//        List<Line> pLines = jdbcTemplate.query(sqlTemplate, new Object[]{trRn}, new LineMapper());
-//        for (Line line : pLines) {
-//            line.setSectionNum(trNum);
-//        }
-//        return pLines;
-//    }
-//
-//
-//
-//
-//    public void savePTransValues(List<Transformator> pTransformators) {
-//
-//    }
-//
-//    public void addPTransformator(String rn) {
-//
-//    }
-//
-//
-//    public void deletePTransformator(String rn) {
-//
-//    }
-
 
     public void deleteLine(String lineRn, boolean additional) {
         String postfix = createPostfix(additional);
@@ -175,9 +139,14 @@ public class PodstationDAO {
         }
     }
 
-    public void updatePodstationValues(Podstation podstation, boolean additional) {
+    public void updatePodstationValues(Podstation podstation) {
         for (int i = 0; i < podstation.getTrList().size(); i++) {
-            updateTransformatorValues(podstation.getTrList().get(i), additional);
+            updateTransformatorValues(podstation.getTrList().get(i), false);
+        }
+        if (podstation.getpTransformators().size() > 0){
+            for (int i = 0; i < podstation.getpTransformators().size() ; i++) {
+                updateTransformatorValues(podstation.getpTransformators().get(i), true);
+            }
         }
     }
 
@@ -226,6 +195,18 @@ public class PodstationDAO {
         return podstations;
     }
 
+    public void createIndeterminateMeasure(Podstation podstation){
+        for (Transformator transformator : podstation.getTrList()){
+            String pTransformatorRn = addTransformator(String.valueOf(podstation.getRn()), transformator.getNum(), true);
+            jdbcTemplate.update("execute procedure TRANS_UPDATE_P(?, ?, ?)",
+                    new Object[]{transformator.getFider(), transformator.getPower(), pTransformatorRn});
+            for (Line line : transformator.getListLines()){
+                String pLineRn = addLine(pTransformatorRn, String.valueOf(line.getNum()), true);
+                jdbcTemplate.update("execute procedure LINE_UPDATE_P(?, ?, ?)", new Object[]{line.getNum(), line.getName(), pLineRn});
+            }
+        }
+    }
+
     public Podstation getPodstation(String rn) {
         log.info(" rn: " + rn + " Current date is: " + currentDate);
         String sqlTemplate = "SELECT RN, PODST_TYPE, NUM, NUM_STR, RES_NUM, DATE_RN, IS_ACTIVE, ADDRESS FROM PODSTATION WHERE RN =?";
@@ -235,6 +216,14 @@ public class PodstationDAO {
         for (int i = 0; i < podstation.getTrList().size(); i++) {
             podstation.getTrList().get(i).setListLines(getTransformatorLines(podstation.getTrList().get(i).getNum(), podstation.getTrList().get(i).getRn(), false));
             podstation.getTrList().get(i).setLinesCount(podstation.getTrList().get(i).getListLines().size());
+        }
+        if (isPTransformatorsExist(rn)){
+            podstation.setpTransformators(getTransformators(podstation.getRn(), true));
+            for (int i = 0; i < podstation.getpTransformators().size(); i++) {
+                podstation.getpTransformators().get(i).setListLines(getTransformatorLines(podstation.getpTransformators().get(i).getNum(), podstation.getpTransformators().get(i).getRn(), true));
+                podstation.getpTransformators().get(i).setLinesCount(podstation.getpTransformators().get(i).getListLines().size());
+                System.out.println("indetermininame lines count on " + i + ": " + podstation.getpTransformators().get(i).getListLines().size());
+            }
         }
         return podstation;
     }
@@ -250,6 +239,7 @@ public class PodstationDAO {
         String postfix = createPostfix(additional);
         log.info(" trRn: " + trNum + " trRn: " + trRn);
         String sqlTemplate = "SELECT RN, TR_RN, NUM, NAME, I_A, I_B, I_C, I_O, KA FROM LINE" + postfix + " WHERE TR_RN = ? ORDER BY NUM";
+        System.out.println(sqlTemplate);
         List<Line> tLines = jdbcTemplate.query(sqlTemplate, new Object[]{trRn}, new LineMapper());
         for (Line line : tLines) {
             line.setSectionNum(trNum);

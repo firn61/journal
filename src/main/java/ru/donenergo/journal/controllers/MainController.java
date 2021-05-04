@@ -156,12 +156,25 @@ public class MainController {
     @PostMapping("/editvalues")
     public String editPodstationValues(@ModelAttribute("sPodstation") Podstation sPodstation,
                                        Model model,
-                                       HttpServletRequest request) {
+                                       HttpServletRequest request,
+                                       @RequestParam(value = "action") String action) {
+        System.out.println(action);
         String ipAddr = request.getRemoteAddr();
         if (hostService.checkRights(ipAddr, mds.getsPodstation().getResNum())) {
-            podstationDAO.updatePodstationValues(sPodstation, false);
             model.addAttribute("rightsMessage", hostService.getRightsMessage(ipAddr, mds.getsPodstation().getResNum()));
-            model.addAttribute("successMessage", "Подстанция сохранена.");
+            if (action.equals("addP")) {
+                podstationDAO.createIndeterminateMeasure(sPodstation);
+                model.addAttribute("successMessage", "Промежуточный замер добавлен.");
+            }
+            if (action.equals("save")) {
+                podstationDAO.updatePodstationValues(sPodstation);
+                model.addAttribute("successMessage", "Подстанция сохранена.");
+            }
+            if (action.startsWith("pTransDel")){
+                String pTransformatorRn = action.split("&")[1];
+                podstationDAO.deleteTrans(pTransformatorRn, true);
+                model.addAttribute("successMessage", "Промежуточный замер удален.");
+            }
         } else {
             model.addAttribute("rightsMessage", hostService.getRightsMessage(ipAddr, mds.getsPodstation().getResNum()) + ". Данные не сохранены.");
         }
