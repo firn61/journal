@@ -13,16 +13,8 @@ public class Podstation {
     private String address;
     private int trCount;
     private List<Transformator> trList;
-
-    public List<Transformator> getpTransformators() {
-        return pTransformators;
-    }
-
-    public void setpTransformators(List<Transformator> pTransformators) {
-        this.pTransformators = pTransformators;
-    }
-
     private List<Transformator> pTransformators;
+
 
     public Podstation() {
     }
@@ -41,6 +33,14 @@ public class Podstation {
         this.dateRn = dateRn;
         this.isActive = isActive;
         this.address = address;
+    }
+
+    public List<Transformator> getpTransformators() {
+        return pTransformators;
+    }
+
+    public void setpTransformators(List<Transformator> pTransformators) {
+        this.pTransformators = pTransformators;
     }
 
     public int getTrCount() {

@@ -159,7 +159,7 @@ public class MainController {
                                        HttpServletRequest request) {
         String ipAddr = request.getRemoteAddr();
         if (hostService.checkRights(ipAddr, mds.getsPodstation().getResNum())) {
-            podstationDAO.updatePodstationValues(sPodstation);
+            podstationDAO.updatePodstationValues(sPodstation, false);
             model.addAttribute("rightsMessage", hostService.getRightsMessage(ipAddr, mds.getsPodstation().getResNum()));
             model.addAttribute("successMessage", "Подстанция сохранена.");
         } else {
@@ -216,10 +216,10 @@ public class MainController {
                 String[] targetValues = action.split("&");
                 if (targetValues[0].equals("trans")) {
                     if (targetValues[1].equals("add")) {
-                        podstationDAO.addTransformator(targetValues[2], sPodstation.getTrCount() + 1);
+                        podstationDAO.addTransformator(targetValues[2], sPodstation.getTrCount() + 1, false);
                     }
                     if (targetValues[1].equals("del")) {
-                        podstationDAO.deleteTrans(targetValues[2]);
+                        podstationDAO.deleteTrans(targetValues[2], false);
                     }
                 }
                 if (targetValues[0].equals("line")) {
@@ -227,10 +227,10 @@ public class MainController {
                         String[] addLineParams = targetValues[2].split("-");
                         int linesCount = Integer.valueOf(addLineParams[1]);
                         addLineParams[1] = String.valueOf(Integer.valueOf(linesCount + 1));
-                        podstationDAO.addLine(addLineParams[0], addLineParams[1]);
+                        podstationDAO.addLine(addLineParams[0], addLineParams[1], false);
                     }
                     if (targetValues[1].equals("del")) {
-                        podstationDAO.deleteLine(targetValues[2]);
+                        podstationDAO.deleteLine(targetValues[2], false);
                     }
                     if (targetValues[1].equals("up")) {
                         podstationDAO.moveLine(targetValues[2], "up");
