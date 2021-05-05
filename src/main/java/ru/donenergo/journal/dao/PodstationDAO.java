@@ -84,9 +84,18 @@ public class PodstationDAO {
         return jdbcTemplate.queryForObject(sqlAddTransformator, new Object[]{podstationRn, num}, String.class);
     }
 
+    public String addTransformatorToNewPeriod(String tpRn, Integer num, String fider, Integer power ) {
+        String sqlAddTransformator = "execute procedure TRANS_INSERT(?, ?, ?, ?, 0, 0, 0, 0, 0, 0, 0, null, null)";
+        return jdbcTemplate.queryForObject(sqlAddTransformator, new Object[]{tpRn, num, fider, power}, String.class);
+    }
+
     public String addLine(String transformatorRn, String num, boolean additional) {
         String postfix = createPostfix(additional);
         return jdbcTemplate.queryForObject("execute procedure LINE_INSERT" + postfix +"(?, ?, ?, 0, 0, 0, 0, null)", new Object[]{transformatorRn, num, "Л-"}, String.class);
+    }
+
+    public void addLineToNewPeriod(String trRn, Integer num, String name){
+        jdbcTemplate.queryForObject("execute procedure LINE_INSERT(?, ?, ?, 0, 0, 0, 0, null)", new Object[]{trRn, num, name}, String.class);
     }
 
     public Line getLine(String rn, boolean additional) {
@@ -262,8 +271,6 @@ public class PodstationDAO {
         return podstationTypes;
     }
 
-
-    //get podstations to model
     public List<Podstation> getListPodstations(String requestDate) {
         log.info(" requestDate: " + requestDate);
         if (requestDate.equals(currentDate)) {
@@ -286,5 +293,21 @@ public class PodstationDAO {
         this.currentDate = currentDate;
     }
 
+    public void startNewPeriod(){
+        String currentDate = getCurrentDate();
+        String targetDate = String.valueOf(Integer.valueOf(currentDate) +1);
+        List<Podstation> currentPodstations= getPodstationsListFromDb(currentDate);
+        for (Podstation p : currentPodstations){
+            String pRn = addPodstation(p.getPodstType(), p.getNumStr(), String.valueOf(p.getResNum()), targetDate, p.getAddress());
+            List<Transformator> transformators = getTransformators(p.getRn(), false);
+            for (Transformator t: transformators) {
+                String tRn = addTransformatorToNewPeriod(pRn, t.getNum(), t.getFider(), t.getPower());
+                List<Line> lines = getTransformatorLines(t.getNum(), Integer.valueOf(tRn), false);
+                for (Line l : lines){
+                    addLineToNewPeriod(tRn, l.getNum(), l.getName());
+                }
+            }
+        }
+    }
 
 }
