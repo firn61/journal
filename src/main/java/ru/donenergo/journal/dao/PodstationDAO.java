@@ -95,6 +95,7 @@ public class PodstationDAO {
     }
 
     public void addLineToNewPeriod(String trRn, Integer num, String name){
+        log.info(" trRn: " + trRn + "num: " + num + "name: " + name);
         jdbcTemplate.queryForObject("execute procedure LINE_INSERT(?, ?, ?, 0, 0, 0, 0, null)", new Object[]{trRn, num, name}, String.class);
     }
 
@@ -152,7 +153,7 @@ public class PodstationDAO {
         for (int i = 0; i < podstation.getTrList().size(); i++) {
             updateTransformatorValues(podstation.getTrList().get(i), false);
         }
-        if (podstation.getpTransformators().size() > 0){
+        if ((podstation.getpTransformators() != null) && (podstation.getpTransformators().size() > 0)){
             for (int i = 0; i < podstation.getpTransformators().size() ; i++) {
                 updateTransformatorValues(podstation.getpTransformators().get(i), true);
             }
@@ -293,21 +294,22 @@ public class PodstationDAO {
         this.currentDate = currentDate;
     }
 
-    public void startNewPeriod(){
-        String currentDate = getCurrentDate();
+    public String startNewPeriod(){
+        String currentDate = getCurrentDateFromDb();
         String targetDate = String.valueOf(Integer.valueOf(currentDate) +1);
         List<Podstation> currentPodstations= getPodstationsListFromDb(currentDate);
         for (Podstation p : currentPodstations){
             String pRn = addPodstation(p.getPodstType(), p.getNumStr(), String.valueOf(p.getResNum()), targetDate, p.getAddress());
-            List<Transformator> transformators = getTransformators(p.getRn(), false);
-            for (Transformator t: transformators) {
+            List<Transformator> oldTransformators = getTransformators(p.getRn(), false);
+            for (Transformator t: oldTransformators) {
                 String tRn = addTransformatorToNewPeriod(pRn, t.getNum(), t.getFider(), t.getPower());
-                List<Line> lines = getTransformatorLines(t.getNum(), Integer.valueOf(tRn), false);
+                List<Line> lines = getTransformatorLines(t.getNum(), t.getRn(), false);
                 for (Line l : lines){
                     addLineToNewPeriod(tRn, l.getNum(), l.getName());
                 }
             }
         }
+        return targetDate;
     }
 
 }

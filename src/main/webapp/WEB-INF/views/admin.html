@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="stylesheet" href="/resources/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="/resources/assets/fonts/fontawesome-all.min.css">
     <meta charset="UTF-8">
     <title>admin</title>
 </head>
 <body>
+<span class="text-center" style="color:green;font-weight:bold" th:if="${successMessage}"><p
+        th:text="${successMessage}"></p></span>
+<form th:method="POST" th:action="@{/newperiod}">
+    <button type="submit">Открыть новый период</button>
+</form>
 <form th:method="POST" th:action="@{/admin}" th:object="${adminService}">
     <label for="currentDate">Текущий период:</label>
     <input type="number" name="currentDate" id="currentDate" th:field="*{currentDate}">
@@ -18,6 +26,7 @@
     <div style="color:green;font-weight:bold" th:text="${statusMessage}" th:if="${statusMessage}"></div>
     <button type="submit">Сохранить системные параметры</button>
 </form>
+<br>
 <form th:method="POST" th:action="@{/hostsave}" th:object="${hosts}">
     <button type="submit">Сохранить права доступа</button>
     <table>
