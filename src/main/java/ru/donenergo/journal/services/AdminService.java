@@ -74,6 +74,11 @@ public class AdminService {
         initValues();
     }
 
+    public void updateCurrentDate(String vCurrentDate){
+        systemDAO.updateSystemValue(vCurrentDate, "currentDate");
+        initValues();
+    }
+
     @PostConstruct
     void initValues() {
         setFilesDir1(systemDAO.getSystemValue("filesdir"));
