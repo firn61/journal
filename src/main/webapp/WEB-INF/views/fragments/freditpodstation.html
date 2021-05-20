@@ -36,7 +36,7 @@
                 </div>
             </div>
             <div class="card shadow" style="max-width: 1100px;margin-right: auto;margin-left: auto;">
-                <th:block th:each="transformator, tstat : ${sPodstation.trList}">
+                <th:block th:each="transformator, tstat : ${sPodstation.transformators}">
                     <div class="card-body">
                         <div class="table-responsive table mt-2" id="dataTable" role="grid"
                              aria-describedby="dataTable_info">
@@ -48,17 +48,17 @@
                                     <th></th>
                                 </tr>
                                 <tr>
-                                    <input type="hidden" th:field="*{trList[__${tstat.index}__].rn}"/>
-                                    <input type="hidden" th:field="*{trList[__${tstat.index}__].tpRn}"/>
+                                    <input type="hidden" th:field="*{transformators[__${tstat.index}__].rn}"/>
+                                    <input type="hidden" th:field="*{transformators[__${tstat.index}__].tpRn}"/>
                                     <td><span th:text="${transformator.getNum()}"/></td>
-                                    <input type="hidden" th:field="*{trList[__${tstat.index}__].num}"/>
+                                    <input type="hidden" th:field="*{transformators[__${tstat.index}__].num}"/>
                                     <td><input class="border rounded shadow" type="text"
-                                               th:field="*{trList[__${tstat.index}__].fider}"
+                                               th:field="*{transformators[__${tstat.index}__].fider}"
                                                th:disabled="${rightsMessage != 'Ok'}"/></td>
                                     <td><input class="border rounded shadow" type="number"
-                                               th:field="*{trList[__${tstat.index}__].power}"
+                                               th:field="*{transformators[__${tstat.index}__].power}"
                                                th:disabled="${rightsMessage != 'Ok'}"/></td>
-                                    <input type="hidden" th:field="*{trList[__${tstat.index}__].linesCount}">
+                                    <input type="hidden" th:field="*{transformators[__${tstat.index}__].linesCount}">
                                     <td>
                                         <button type="submit" th:name="action"
                                                 th:value="'line&add&' + ${transformator.getRn()}+'-' + ${transformator.linesCount}"
@@ -86,17 +86,17 @@
                                 </tr>
                                 <tr th:each="line, lstat : ${transformator.getListLines()}">
                                     <input type="hidden"
-                                           th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].rn}"></input>
+                                           th:field="*{transformators[__${tstat.index}__].listLines[__${lstat.index}__].rn}"></input>
                                     <input type="hidden"
-                                           th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].trRn}"></input>
+                                           th:field="*{transformators[__${tstat.index}__].listLines[__${lstat.index}__].trRn}"></input>
                                     <input type="hidden"
-                                           th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].sectionNum}"></input>
+                                           th:field="*{transformators[__${tstat.index}__].listLines[__${lstat.index}__].sectionNum}"></input>
                                     <td><p th:text="${line.getNum()}"></p></td>
                                     <input type="hidden"
-                                           th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].num}"></input>
+                                           th:field="*{transformators[__${tstat.index}__].listLines[__${lstat.index}__].num}"></input>
                                     <td><input type="text" class="border rounded shadow"
                                                style="width: 800px;max-width: 800px;"
-                                               th:field="*{trList[__${tstat.index}__].listLines[__${lstat.index}__].name}"
+                                               th:field="*{transformators[__${tstat.index}__].listLines[__${lstat.index}__].name}"
                                                th:disabled="${rightsMessage != 'Ok'}"></input>
                                     </td>
                                     <td>

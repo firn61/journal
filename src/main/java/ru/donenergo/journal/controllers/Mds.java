@@ -49,7 +49,6 @@ public class Mds {
 
 
     public Podstation refreshMdsValues(String rn, String type) {
-        System.out.println(rn + " " + type);
         List<Podstation> podstations = podstationDAO.getListPodstations(currentDate);
         setPodstations(podstations);
         if (rn.equals("norn")) {
@@ -62,7 +61,6 @@ public class Mds {
                 }
             }
         }
-        //setPodstationNum(podstationDAO.getPodstationNumByRn(getCurrentPodstation()));
         setPodstTypes(podstationDAO.getPodstationTypes(getCurrentDate()));
         Podstation sPodstation = podstationDAO.getPodstation(getCurrentPodstation());
         setsPodstation(sPodstation);

@@ -12,7 +12,7 @@ public class Podstation {
     private int isActive;
     private String address;
     private int trCount;
-    private List<Transformator> trList;
+    private List<Transformator> transformators;
     private List<Transformator> pTransformators;
 
 
@@ -51,12 +51,12 @@ public class Podstation {
         this.trCount = trCount;
     }
 
-    public List<Transformator> getTrList() {
-        return trList;
+    public List<Transformator> getTransformators() {
+        return transformators;
     }
 
-    public void setTrList(List<Transformator> trList) {
-        this.trList = trList;
+    public void setTransformators(List<Transformator> transformators) {
+        this.transformators = transformators;
     }
 
     public int getRn() {

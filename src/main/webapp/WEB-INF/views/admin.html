@@ -2,7 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" href="/resources/assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="/resources/assets/fonts/fontawesome-all.min.css">
     <meta charset="UTF-8">
     <title>admin</title>
@@ -33,18 +34,9 @@
         <tr th:each="host, hstat : ${hosts.hosts}">
             <td><p th:text="${host.ip}"></td>
             <input type="hidden" th:field="*{hosts[__${hstat.index}__].ip}">
-            <td><input type ="text" th:field="*{hosts[__${hstat.index}__].rights}"></td>
+            <td><input type="text" th:field="*{hosts[__${hstat.index}__].rights}"></td>
         </tr>
     </table>
-<!--</form><form th:method="POST" th:action="@{/hostsave}" th:object="${adminService.hostService}">-->
-<!--    <button type="submit">Сохранить права доступа</button>-->
-<!--    <table>-->
-<!--        <tr th:each="host, hstat : ${adminService.hostService.hostsList}">-->
-<!--            <td><p th:text="${host.ip}"></td>-->
-<!--            <input type="hidden" th:field="*{hostsList[__${hstat.index}__].ip}">-->
-<!--            <td><input type ="text" th:field="*{hostsList[__${hstat.index}__].rights}"></td>-->
-<!--        </tr>-->
-<!--    </table>-->
-<!--</form>-->
+</form>
 </body>
 </html>

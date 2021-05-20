@@ -1,9 +1,9 @@
 <div th:fragment="streetsedit">
     <div class="container-fluid">
-        <form th:action="@{/v2streetsedit}" method="GET" th:object="${streets}">
+        <form th:action="@{/streetsedit}" method="GET" th:object="${streets}">
             <div class="card shadow" style="max-width: 1100px;margin-right: auto;margin-left: auto;">
                 <div class="card-body">
-                    <div class="input-group" th:each="transformator : ${sPodstation.getTrList()}">
+                    <div class="input-group" th:each="transformator : ${sPodstation.getTransformators()}">
                         <input class="form-check" th:onchange="this.form.submit()" type="radio" th:name="trans"
                                th:value="${transformator.getNum()}"
                                th:text="'Т-' + ${transformator.getNum()} + ' : ' + ${transformator.getFider()}"

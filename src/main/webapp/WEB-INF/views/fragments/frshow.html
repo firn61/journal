@@ -3,7 +3,7 @@
         <h4 class="text-dark mb-4 text-center">
             <p th:text="${sPodstation.podstType} + '-' + ${sPodstation.numStr} + ', ' + ${sPodstation.address}"></h4>
         <div class="card shadow" style="max-width: 1100px;margin-right: auto;margin-left: auto;">
-            <th:block th:each="transformator : ${mds.sPodstation.getTrList()}">
+            <th:block th:each="transformator : ${mds.sPodstation.getTransformators()}">
                 <div class="card-body">
                     <div class="table-responsive table mt-2" id="dataTable" role="grid"
                          aria-describedby="dataTable_info">

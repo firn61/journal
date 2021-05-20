@@ -58,7 +58,6 @@ public class MainController {
         return "show";
     }
 
-    ///v2
     @GetMapping("/savepodstation")
     public String savePodstation(@RequestParam(value = "podsttype") String podstType,
                                  @RequestParam(value = "num") String num,
@@ -81,8 +80,7 @@ public class MainController {
         return "editpodstation";
     }
 
-    ///v2
-    @GetMapping("/v2streetsedit")
+    @GetMapping("/streetsedit")
     public String getStreetsEdit(@RequestParam(value = "street", required = false) String street,
                                  @RequestParam(value = "action", required = false) String action,
                                  @RequestParam(value = "trans", required = false) Integer trans,
@@ -103,7 +101,7 @@ public class MainController {
                 String[] streetParams = street.split(", ");
                 streetDAO.addSegment(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr(),
                         trans,
-                        mds.getsPodstation().getTrList().get(trans - 1).getFider(),
+                        mds.getsPodstation().getTransformators().get(trans - 1).getFider(),
                         streetDAO.getStreetRnByName(streetParams[0], streetParams[1]),
                         streetParams[0],
                         streetParams[1],
@@ -131,9 +129,8 @@ public class MainController {
         return "streetsedit";
     }
 
-    ///v2
-    @GetMapping("/v2streets")
-    public String getStreetsv2(@RequestParam(value = "street") String street,
+    @GetMapping("/streets")
+    public String getStreets(@RequestParam(value = "street") String street,
                                @RequestParam(value = "housenum") String houseNum,
                                @RequestParam(value = "letter") String letter,
                                Model model) {
@@ -154,7 +151,6 @@ public class MainController {
         return "streetsshow";
     }
 
-    ///v2
     @PostMapping("/editvalues")
     public String editPodstationValues(@ModelAttribute("sPodstation") Podstation sPodstation,
                                        Model model,
@@ -174,7 +170,7 @@ public class MainController {
             }
             if (action.startsWith("pTransDel")){
                 String pTransformatorRn = action.split("&")[1];
-                podstationDAO.deleteTrans(pTransformatorRn, true);
+                podstationDAO.deleteTransformator(pTransformatorRn, true);
                 model.addAttribute("successMessage", "Промежуточный замер удален.");
             }
         } else {
@@ -201,22 +197,20 @@ public class MainController {
         return "measurereport";
     }
 
-    ///v2
     @GetMapping("/measureblank")
     public String getMeasureBlank(Model model) {
         model.addAttribute(mds);
         model.addAttribute("mbr", MeasureBlankReport.getBlankReportLines(mds.getsPodstation()));
         model.addAttribute("sPodstation", mds.getsPodstation());
-        if (mds.getsPodstation().getTrList().size() == 2) {
+        if (mds.getsPodstation().getTransformators().size() == 2) {
             return "measureblankdouble";
-        } else if (mds.getsPodstation().getTrList().size() == 1) {
+        } else if (mds.getsPodstation().getTransformators().size() == 1) {
             return "measureblanksingle";
         } else {
             return null;
         }
     }
 
-    ///v2
     @PostMapping("/edit")
     public String editPodstation(@ModelAttribute("sPodstation") Podstation sPodstation,
                                  @RequestParam(value = "action") String action,
@@ -229,8 +223,8 @@ public class MainController {
             } else if (action.equals("streetsedit")) {
                 if (sPodstation.getTrCount() > 0) {
                     mds.setCurrentActivity("streetsedit");
-                    model.addAttribute("houseSegments", streetDAO.getHouseSegmentsByTr(sPodstation.getPodstType() + sPodstation.getNumStr(), sPodstation.getTrList().get(0).getNum()));
-                    model.addAttribute("selectedTransformator", sPodstation.getTrList().get(0).getNum());
+                    model.addAttribute("houseSegments", streetDAO.getHouseSegmentsByTr(sPodstation.getPodstType() + sPodstation.getNumStr(), sPodstation.getTransformators().get(0).getNum()));
+                    model.addAttribute("selectedTransformator", sPodstation.getTransformators().get(0).getNum());
                 }
                 model.addAttribute(mds);
                 model.addAttribute("sPodstation", sPodstation);
@@ -243,7 +237,7 @@ public class MainController {
                         podstationDAO.addTransformator(targetValues[2], sPodstation.getTrCount() + 1, false);
                     }
                     if (targetValues[1].equals("del")) {
-                        podstationDAO.deleteTrans(targetValues[2], false);
+                        podstationDAO.deleteTransformator(targetValues[2], false);
                     }
                 }
                 if (targetValues[0].equals("line")) {
@@ -273,7 +267,6 @@ public class MainController {
         return "editpodstation";
     }
 
-    ///v2
     @GetMapping("/switchstreetsshow")
     public String switchStreets(Model model) {
         model.addAttribute("streets", streetDAO.getStreets());
@@ -284,7 +277,6 @@ public class MainController {
         return "streetsshow";
     }
 
-    ///v2
     @GetMapping("/switchshow")
     public String switchShow(Model model) {
         mds.setCurrentActivity("show");
@@ -299,7 +291,6 @@ public class MainController {
         return "overload";
     }
 
-    ///v2
     @GetMapping("/switcheditvalues")
     public String switchEditValues(Model model,
                                    HttpServletRequest request) {
@@ -310,7 +301,6 @@ public class MainController {
         return "editvalues";
     }
 
-    ///v2
     @GetMapping("/switcheditpodstation")
     public String switchEditPodstation(Model model,
                                        HttpServletRequest request) {
@@ -321,9 +311,8 @@ public class MainController {
         return "editpodstation";
     }
 
-    ///v2
-    @GetMapping("/v2show")
-    public String showPodstation2(@RequestParam(value = "period", required = false) String period,
+    @GetMapping("/find")
+    public String findPodstation(@RequestParam(value = "period", required = false) String period,
                                   @RequestParam(value = "podstation", required = false) String podstationRnFromSelect,
                                   @RequestParam(value = "podstationNum", required = false) String podstationNumFromInput,
                                   @RequestParam(value = "podstType", required = false) String podstTypeForm,
@@ -331,8 +320,6 @@ public class MainController {
                                   @RequestParam(value = "currentActivity", required = false) String currentActivity,
                                   HttpServletRequest request,
                                   Model model) {
-        System.out.println("period: " + period + " psRnSel: " + podstationRnFromSelect + " pNum: " + podstationNumFromInput + " pType: " + podstTypeForm +
-                " cAct: " + currentActivity + " action: " + action);
         String ipAdr = request.getRemoteAddr();
         boolean actionPerformed = false;
         //если изменился период
@@ -375,8 +362,8 @@ public class MainController {
             model.addAttribute("houseSegmentList", streetDAO.getHouseSegmentsTp(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr()));
         }
         if (currentActivity.equals("streetsedit")) {
-            model.addAttribute("houseSegments", streetDAO.getHouseSegmentsByTr(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr(), mds.getsPodstation().getTrList().get(0).getNum()));
-            model.addAttribute("selectedTransformator", mds.getsPodstation().getTrList().get(0).getNum());
+            model.addAttribute("houseSegments", streetDAO.getHouseSegmentsByTr(mds.getsPodstation().getPodstType() + mds.getsPodstation().getNumStr(), mds.getsPodstation().getTransformators().get(0).getNum()));
+            model.addAttribute("selectedTransformator", mds.getsPodstation().getTransformators().get(0).getNum());
         }
         model.addAttribute("rightsMessage", hostService.getRightsMessage(ipAdr, mds.getsPodstation().getResNum()));
         model.addAttribute(mds);
